@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html class="dark" dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>4U Delivery | الرئيسية</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { DEFAULT: '#c8102e', light: '#ff4757', dark: '#8b0000', glow: 'rgba(200,16,46,0.15)' },
+                        gold: { DEFAULT: '#f0c040', light: '#ffe085', dark: '#b8860b' },
+                        dark: { 50:'#f5f5f5',100:'#e0e0e0',200:'#bdbdbd',300:'#9e9e9e',400:'#757575',500:'#616161',600:'#424242',700:'#303030',800:'#1a1a1a',900:'#0d0d0d',950:'#080808' },
+                    },
+                    fontFamily: { cairo: ['Cairo', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        ::selection { background: rgba(200, 16, 46, 0.9); color: white; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Cairo',sans-serif; background:#080808; color:#e0e0e0; overflow-x:hidden; }
+        .glass { background:rgba(26,26,26,0.6); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.06); }
+        .glass-strong { background:rgba(26,26,26,0.85); backdrop-filter:blur(30px); border:1px solid rgba(255,255,255,0.08); }
+        .text-gradient-gold { background:linear-gradient(135deg,#f0c040,#ffe085,#f0c040); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .text-gradient-red { background:linear-gradient(135deg,#ff4757,#c8102e); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .glow-red { box-shadow:0 0 60px rgba(200,16,46,0.12); }
+        .glow-gold { box-shadow:0 0 40px rgba(240,192,64,0.08); }
+        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+        @keyframes slide-up { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+        @keyframes hero-pulse { 0%,100%{opacity:0.5;transform:scale(1)} 50%{opacity:0.8;transform:scale(1.05)} }
+        .animate-float { animation:float 5s ease-in-out infinite; }
+        .animate-slide-up { animation:slide-up 0.8s ease-out forwards; }
+        .hero-bg-pulse { animation:hero-pulse 8s ease-in-out infinite; }
+        .reveal { opacity:0; transform:translateY(30px); transition:all 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity:1; transform:translateY(0); }
+        .card-hover { transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+        .card-hover:hover { transform:translateY(-8px); }
+        ::-webkit-scrollbar { width:6px } ::-webkit-scrollbar-track { background:#080808 } ::-webkit-scrollbar-thumb { background:#c8102e; border-radius:10px }
+        .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+    </style>
+</head>
+<body>
+
+    <!-- ═══ NAVBAR ═══ -->
+    <nav class="fixed top-0 w-full z-50 glass-strong transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-[72px] flex items-center justify-between">
+            <a href="../_3/home.html" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-brand flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform">4U  </div>
+                <span class="text-xl font-bold text-white group-hover:text-gold transition-colors">Delivery</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="../_3/home.html" class="text-white text-sm font-bold relative after:absolute after:bottom-[-4px] after:right-0 after:w-full after:h-[2px] after:bg-brand">الرئيسية</a>
+                <a href="../_4/res.html" class="text-dark-300 hover:text-white text-sm font-medium transition-colors">المطاعم</a>
+                <a href="../_5/About.html" class="text-dark-300 hover:text-white text-sm font-medium transition-colors">عننا</a>
+                <a href="../_2/profile.html" class="text-dark-300 hover:text-white text-sm font-medium transition-colors">بروفايلي</a>
+                
+                <!-- Menu Dropdown -->
+                <div class="relative group">
+                    <button class="text-dark-300 hover:text-white text-sm font-medium transition-colors flex items-center gap-1 py-4">
+                        القائمة <span class="material-symbols-outlined text-sm">expand_more</span>
+                    </button>
+                    <div class="absolute top-full right-0 w-48 glass rounded-xl border border-white/10 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 flex flex-col overflow-hidden py-2 translate-y-2 group-hover:translate-y-0">
+                        <a href="../_6/stamp_card.html" class="px-4 py-2 text-sm text-dark-200 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">card_membership</span> كارت الأختام</a>
+                        <a href="#" class="px-4 py-2 text-sm text-dark-200 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">support_agent</span> المساعدة</a>
+                        <a href="#" class="px-4 py-2 text-sm text-dark-200 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">rule</span> الشروط والأحكام</a>
+                    </div>
+                </div>
+
+                <div class="w-px h-4 bg-white/10"></div>
+                <a href="../_6/admin_stamps.html" class="text-gold hover:text-gold-light text-sm font-bold transition-colors flex items-center gap-1 group">
+                    <span class="material-symbols-outlined text-[18px] group-hover:rotate-12 transition-transform">admin_panel_settings</span>
+                    الإدارة
+                </a>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="../_1/login.html" onclick="localStorage.setItem('authTab','login')" class="hidden sm:inline-block text-dark-300 hover:text-white text-sm font-medium transition-colors px-4 py-2">دخول</a>
+                <a href="../_1/login.html" onclick="localStorage.setItem('authTab','register')" class="hidden sm:inline-block bg-brand hover:bg-brand-light text-white text-sm font-bold px-5 py-2 rounded-xl transition-all active:scale-95 shadow-lg shadow-brand/20">اعمل حساب</a>
+                <button id="mobile-menu-btn" class="md:hidden text-white p-2 bg-white/5 rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="md:hidden fixed inset-0 bg-black z-[100] translate-x-full transition-transform duration-300 flex flex-col p-6" style="background-color: #080808 !important;">
+            <div class="flex justify-between items-center mb-10">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-brand flex items-center justify-center text-white font-bold text-lg shadow-[0_0_15px_rgba(200,16,46,0.5)]">4U</div>
+                    <span class="text-xl font-bold text-white">Delivery</span>
+                </div>
+                <button id="close-menu-btn" class="text-white p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors flex items-center justify-center">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="flex flex-col gap-6 text-right">
+                <a href="../_3/home.html" class="text-2xl font-black text-white hover:text-brand transition-colors">الرئيسية</a>
+                <a href="../_4/res.html" class="text-2xl font-black text-white hover:text-brand transition-colors">المطاعم</a>
+                <a href="../_5/About.html" class="text-2xl font-black text-white hover:text-brand transition-colors">عننا</a>
+                <a href="../_2/profile.html" class="text-2xl font-black text-white hover:text-brand transition-colors">بروفايلي</a>
+                <hr class="border-white/10 my-4">
+                <a href="../_6/stamp_card.html" class="text-xl font-bold text-dark-200 hover:text-white transition-colors flex items-center gap-2"><span class="material-symbols-outlined">card_membership</span> كارت الأختام</a>
+                <a href="../_6/admin_stamps.html" class="text-xl font-black text-gold mt-4 flex items-center gap-2"><span class="material-symbols-outlined">shield_person</span> الإدارة</a>
+                <div class="mt-auto pt-10">
+                    <a href="../_1/login.html" class="w-full block text-center bg-brand hover:bg-brand-light transition-colors text-white font-bold py-4 rounded-xl mb-3">دخول / تسجيل حساب</a>
+                </div>
+            </div>
+        </div>
+        <script>
+            const mBtn = document.getElementById('mobile-menu-btn');
+            const cBtn = document.getElementById('close-menu-btn');
+            const mMenu = document.getElementById('mobile-menu');
+            if(mBtn && cBtn && mMenu) {
+                mBtn.addEventListener('click', () => mMenu.classList.remove('translate-x-full'));
+                cBtn.addEventListener('click', () => mMenu.classList.add('translate-x-full'));
+            }
+        </script>
+
+    <!-- ═══ HERO ═══ -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <!-- Cinematic BG -->
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuDNH9L_B8_mjsVlOGr0jnndHIaNIs3lsiX1PnsnYFH7FurWIV9N4KYygXhfDP9C7ObtuIQnXCvGcQSvR6KQg41AFNQdqKzr82MtxPQIx9IiKdne3VK-ydFAoSeigK-wU6bl6DqoQJhkuKOBadB0cb_WNRa7d1umUO75cbJ4_Js4BFwqTQuyc4kN0LjbTrxi1n0cdCOD4KtJFvuc8252YBSXOX0xnF5TASEGs5JpWinuSANWwlUJDHZr')"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-dark-950 via-dark-950/70 to-dark-950/40"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-dark-950/80 to-transparent"></div>
+        </div>
+        <!-- Glow orbs -->
+        <div class="absolute top-1/3 right-1/4 w-[400px] h-[400px] bg-brand/10 rounded-full blur-[100px] hero-bg-pulse"></div>
+        <div class="absolute bottom-1/3 left-1/4 w-[300px] h-[300px] bg-gold/5 rounded-full blur-[80px] hero-bg-pulse" style="animation-delay:4s"></div>
+
+        <div class="relative z-10 text-center max-w-4xl mx-auto px-6 animate-slide-up">
+            <div class="inline-flex items-center gap-2 bg-brand/10 border border-brand/20 rounded-full px-5 py-2 mb-8">
+                <span class="w-2 h-2 rounded-full bg-brand animate-pulse"></span>
+                <span class="text-brand-light text-sm font-semibold">أسرع خدمة توصيل في منطقتك</span>
+            </div>
+            <h1 class="text-5xl md:text-7xl font-black text-white mb-6 leading-tight">
+                معيار جديد<br>
+                <span class="text-gradient-red">لاحترافية التوصيل</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-dark-200 font-medium mb-10">
+                سرعة بلا تنازلات.. وجودة تليق بتطلعاتك الاستثنائية.
+            </p>
+            <!-- Search Bar -->
+            <div class="relative max-w-2xl mx-auto">
+                <div class="glass rounded-2xl p-2 flex items-center gap-2 glow-red hover:border-brand/30 transition-all group">
+                    <span class="material-symbols-outlined text-brand pr-3 pl-1">search</span>
+                    <input type="text" placeholder="بتدور على مطعم أو أكلة معينة؟" class="bg-transparent border-none w-full text-white placeholder:text-dark-400 focus:ring-0 text-right font-medium"/>
+                    <button class="bg-brand hover:bg-brand-light text-white px-8 py-3 rounded-xl font-bold transition-all active:scale-95 shrink-0">بحث</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-dark-400 animate-float">
+            <span class="text-xs">اكتشف أكتر</span>
+            <span class="material-symbols-outlined text-brand">expand_more</span>
+        </div>
+    </section>
+
+    <!-- ═══ CATEGORIES ═══ -->
+    <section class="py-16 px-6 reveal">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-4 md:grid-cols-8 gap-3">
+                <button class="flex flex-col items-center gap-2 p-4 glass rounded-2xl card-hover group border-b-2 border-brand">
+                    <span class="text-3xl group-hover:scale-125 transition-transform">🍔</span>
+                    <span class="text-xs font-bold text-white">برجر</span>
+                </button>
+                <button class="flex flex-col items-center gap-2 p-4 glass rounded-2xl card-hover group">
+                    <span class="text-3xl group-hover:scale-125 transition-transform">🍕</span>
+                    <span class="text-xs font-bold text-dark-300">بيتزا</span>
+                </button>
+                <button class="flex flex-col items-center gap-2 p-4 glass rounded-2xl card-hover group">
+                    <span class="text-3xl group-hover:scale-125 transition-transform">🍗</span>
+                    <span class="text-xs font-bold text-dark-300">فرايد تشيكن</span>
+                </button>
+                <button class="flex flex-col items-center gap-2 p-4 glass rounded-2xl card-hover group">
+                    <span class="text-3xl group-hover:scale-125 transition-transform">🥩</span>
+                    <span class="text-xs font-bold text-dark-300">مشويات</span>
+                </button>
+                <button class="flex flex-col items-center gap-2 p-4 glass rounded-2xl card-hover group">
+                    <span class="text-3xl group-hover:scale-125 transition-transform">🍟</span>
+                    <span class="text-xs font-bold text-dark-300">وجبات سريعة</span>
+                </button>
+                <button class="flex flex-col items-center gap-2 p-4 glass rounded-2xl card-hover group">
+                    <span class="text-3xl group-hover:scale-125 transition-transform">🍰</span>
+                    <span class="text-xs font-bold text-dark-300">حلويات</span>
+                </button>
+                <button class="flex flex-col items-center gap-2 p-4 glass rounded-2xl card-hover group">
+                    <span class="text-3xl group-hover:scale-125 transition-transform">☕</span>
+                    <span class="text-xs font-bold text-dark-300">مشروبات</span>
+                </button>
+                <button class="flex flex-col items-center gap-2 p-4 glass rounded-2xl card-hover group">
+                    <span class="text-3xl group-hover:scale-125 transition-transform">🥗</span>
+                    <span class="text-xs font-bold text-dark-300">أكل صحي</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ POINTS BANNER ═══ -->
+    <section class="py-8 px-6 reveal">
+        <div class="max-w-6xl mx-auto">
+            <div class="glass rounded-3xl p-8 md:p-10 relative overflow-hidden glow-gold flex flex-col md:flex-row items-center justify-between gap-6 border border-gold/10">
+                <div class="absolute inset-0 bg-gradient-to-l from-transparent to-brand/10 pointer-events-none"></div>
+                <div class="absolute top-0 right-0 w-60 h-60 bg-gold/5 rounded-full blur-[80px] pointer-events-none"></div>
+                <div class="relative z-10 text-right flex-1">
+                    <div class="inline-block bg-white/10 border border-white/20 rounded-full px-3 py-1 mb-4">
+                        <span class="text-gold text-xs font-bold"> الجائزة الكبرى: سحب على iPhone 13</span>
+                    </div>
+                    <h2 class="text-2xl md:text-3xl font-black text-white mb-3">نظام النقاط والليفلات ✨</h2>
+                    <p class="text-dark-300 leading-relaxed max-w-xl">
+                        كل أوردر بيوصل معانا.. مش بس بيوصل بسرعة واحترافية، لكن كمان بتجمع نقاط بتتحول لمكافآت وخصومات وجوايز حقيقية. لأننا بنعتبرك <span class="text-gold font-bold">شريك نجاح</span>!
+                    </p>
+                    <a href="../_5/About.html" class="inline-flex items-center gap-2 mt-4 bg-gold hover:bg-gold-light text-dark-900 font-bold px-6 py-3 rounded-xl transition-all active:scale-95 hover:shadow-lg hover:shadow-gold/20">
+                        <span class="material-symbols-outlined text-sm">arrow_back</span>
+                        اعرف أكتر
+                    </a>
+                </div>
+                <div class="relative z-10 flex-shrink-0 w-48 h-48 md:w-56 md:h-56 animate-float">
+                    <div class="absolute inset-0 bg-brand/20 rounded-full blur-[40px]"></div>
+                    <img src="../_5/iphone_reward_1782958644420.png" alt="iPhone 13" class="relative z-10 w-full h-full object-contain drop-shadow-2xl hover:scale-110 transition-transform duration-500" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FEATURED RESTAURANTS ═══ -->
+    <section class="py-16 px-6 reveal">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex justify-between items-end mb-10">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-black text-white mb-2">أهم المطاعم </h2>
+                    <p class="text-dark-400 font-medium">اختياراتنا المميزة ليك النهاردة</p>
+                </div>
+                <a href="../_4/res.html" class="text-brand text-sm font-bold hover:underline flex items-center gap-1">
+                    عرض الكل <span class="material-symbols-outlined text-sm">arrow_back_ios</span>
+                </a>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="glass rounded-2xl overflow-hidden card-hover group">
+                    <div class="relative h-52 overflow-hidden">
+                        <div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuBd7vrccaZ2Pgsqt79vc1ddonOmxNNauM5-JI9yQ4lHv6b4Ulhj8gfw_nU5-lCoMsb1F7Xp_2BfkQCP7vxFlgEYaF8Q2DybTB1kEsgdTTsgDyU_zFXNx6mPp8QgxcIe92lJhaIQY3fANlBv5Mt9UUFSRxPjyfZaJW5Ong2AfB1Ep8NV61t7RF7CCld9MQlklhA26VPSvDOBGl0cOpL-P9sZM17GOmG2nxN6vjM9doM_rnrgTF-xqR8w')"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark-950/80 to-transparent"></div>
+                        <div class="absolute top-3 right-3 bg-dark-900/60 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1">
+                            <span class="material-symbols-outlined text-gold text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                            <span class="text-white text-xs font-bold">4.9</span>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-white mb-1">البرنس للمشويات</h3>
+                        <p class="text-dark-400 text-sm mb-4">مشويات مصرية أصيلة بالخلطة السرية</p>
+                        <div class="flex items-center gap-4 text-dark-400 text-xs">
+                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> 30-45 دقيقة</span>
+                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">delivery_dining</span> 25 ج.م</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="glass rounded-2xl overflow-hidden card-hover group">
+                    <div class="relative h-52 overflow-hidden">
+                        <div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuBxpljn1Pk1qEnAD8jwgMD9n0t3cO0qeHoQkEhLZTWnbKv3dWi508bR7bBnPQ9qgGb315JeWFRhkbfEO02y3qFQT2Kcaa18yyOQJAVJvUL4Zik2rtoEECwvs0cVKTB_z5Y0V3b5R5elx1Ffgwyc7667S7f2uvYvl85UEZ8Hwaq5MzqbSktJTCQqnm-JXKQ0cBfonf7Upq2miSR0pb0TeFrrIB8s7ac-ZNH1v3u5t7b8ZEgjTMZZ7XHF')"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark-950/80 to-transparent"></div>
+                        <div class="absolute top-3 right-3 bg-dark-900/60 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1">
+                            <span class="material-symbols-outlined text-gold text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                            <span class="text-white text-xs font-bold">4.7</span>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-white mb-1">كشري التحرير</h3>
+                        <p class="text-dark-400 text-sm mb-4">ملك الكشري في مصر بلا منازع</p>
+                        <div class="flex items-center gap-4 text-dark-400 text-xs">
+                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> 20-30 دقيقة</span>
+                            <span class="flex items-center gap-1 text-green-500"><span class="material-symbols-outlined text-sm">delivery_dining</span> مجاني</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="glass rounded-2xl overflow-hidden card-hover group">
+                    <div class="relative h-52 overflow-hidden">
+                        <div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuAy-D2WotH7O8BhVK58zR9Dv5PuYJjD_w_BfIc7iDrkdwL-ovUqy_Tl6oVxBw21BH5t_SPmKcjx3F5lvIcsOvKg_apc4BbD56bageNnXgsDjGQwhvfjgF9MaRTDiqrNdiYur6DNWDynDsOuGJa0z2DVq0gDB-8TY4RGb9me5KAgEyIvdvOpwNUBOZ2Osf_xaIU7Xb5YgyrygPKjzOvVjjoKESi_VXVl7_17IrwOlvv31tsyvaVJr1YY')"></div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-dark-950/80 to-transparent"></div>
+                        <div class="absolute top-3 right-3 bg-dark-900/60 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1">
+                            <span class="material-symbols-outlined text-gold text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                            <span class="text-white text-xs font-bold">4.8</span>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-white mb-1">حلويات ديوكس</h3>
+                        <p class="text-dark-400 text-sm mb-4">أحلى حلويات شرقية وغربية بلمسة عصرية</p>
+                        <div class="flex items-center gap-4 text-dark-400 text-xs">
+                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> 40-55 دقيقة</span>
+                            <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">delivery_dining</span> 30 ج.م</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ TODAY'S OFFERS ═══ -->
+    <section class="py-16 px-6 bg-dark-900/50 reveal">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-black text-white mb-10">عروض النهاردة </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="relative rounded-2xl overflow-hidden p-8 bg-gradient-to-br from-brand-dark to-brand group glow-red">
+                    <div class="absolute -left-10 -bottom-10 opacity-20 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-[150px] text-white">fastfood</span>
+                    </div>
+                    <div class="relative z-10">
+                        <span class="bg-white/20 text-white px-4 py-1 rounded-full text-sm font-bold mb-4 inline-block">خصم 50%</span>
+                        <h4 class="text-2xl font-black text-white mb-2">وجبة التوفير من برجر كينج</h4>
+                        <p class="text-white/70 mb-6">ساندوتش دبل شيز + بطاطس + كولا</p>
+                        <button class="bg-white text-brand font-bold px-6 py-3 rounded-xl hover:shadow-xl transition-all active:scale-95">اطلب دلوقتي</button>
+                    </div>
+                </div>
+                <div class="relative rounded-2xl overflow-hidden p-8 glass border-r-4 border-gold group">
+                    <div class="absolute -left-10 -bottom-10 opacity-10 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-[150px] text-gold">local_shipping</span>
+                    </div>
+                    <div class="relative z-10">
+                        <span class="bg-gold text-dark-900 px-4 py-1 rounded-full text-sm font-bold mb-4 inline-block">عرض خاص</span>
+                        <h4 class="text-2xl font-black text-white mb-2">توصيل مجاني لطلبات العيلة</h4>
+                        <p class="text-dark-300 mb-6">لأي طلب فوق الـ 300 جنيه النهاردة بس</p>
+                        <button class="bg-gold text-dark-900 font-bold px-6 py-3 rounded-xl hover:shadow-xl transition-all active:scale-95">استخدم الكود</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ REVIEWS ═══ -->
+    <section class="py-16 px-6 reveal">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-black text-white mb-10 text-center">قالوا إيه عننا؟ 💬</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass rounded-2xl p-6 card-hover">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-brand/20 flex items-center justify-center text-brand font-bold text-lg">أ</div>
+                        <div>
+                            <p class="text-white font-bold text-sm">أحمد علي</p>
+                            <div class="flex text-gold text-xs gap-0.5">
+                                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-dark-300 text-sm leading-relaxed italic">"أسرع دليفري جربته في حياتي، الأكل وصل سخن جداً كأني في المطعم بالظبط. والخدمة ممتازة."</p>
+                </div>
+                <div class="glass rounded-2xl p-6 card-hover">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center text-gold font-bold text-lg">س</div>
+                        <div>
+                            <p class="text-white font-bold text-sm">سارة محمود</p>
+                            <div class="flex text-gold text-xs gap-0.5">
+                                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                                <span class="material-symbols-outlined text-sm">star</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-dark-300 text-sm leading-relaxed italic">"الابلكيشن سهل جداً في الاستخدام، وفيه عروض حقيقية مش مجرد كلام. بجد شابوه ليكم."</p>
+                </div>
+                <div class="glass rounded-2xl p-6 card-hover">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-brand/20 flex items-center justify-center text-brand font-bold text-lg">م</div>
+                        <div>
+                            <p class="text-white font-bold text-sm">محمد خالد</p>
+                            <div class="flex text-gold text-xs gap-0.5">
+                                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-dark-300 text-sm leading-relaxed italic">"تجربة روعة، الأسعار فعلاً هي هي أسعار المطعم من غير زيادة، وتنوع المطاعم كبير جداً."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ DOWNLOAD APP ═══ -->
+    <section class="py-16 px-6 reveal">
+        <div class="max-w-5xl mx-auto">
+            <div class="rounded-3xl p-10 md:p-14 relative overflow-hidden bg-gradient-to-br from-brand-dark via-dark-800 to-dark-950 glow-red group">
+                <div class="absolute top-0 right-0 opacity-5 pointer-events-none">
+                    <span class="material-symbols-outlined text-[300px] text-white">restaurant</span>
+                </div>
+                <div class="relative z-10 flex flex-col md:flex-row items-center gap-10">
+                    <div class="flex-1 text-right">
+                        <h2 class="text-3xl md:text-4xl font-black text-white mb-4">دلع موبايلك ونزل التطبيق </h2>
+                        <p class="text-dark-200 text-lg mb-8">عشان تطلب أكلك بلمسة واحدة وتستمتع بعروض حصرية للموبايل بس.</p>
+                        <div class="flex gap-4 justify-start">
+                            <button class="bg-black border border-white/20 px-6 py-3 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all active:scale-95">
+                                <div class="text-right"><p class="text-[10px] text-white/60">Download on the</p><p class="text-sm font-bold text-white">App Store</p></div>
+                                <span class="material-symbols-outlined text-3xl text-white">apps</span>
+                            </button>
+                            <button class="bg-black border border-white/20 px-6 py-3 rounded-xl flex items-center gap-3 hover:bg-white/10 transition-all active:scale-95">
+                                <div class="text-right"><p class="text-[10px] text-white/60">Get it on</p><p class="text-sm font-bold text-white">Google Play</p></div>
+                                <span class="material-symbols-outlined text-3xl text-white">play_arrow</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex-1 relative hidden md:flex justify-center">
+                        <div class="w-52 h-[400px] bg-black/40 rounded-[2.5rem] border-[6px] border-white/10 backdrop-blur-md rotate-6 group-hover:rotate-3 transition-all duration-700 shadow-2xl"></div>
+                        <div class="absolute w-52 h-[400px] bg-black/60 rounded-[2.5rem] border-[6px] border-white/15 backdrop-blur-md -rotate-6 group-hover:-rotate-3 transition-all duration-700 shadow-2xl left-10 top-10"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="border-t border-white/5 bg-dark-950">
+        <div class="max-w-6xl mx-auto px-6 py-14">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-xl bg-brand flex items-center justify-center text-white font-bold text-lg">4U</div>
+                        <span class="text-xl font-bold text-white">Delivery</span>
+                    </div>
+                    <p class="text-dark-400 leading-relaxed mb-4">أكبر منصة لطلب الطعام وتوصيل الشحنات. بنوصلك اللي بتحبه لحد باب بيتك بأعلى جودة.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">روابط سريعة</h4>
+                    <div class="space-y-3">
+                        <a href="../_4/res.html" class="block text-dark-400 hover:text-brand transition-colors text-sm">المطاعم</a>
+                        <a href="../_5/About.html" class="block text-dark-400 hover:text-brand transition-colors text-sm">عننا</a>
+                        <a href="#" class="block text-dark-400 hover:text-brand transition-colors text-sm">سياسة الخصوصية</a>
+                        <a href="#" class="block text-dark-400 hover:text-brand transition-colors text-sm">الشروط والأحكام</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">تواصل معنا</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-center gap-3 text-dark-400 text-sm"><span class="material-symbols-outlined text-brand text-lg">location_on</span>بني سويف الجديدة - الكورنيش</div>
+                        <div class="flex items-center gap-3 text-dark-400 text-sm"><span class="material-symbols-outlined text-brand text-lg">call</span><span dir="ltr">0103273273</span></div>
+                        <div class="flex items-center gap-3 text-dark-400 text-sm"><span class="material-symbols-outlined text-brand text-lg">call</span><span dir="ltr">01111139271 / 01111139279</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-white/5 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-dark-500 text-sm">© ٢٠٢٤ 4U Delivery. جميع الحقوق محفوظة.</p>
+                <p class="text-dark-500 text-xs">صنع بـ ❤️ في مصر</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating -->
+    <div class="fixed bottom-6 left-6 z-50 flex flex-col gap-3">
+        <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="w-12 h-12 rounded-xl bg-dark-700/80 backdrop-blur-md hover:bg-brand text-dark-300 hover:text-white flex items-center justify-center shadow-xl transition-all hover:scale-110"><span class="material-symbols-outlined">arrow_upward</span></button>
+        <button class="w-12 h-12 rounded-xl bg-brand hover:bg-brand-light text-white flex items-center justify-center shadow-xl shadow-brand/20 transition-all hover:scale-110"><span class="material-symbols-outlined" style="font-variation-settings:'FILL'1;">chat</span></button>
+    </div>
+
+    <script>
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => { if(window.scrollY>80){navbar.classList.add('shadow-lg','shadow-black/20');navbar.style.height='60px'}else{navbar.classList.remove('shadow-lg','shadow-black/20');navbar.style.height=''} });
+        const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible') }) }, { threshold:0.1, rootMargin:'0px 0px -50px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        const searchInput = document.querySelector('input[type="text"]');
+        const searchBox = searchInput?.closest('.glass');
+        searchInput?.addEventListener('focus', () => searchBox?.classList.add('border-brand/30'));
+        searchInput?.addEventListener('blur', () => searchBox?.classList.remove('border-brand/30'));
+    </script>
+</body>
+</html>

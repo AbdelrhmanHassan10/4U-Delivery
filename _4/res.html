@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html class="dark" dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>4U Delivery | المطاعم</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = { darkMode:"class", theme:{ extend:{ colors:{ brand:{DEFAULT:'#c8102e',light:'#ff4757',dark:'#8b0000'}, gold:{DEFAULT:'#f0c040',light:'#ffe085',dark:'#b8860b'}, dark:{50:'#f5f5f5',100:'#e0e0e0',200:'#bdbdbd',300:'#9e9e9e',400:'#757575',500:'#616161',600:'#424242',700:'#303030',800:'#1a1a1a',900:'#0d0d0d',950:'#080808'}}, fontFamily:{cairo:['Cairo','sans-serif']} }}}
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        ::selection { background: rgba(200, 16, 46, 0.9); color: white; }
+        * { margin:0;padding:0;box-sizing:border-box }
+        body { font-family:'Cairo',sans-serif; background:#080808; color:#e0e0e0; overflow-x:hidden; }
+        .glass { background:rgba(26,26,26,0.6); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.06); }
+        .glass-strong { background:rgba(26,26,26,0.85); backdrop-filter:blur(30px); border:1px solid rgba(255,255,255,0.08); }
+        .glow-red { box-shadow:0 0 60px rgba(200,16,46,0.12); }
+        .card-hover { transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+        .card-hover:hover { transform:translateY(-8px); }
+        .reveal { opacity:0; transform:translateY(30px); transition:all 0.8s cubic-bezier(0.16,1,0.3,1); }
+        .reveal.visible { opacity:1; transform:translateY(0); }
+        ::-webkit-scrollbar { width:6px } ::-webkit-scrollbar-track { background:#080808 } ::-webkit-scrollbar-thumb { background:#c8102e; border-radius:10px }
+        .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+        input[type="checkbox"], input[type="radio"] { accent-color:#c8102e; }
+    </style>
+</head>
+<body>
+
+    <!-- ═══ NAVBAR ═══ -->
+    <nav class="fixed top-0 w-full z-50 glass-strong transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 h-[72px] flex items-center justify-between">
+            <a href="../_3/home.html" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-brand flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform">4U</div>
+                <span class="text-xl font-bold text-white group-hover:text-gold transition-colors">Delivery</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="../_3/home.html" class="text-dark-300 hover:text-white text-sm font-medium transition-colors">الرئيسية</a>
+                <a href="../_4/res.html" class="text-white text-sm font-bold relative after:absolute after:bottom-[-4px] after:right-0 after:w-full after:h-[2px] after:bg-brand">المطاعم</a>
+                <a href="../_5/About.html" class="text-dark-300 hover:text-white text-sm font-medium transition-colors">عننا</a>
+                <a href="../_2/profile.html" class="text-dark-300 hover:text-white text-sm font-medium transition-colors">بروفايلي</a>
+                
+                <!-- Menu Dropdown -->
+                <div class="relative group">
+                    <button class="text-dark-300 hover:text-white text-sm font-medium transition-colors flex items-center gap-1 py-4">
+                        القائمة <span class="material-symbols-outlined text-sm">expand_more</span>
+                    </button>
+                    <div class="absolute top-full right-0 w-48 glass rounded-xl border border-white/10 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 flex flex-col overflow-hidden py-2 translate-y-2 group-hover:translate-y-0">
+                        <a href="../_6/stamp_card.html" class="px-4 py-2 text-sm text-dark-200 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">card_membership</span> كارت الأختام</a>
+                        <a href="#" class="px-4 py-2 text-sm text-dark-200 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">support_agent</span> المساعدة</a>
+                        <a href="#" class="px-4 py-2 text-sm text-dark-200 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">rule</span> الشروط والأحكام</a>
+                    </div>
+                </div>
+
+                <div class="w-px h-4 bg-white/10"></div>
+                <a href="../_6/admin_stamps.html" class="text-gold hover:text-gold-light text-sm font-bold transition-colors flex items-center gap-1 group">
+                    <span class="material-symbols-outlined text-[18px] group-hover:rotate-12 transition-transform">admin_panel_settings</span>
+                    الإدارة
+                </a>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="../_1/login.html" onclick="localStorage.setItem('authTab','login')" class="hidden sm:inline-block text-dark-300 hover:text-white text-sm font-medium transition-colors px-4 py-2">دخول</a>
+                <a href="../_1/login.html" onclick="localStorage.setItem('authTab','register')" class="hidden sm:inline-block bg-brand hover:bg-brand-light text-white text-sm font-bold px-5 py-2 rounded-xl transition-all active:scale-95 shadow-lg shadow-brand/20">اعمل حساب</a>
+                <button id="mobile-menu-btn" class="md:hidden text-white p-2 bg-white/5 rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="md:hidden fixed inset-0 bg-black z-[100] translate-x-full transition-transform duration-300 flex flex-col p-6" style="background-color: #080808 !important;">
+            <div class="flex justify-between items-center mb-10">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-brand flex items-center justify-center text-white font-bold text-lg shadow-[0_0_15px_rgba(200,16,46,0.5)]">4U</div>
+                    <span class="text-xl font-bold text-white">Delivery</span>
+                </div>
+                <button id="close-menu-btn" class="text-white p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors flex items-center justify-center">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="flex flex-col gap-6 text-right">
+                <a href="../_3/home.html" class="text-2xl font-black text-white hover:text-brand transition-colors">الرئيسية</a>
+                <a href="../_4/res.html" class="text-2xl font-black text-white hover:text-brand transition-colors">المطاعم</a>
+                <a href="../_5/About.html" class="text-2xl font-black text-white hover:text-brand transition-colors">عننا</a>
+                <a href="../_2/profile.html" class="text-2xl font-black text-white hover:text-brand transition-colors">بروفايلي</a>
+                <hr class="border-white/10 my-4">
+                <a href="../_6/stamp_card.html" class="text-xl font-bold text-dark-200 hover:text-white transition-colors flex items-center gap-2"><span class="material-symbols-outlined">card_membership</span> كارت الأختام</a>
+                <a href="../_6/admin_stamps.html" class="text-xl font-black text-gold mt-4 flex items-center gap-2"><span class="material-symbols-outlined">shield_person</span> الإدارة</a>
+                <div class="mt-auto pt-10">
+                    <a href="../_1/login.html" class="w-full block text-center bg-brand hover:bg-brand-light transition-colors text-white font-bold py-4 rounded-xl mb-3">دخول / تسجيل حساب</a>
+                </div>
+            </div>
+        </div>
+        <script>
+            const mBtn = document.getElementById('mobile-menu-btn');
+            const cBtn = document.getElementById('close-menu-btn');
+            const mMenu = document.getElementById('mobile-menu');
+            if(mBtn && cBtn && mMenu) {
+                mBtn.addEventListener('click', () => mMenu.classList.remove('translate-x-full'));
+                cBtn.addEventListener('click', () => mMenu.classList.add('translate-x-full'));
+            }
+        </script>
+
+    <!-- ═══ MAIN LAYOUT ═══ -->
+    <main class="pt-[100px] pb-20 px-4 md:px-6 max-w-[1400px] mx-auto min-h-screen">
+        <div class="flex flex-col lg:flex-row gap-6">
+            
+            <!-- ═══ SIDEBAR FILTER ═══ -->
+            <aside class="w-full lg:w-[320px] shrink-0">
+                <div class="glass sticky top-[100px] p-6 rounded-3xl flex flex-col gap-6 glow-red border border-white/5">
+                    <div class="flex items-center justify-between pb-4 border-b border-white/5">
+                        <h2 class="text-xl font-black text-white">فلتر بحثك </h2>
+                        <span class="material-symbols-outlined text-brand">tune</span>
+                    </div>
+
+                    <!-- Search Input -->
+                    <div class="relative">
+                        <input class="w-full bg-dark-900 border border-dark-600 rounded-xl py-3 pr-12 pl-4 text-white text-sm focus:border-brand focus:ring-1 focus:ring-brand/30 placeholder:text-dark-500 transition-all" placeholder="بتدور على مطعم معين؟" type="text"/>
+                        <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-dark-500">search</span>
+                    </div>
+
+                    <!-- Categories -->
+                    <div class="flex flex-col gap-3">
+                        <h3 class="text-sm font-bold text-dark-300">الأصناف</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="px-4 py-1.5 rounded-full bg-brand text-white text-xs font-bold border border-brand/20 shadow-lg shadow-brand/20">الكل</button>
+                            <button class="px-4 py-1.5 rounded-full bg-dark-800 text-dark-300 text-xs font-semibold hover:border-brand/50 border border-transparent transition-all">كشري</button>
+                            <button class="px-4 py-1.5 rounded-full bg-dark-800 text-dark-300 text-xs font-semibold hover:border-brand/50 border border-transparent transition-all">مشويات</button>
+                            <button class="px-4 py-1.5 rounded-full bg-dark-800 text-dark-300 text-xs font-semibold hover:border-brand/50 border border-transparent transition-all">سي فود</button>
+                            <button class="px-4 py-1.5 rounded-full bg-dark-800 text-dark-300 text-xs font-semibold hover:border-brand/50 border border-transparent transition-all">حلويات</button>
+                            <button class="px-4 py-1.5 rounded-full bg-dark-800 text-dark-300 text-xs font-semibold hover:border-brand/50 border border-transparent transition-all">برجر</button>
+                        </div>
+                    </div>
+
+                    <!-- Rating Filter -->
+                    <div class="flex flex-col gap-3">
+                        <h3 class="text-sm font-bold text-dark-300">التقييم</h3>
+                        <div class="flex flex-col gap-2">
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input class="w-4 h-4 rounded bg-dark-800 border-dark-600 text-brand focus:ring-brand" type="checkbox" checked/>
+                                <div class="flex items-center gap-1 text-gold text-sm">
+                                    <span class="material-symbols-outlined" style="font-variation-settings:'FILL'1;">star</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings:'FILL'1;">star</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings:'FILL'1;">star</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings:'FILL'1;">star</span>
+                                    <span class="mr-1 text-white text-sm font-semibold">+4.5</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input class="w-4 h-4 rounded bg-dark-800 border-dark-600 text-brand focus:ring-brand" type="checkbox"/>
+                                <div class="flex items-center gap-1 text-gold text-sm">
+                                    <span class="material-symbols-outlined" style="font-variation-settings:'FILL'1;">star</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings:'FILL'1;">star</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings:'FILL'1;">star</span>
+                                    <span class="material-symbols-outlined" style="font-variation-settings:'FILL'1;">star_half</span>
+                                    <span class="mr-1 text-white text-sm font-semibold">+4.0</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Time -->
+                    <div class="flex flex-col gap-3">
+                        <h3 class="text-sm font-bold text-dark-300">وقت التوصيل</h3>
+                        <div class="flex flex-col gap-2">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input class="w-4 h-4 bg-dark-800 border-dark-600 text-brand focus:ring-brand" name="delivery" type="radio"/>
+                                <span class="text-white text-sm font-semibold">أقل من 30 دقيقة</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input class="w-4 h-4 bg-dark-800 border-dark-600 text-brand focus:ring-brand" name="delivery" type="radio" checked/>
+                                <span class="text-white text-sm font-semibold">أقل من 45 دقيقة</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- ═══ RESTAURANTS GRID ═══ -->
+            <div class="flex-1">
+                <div class="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                    <div>
+                        <h1 class="text-4xl font-black text-white mb-2">أجدع مطاعم المحروسة </h1>
+                        <p class="text-dark-400 text-sm">اختار اللي يعجبك وسيب الباقي علينا</p>
+                    </div>
+                    <div class="flex items-center gap-2 bg-dark-900 rounded-xl px-4 py-2 border border-white/5">
+                        <span class="text-dark-400 text-xs font-bold">ترتيب حسب:</span>
+                        <select class="bg-transparent border-none text-white text-sm font-bold focus:ring-0 cursor-pointer p-0 pr-1">
+                            <option class="bg-dark-900">الأكثر طلباً</option>
+                            <option class="bg-dark-900">الأعلى تقييماً</option>
+                            <option class="bg-dark-900">الأسرع توصيلاً</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Card 1 -->
+                    <div class="glass rounded-3xl overflow-hidden flex flex-col card-hover group relative">
+                        <div class="relative h-[220px] overflow-hidden">
+                            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBN_WvbrlHMtciE51w9c_iltMr6PZ6Tu-0Z-TixYL5jMpAkYGBYjDk2m0zbbqoYaPgGLyj5Vnlh1OGNBO6_pbPxNbsfd2MdI9kBf5VmW6jKfX0UOFcUwJ0z2bKYtSOu4B9TPgRa7GfqMnentc4R1pl9SB7Yu2R8YEf_eHNWc07-w71greUubTfXSsju5dJ1emICE8dcuzvZ5lo0lJFXdgTJHyGEC0SgXoZMsITv5pERKiI24LJDB3vL" alt="كشري"/>
+                            <div class="absolute inset-0 bg-gradient-to-t from-dark-950 via-transparent to-transparent"></div>
+                            <div class="absolute top-4 right-4 bg-dark-950/60 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1 border border-white/10">
+                                <span class="material-symbols-outlined text-gold text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                                <span class="text-white text-xs font-bold">4.9</span>
+                            </div>
+                            <button class="absolute top-4 left-4 w-8 h-8 rounded-full bg-dark-950/60 backdrop-blur-md flex items-center justify-center border border-white/10 hover:bg-brand hover:border-brand transition-colors text-white">
+                                <span class="material-symbols-outlined text-[18px]">favorite</span>
+                            </button>
+                        </div>
+                        <div class="p-6 flex flex-col gap-4">
+                            <div>
+                                <h3 class="text-xl font-black text-white mb-1">كشري التحرير الأصلي</h3>
+                                <p class="text-dark-400 text-xs">كشري، طواجن، مصري أصيل</p>
+                            </div>
+                            <div class="flex items-center gap-6 border-t border-white/5 pt-4">
+                                <div class="flex items-center gap-2 text-dark-300 text-xs font-semibold">
+                                    <span class="material-symbols-outlined text-[18px] text-brand">schedule</span>
+                                    <span>25-35 دقيقة</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-dark-300 text-xs font-semibold">
+                                    <span class="material-symbols-outlined text-[18px] text-brand">delivery_dining</span>
+                                    <span>15 ج.م توصيل</span>
+                                </div>
+                            </div>
+                            <button class="w-full py-3 bg-brand hover:bg-brand-light text-white font-bold rounded-xl transition-all active:scale-[0.98] hover:shadow-lg hover:shadow-brand/20">اطلب دلوقتي</button>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="glass rounded-3xl overflow-hidden flex flex-col card-hover group relative">
+                        <div class="relative h-[220px] overflow-hidden">
+                            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhvvo4QUPaqNQGtOBvPhz4qLi8LqsuXJuYZu1y603QOLne2NL4povYvS_I6e8bTE1E_Mk1NjoWyKNewArWeD5MEkjCZ55HO8c5eOnw0uJ2WzNkoCAjIPaRB0CVVIAnOU1-B-j_naI_E-oNa5bIMW0YHqXRI_aVpTjpx-Jm6L7WP-p6UP5Ko9KRwTo9D8NI9rGdGpbaV48eSj_dnJZVoKFPQNDvKRi8t7hZFbL8o2eX4PAlpGLrkO8i" alt="مشويات"/>
+                            <div class="absolute inset-0 bg-gradient-to-t from-dark-950 via-transparent to-transparent"></div>
+                            <div class="absolute top-4 right-4 bg-dark-950/60 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1 border border-white/10">
+                                <span class="material-symbols-outlined text-gold text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                                <span class="text-white text-xs font-bold">4.7</span>
+                            </div>
+                            <button class="absolute top-4 left-4 w-8 h-8 rounded-full bg-dark-950/60 backdrop-blur-md flex items-center justify-center border border-white/10 hover:bg-brand hover:border-brand transition-colors text-white">
+                                <span class="material-symbols-outlined text-[18px]">favorite</span>
+                            </button>
+                        </div>
+                        <div class="p-6 flex flex-col gap-4">
+                            <div>
+                                <h3 class="text-xl font-black text-white mb-1">مشويات قصر الكبابجي</h3>
+                                <p class="text-dark-400 text-xs">مشويات، كباب وكفتة، فخارة</p>
+                            </div>
+                            <div class="flex items-center gap-6 border-t border-white/5 pt-4">
+                                <div class="flex items-center gap-2 text-dark-300 text-xs font-semibold">
+                                    <span class="material-symbols-outlined text-[18px] text-brand">schedule</span>
+                                    <span>45-55 دقيقة</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-dark-300 text-xs font-semibold">
+                                    <span class="material-symbols-outlined text-[18px] text-brand">delivery_dining</span>
+                                    <span>30 ج.م توصيل</span>
+                                </div>
+                            </div>
+                            <button class="w-full py-3 bg-brand hover:bg-brand-light text-white font-bold rounded-xl transition-all active:scale-[0.98] hover:shadow-lg hover:shadow-brand/20">اطلب دلوقتي</button>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="glass rounded-3xl overflow-hidden flex flex-col card-hover group relative">
+                        <div class="relative h-[220px] overflow-hidden">
+                            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkqJTd7UfPybfF4VdA6olv-C8MQT9VCemlU7L7bM9y-TyOpLOhw8zmuuuyYVmx1KxCZSmoxFQFaxVh1rYP7UKvk2lNlPe9IrfLlyPgAqmOXNtmljRvoK0IQkHPI2ZUEuIvK6DCeQLxpBP6gPq8cOlW1SuRMBP6xPbyc84SSh3k_5PRITrkcAYA7zRobTlZywTnefxAMXJDn_CzXJXWbSX9iM-ZePJG-OwXgUwdMWVx97lv4IeeIasI" alt="سي فود"/>
+                            <div class="absolute inset-0 bg-gradient-to-t from-dark-950 via-transparent to-transparent"></div>
+                            <div class="absolute top-4 right-4 bg-dark-950/60 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1 border border-white/10">
+                                <span class="material-symbols-outlined text-gold text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                                <span class="text-white text-xs font-bold">4.8</span>
+                            </div>
+                            <span class="absolute top-4 left-4 bg-brand/90 backdrop-blur px-3 py-1 rounded-full text-white text-[10px] font-bold tracking-wider">عرض خاص</span>
+                        </div>
+                        <div class="p-6 flex flex-col gap-4">
+                            <div>
+                                <h3 class="text-xl font-black text-white mb-1">أسماك البرج</h3>
+                                <p class="text-dark-400 text-xs">سي فود، شوربة جمبري، أرز صيدية</p>
+                            </div>
+                            <div class="flex items-center gap-6 border-t border-white/5 pt-4">
+                                <div class="flex items-center gap-2 text-dark-300 text-xs font-semibold">
+                                    <span class="material-symbols-outlined text-[18px] text-brand">schedule</span>
+                                    <span>40-50 دقيقة</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-green-500 text-xs font-semibold">
+                                    <span class="material-symbols-outlined text-[18px]">delivery_dining</span>
+                                    <span>توصيل مجاني</span>
+                                </div>
+                            </div>
+                            <button class="w-full py-3 bg-brand hover:bg-brand-light text-white font-bold rounded-xl transition-all active:scale-[0.98] hover:shadow-lg hover:shadow-brand/20">اطلب دلوقتي</button>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="glass rounded-3xl overflow-hidden flex flex-col card-hover group relative">
+                        <div class="relative h-[220px] overflow-hidden">
+                            <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABSXqONXdj65qLAymky8qzi2ZoHmdTqFb5lP927jji-4FtbaglQvLPWi8lR_x3fkXWZvNt6ihF7IEKeBO_nieWjdj3_m13p95ycstEB32JWQxznhh14u-XNeUHtW2eCPqz0zhnH0tiNC_WBZmpOFw0j2S4qqRcQO-Gp8fwdXTPtBRL78uJKuBeQbqtDVbA7h2SvDfTWNq1YwA6A3bNWzS669wBgm9pt9dbb40m_1kNa2Yc8hXIYyeU" alt="برجر"/>
+                            <div class="absolute inset-0 bg-gradient-to-t from-dark-950 via-transparent to-transparent"></div>
+                            <div class="absolute top-4 right-4 bg-dark-950/60 backdrop-blur-md px-3 py-1 rounded-full flex items-center gap-1 border border-white/10">
+                                <span class="material-symbols-outlined text-gold text-sm" style="font-variation-settings:'FILL'1;">star</span>
+                                <span class="text-white text-xs font-bold">4.5</span>
+                            </div>
+                            <button class="absolute top-4 left-4 w-8 h-8 rounded-full bg-dark-950/60 backdrop-blur-md flex items-center justify-center border border-white/10 hover:bg-brand hover:border-brand transition-colors text-white">
+                                <span class="material-symbols-outlined text-[18px]">favorite</span>
+                            </button>
+                        </div>
+                        <div class="p-6 flex flex-col gap-4">
+                            <div>
+                                <h3 class="text-xl font-black text-white mb-1">بافلو برجر - فرع التجمع</h3>
+                                <p class="text-dark-400 text-xs">برجر، أمريكاني، فرايز</p>
+                            </div>
+                            <div class="flex items-center gap-6 border-t border-white/5 pt-4">
+                                <div class="flex items-center gap-2 text-dark-300 text-xs font-semibold">
+                                    <span class="material-symbols-outlined text-[18px] text-brand">schedule</span>
+                                    <span>20-30 دقيقة</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-dark-300 text-xs font-semibold">
+                                    <span class="material-symbols-outlined text-[18px] text-brand">delivery_dining</span>
+                                    <span>20 ج.م توصيل</span>
+                                </div>
+                            </div>
+                            <button class="w-full py-3 bg-brand hover:bg-brand-light text-white font-bold rounded-xl transition-all active:scale-[0.98] hover:shadow-lg hover:shadow-brand/20">اطلب دلوقتي</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load More -->
+                <div class="mt-10 flex justify-center">
+                    <button class="glass px-8 py-3 rounded-xl text-white text-sm font-bold hover:bg-white/5 transition-colors border border-white/10 flex items-center gap-2">
+                        عرض المزيد
+                        <span class="material-symbols-outlined text-lg">expand_more</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="border-t border-white/5 bg-dark-950">
+        <div class="max-w-6xl mx-auto px-6 py-10">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-brand flex items-center justify-center text-white font-bold text-sm">4U</div>
+                    <span class="text-sm font-bold text-white">Delivery</span>
+                </div>
+                <div class="flex gap-6">
+                    <a href="#" class="text-dark-500 hover:text-brand text-xs transition-colors">الشروط والأحكام</a>
+                    <a href="#" class="text-dark-500 hover:text-brand text-xs transition-colors">سياسة الخصوصية</a>
+                    <a href="#" class="text-dark-500 hover:text-brand text-xs transition-colors">تواصل معنا</a>
+                </div>
+                <p class="text-dark-600 text-xs">© ٢٠٢٤ 4U Delivery</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating -->
+    <div class="fixed bottom-6 left-6 z-50 flex flex-col gap-3">
+        <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="w-12 h-12 rounded-xl bg-dark-700/80 backdrop-blur-md hover:bg-brand text-dark-300 hover:text-white flex items-center justify-center shadow-xl transition-all hover:scale-110"><span class="material-symbols-outlined">arrow_upward</span></button>
+    </div>
+
+    <script>
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => { if(window.scrollY>80){navbar.classList.add('shadow-lg','shadow-black/20');navbar.style.height='60px'}else{navbar.classList.remove('shadow-lg','shadow-black/20');navbar.style.height=''} });
+    </script>
+</body>
+</html>

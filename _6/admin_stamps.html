@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html class="dark" dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>4U Delivery | لوحة تحكم الأختام</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = { darkMode:"class", theme:{ extend:{ colors:{ brand:{DEFAULT:'#c8102e',light:'#ff4757',dark:'#8b0000'}, gold:{DEFAULT:'#f0c040',light:'#ffe085',dark:'#b8860b'}, dark:{50:'#f5f5f5',100:'#e0e0e0',200:'#bdbdbd',300:'#9e9e9e',400:'#757575',500:'#616161',600:'#424242',700:'#303030',800:'#1a1a1a',900:'#0d0d0d',950:'#080808'}}, fontFamily:{cairo:['Cairo','sans-serif']} }}}
+    </script>
+    <style>
+        * { margin:0;padding:0;box-sizing:border-box }
+        body { font-family:'Cairo',sans-serif; background:#080808; color:#e0e0e0; overflow-x:hidden; min-height:100vh; }
+        .glass { background:rgba(26,26,26,0.6); backdrop-filter:blur(24px); border:1px solid rgba(255,255,255,0.08); }
+        .material-symbols-outlined { font-variation-settings:'FILL' 1,'wght' 600,'GRAD' 0,'opsz' 24; }
+        select, input { outline:none; }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row h-screen">
+
+    <!-- ═══ SIDEBAR ADMIN ═══ -->
+    <aside class="w-full md:w-64 glass border-l border-white/5 flex flex-col shrink-0">
+        <div class="p-6 border-b border-white/5">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-brand flex items-center justify-center text-white font-bold text-lg">4U</div>
+                <div>
+                    <h2 class="text-white font-bold text-lg leading-tight">Admin</h2>
+                    <p class="text-dark-500 text-xs">نظام الأختام</p>
+                </div>
+            </div>
+        </div>
+        <nav class="p-4 flex-1 flex flex-col gap-2">
+            <a href="#" class="flex items-center gap-3 bg-brand/10 text-brand px-4 py-3 rounded-xl font-bold transition-colors">
+                <span class="material-symbols-outlined text-xl">qr_code_scanner</span>
+                إضافة أختام
+            </a>
+            <a href="#" class="flex items-center gap-3 text-dark-300 hover:text-white hover:bg-dark-800 px-4 py-3 rounded-xl font-bold transition-colors">
+                <span class="material-symbols-outlined text-xl">group</span>
+                سجل العملاء
+            </a>
+            <a href="#" class="flex items-center gap-3 text-dark-300 hover:text-white hover:bg-dark-800 px-4 py-3 rounded-xl font-bold transition-colors">
+                <span class="material-symbols-outlined text-xl">storefront</span>
+                إدارة المطاعم
+            </a>
+        </nav>
+        <div class="p-4 border-t border-white/5">
+            <a href="../_3/home.html" class="flex items-center gap-3 text-dark-400 hover:text-brand transition-colors text-sm font-bold px-4 py-2">
+                <span class="material-symbols-outlined text-lg">logout</span>
+                خروج
+            </a>
+        </div>
+    </aside>
+
+    <!-- ═══ MAIN DASHBOARD ═══ -->
+    <main class="flex-1 p-6 overflow-y-auto">
+        <div class="max-w-4xl mx-auto">
+            
+            <header class="mb-10">
+                <h1 class="text-3xl font-black text-white mb-2">إضافة ختم جديد </h1>
+                <p class="text-dark-400">ابحث عن العميل، اختار المطعم، وضيف الختم بناءً على الاسكرين شوت اللي اتبعتت.</p>
+            </header>
+
+            <!-- 1. Search Customer -->
+            <div class="glass rounded-3xl p-6 md:p-8 mb-6 border-brand/20">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <span class="bg-brand text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">١</span>
+                    ابحث عن العميل
+                </h2>
+                <div class="flex flex-col md:flex-row gap-4">
+                    <div class="relative flex-1">
+                        <input type="text" placeholder="رقم الموبايل (مثال: 010xxxxxxxx)" class="w-full bg-dark-900 border border-dark-600 rounded-xl px-4 py-4 text-white focus:border-brand focus:ring-1 focus:ring-brand/30 transition-all text-right"/>
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-dark-500">search</span>
+                    </div>
+                    <button class="bg-brand hover:bg-brand-light text-white font-bold px-8 py-4 rounded-xl transition-all active:scale-95 shrink-0">
+                        بحث
+                    </button>
+                </div>
+
+                <!-- Search Result (Simulated) -->
+                <div class="mt-6 p-4 bg-dark-800/50 rounded-xl border border-white/5 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-dark-700 rounded-full flex items-center justify-center text-dark-300">
+                            <span class="material-symbols-outlined">person</span>
+                        </div>
+                        <div>
+                            <p class="text-white font-bold">أحمد المحلاوي</p>
+                            <p class="text-dark-400 text-sm" dir="ltr">01012345678</p>
+                        </div>
+                    </div>
+                    <span class="bg-green-500/20 text-green-500 px-3 py-1 rounded-full text-xs font-bold">عميل مسجل</span>
+                </div>
+            </div>
+
+            <!-- 2. Select Restaurant & Add Stamp -->
+            <div class="glass rounded-3xl p-6 md:p-8">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <span class="bg-brand text-white w-6 h-6 rounded-full flex items-center justify-center text-sm">٢</span>
+                    اختيار المطعم وإضافة الختم
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Brand Select -->
+                    <div>
+                        <label class="text-dark-300 text-sm font-bold block mb-2">اختر المطعم (من الـ 15 براند)</label>
+                        <select class="w-full bg-dark-900 border border-dark-600 rounded-xl px-4 py-4 text-white focus:border-brand focus:ring-1 focus:ring-brand/30 transition-all cursor-pointer">
+                            <option value="dots">Dots</option>
+                            <option value="koshary">كشري التحرير</option>
+                            <option value="prince">البرنس للمشويات</option>
+                            <option value="buffalo">بافلو برجر</option>
+                        </select>
+                        
+                        <div class="mt-8 bg-dark-900 p-6 rounded-2xl border border-white/5 text-center">
+                            <p class="text-dark-400 text-sm mb-2">الأختام الحالية لهذا العميل في Dots</p>
+                            <div class="text-5xl font-black text-brand mb-4">٤ <span class="text-lg text-dark-500 font-normal">/ ١٠</span></div>
+                            <p class="text-xs text-gold mb-4">باقي ٦ أختام لدخول السحب!</p>
+                            <button class="w-full bg-white hover:bg-gray-200 text-dark-900 font-black py-4 rounded-xl transition-all active:scale-95 shadow-lg flex items-center justify-center gap-2" onclick="alert('تم إضافة الختم بنجاح للعميل!')">
+                                <span class="material-symbols-outlined text-brand">verified</span>
+                                إضافة ختم جديد الآن
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Live Preview -->
+                    <div>
+                        <label class="text-dark-300 text-sm font-bold block mb-2">رؤية كارت العميل (Live Preview)</label>
+                        <div class="bg-dark-950 border border-dark-600 rounded-2xl h-[350px] overflow-hidden relative group">
+                            <!-- iFrame to show the smart template -->
+                            <iframe src="../_6/stamp_card.html?brand=Dots&stamps=4" class="w-full h-full border-none pointer-events-none transform scale-[0.6] origin-top"></iframe>
+                            
+                            <!-- Overlay CTA to open full -->
+                            <div class="absolute inset-0 bg-dark-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                                <a href="../_6/stamp_card.html?brand=Dots&stamps=4" target="_blank" class="bg-brand text-white px-6 py-2 rounded-lg font-bold shadow-lg">فتح الكارت كامل</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
