@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html class="dark" dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>4U Delivery | سياسة الخصوصية</title>
+    <meta name="description" content="سياسة الخصوصية وحماية البيانات الخاصة بمنصة 4U Delivery"/>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="legal.css">
+</head>
+<body>
+    <div class="page-transition-curtain"></div>
+    <div class="bg-effects"><div class="glow-brand animate-float"></div><div class="glow-gold animate-float" style="animation-delay:-3s;"></div></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-inner">
+            <a href="../_3/home.html" class="nav-brand"><div class="nav-brand-icon">4U</div><span>Delivery</span></a>
+            <div class="nav-links">
+                <a href="../_3/home.html" class="nav-link">الرئيسية</a>
+                <a href="../_4/res.html" class="nav-link">المطاعم</a>
+                <a href="../_5/About.html" class="nav-link">عننا</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">القائمة <span class="material-symbols-outlined">expand_more</span></button>
+                    <div class="nav-dropdown-content">
+                        <a href="../_6/stamp_card.html" class="nav-dropdown-item"><span class="material-symbols-outlined">card_membership</span> كارت الأختام</a>
+                        <a href="../_7/contact.html" class="nav-dropdown-item"><span class="material-symbols-outlined">support_agent</span> المساعدة</a>
+                        <a href="../_7/terms.html" class="nav-dropdown-item"><span class="material-symbols-outlined">rule</span> الشروط والأحكام</a>
+                    </div>
+                </div>
+                <div style="width:1px;height:16px;background:rgba(255,255,255,0.1);margin:0 0.5rem;"></div>
+                <a href="../_6/admin_stamps.html" class="nav-link" style="color:var(--gold);display:flex;align-items:center;gap:0.25rem;"><span class="material-symbols-outlined">admin_panel_settings</span> الإدارة</a>
+            </div>
+            <div class="nav-actions">
+                <div id="nav-auth-buttons" style="display:flex;gap:1rem;align-items:center;">
+                    <a href="../_1/login.html" class="btn-login" onclick="localStorage.setItem('authTab','login')">دخول</a>
+                    <a href="../_1/login.html" class="btn-primary ripple-btn" onclick="localStorage.setItem('authTab','register')">اعمل حساب</a>
+                </div>
+                <div id="nav-profile-button" class="hidden">
+                    <a href="../_2/profile.html" class="btn-primary ripple-btn" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);"><span class="material-symbols-outlined">person</span> <span id="nav-user-name">حسابي</span></a>
+                </div>
+                <button id="mobile-menu-btn" class="btn-menu ripple-btn"><span class="material-symbols-outlined">menu</span></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu-overlay">
+        <div class="mobile-header">
+            <div class="nav-brand"><div class="nav-brand-icon">4U</div><span>Delivery</span></div>
+            <button id="close-menu-btn" class="btn-close-menu ripple-btn"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="mobile-nav">
+            <a href="../_3/home.html" class="mobile-link">الرئيسية</a>
+            <a href="../_4/res.html" class="mobile-link">المطاعم</a>
+            <a href="../_5/About.html" class="mobile-link">عننا</a>
+            <a href="../_2/profile.html" class="mobile-link">بروفايلي</a>
+            <div class="mobile-divider"></div>
+            <a href="../_7/contact.html" class="mobile-sublink"><span class="material-symbols-outlined">support_agent</span> المساعدة</a>
+            <a href="../_7/terms.html" class="mobile-sublink"><span class="material-symbols-outlined">rule</span> الشروط والأحكام</a>
+            <a href="../_7/privacy.html" class="mobile-sublink"><span class="material-symbols-outlined">shield</span> سياسة الخصوصية</a>
+        </div>
+        <div class="mobile-bottom"><a href="../_1/login.html" class="btn-mobile-auth ripple-btn" id="mobile-auth-btn">دخول / تسجيل حساب</a></div>
+    </div>
+
+    <!-- Hero -->
+    <section class="page-hero stagger-1">
+        <div class="page-hero-icon green-bg"><span class="material-symbols-outlined icon-filled">shield</span></div>
+        <h1>سياسة الخصوصية</h1>
+        <p>نحترم خصوصيتك ونحمي بياناتك الشخصية بأعلى معايير الأمان</p>
+        <p class="last-updated">آخر تحديث: يوليو 2026</p>
+    </section>
+
+    <!-- Content -->
+    <div class="content-wrapper">
+        <div class="content-section stagger-2">
+            <div class="section-header"><div class="section-number">١</div><h2 class="section-title">البيانات التي نجمعها</h2></div>
+            <div class="section-body">
+                <p>عند استخدامك لمنصة <strong>4U Delivery</strong>، قد نقوم بجمع البيانات التالية:</p>
+                <ul>
+                    <li><strong>بيانات التسجيل:</strong> الاسم، البريد الإلكتروني، ورقم الهاتف.</li>
+                    <li><strong>بيانات الطلبات:</strong> سجل الطلبات، العناوين المستخدمة، والتقييمات.</li>
+                    <li><strong>بيانات النقاط:</strong> رصيد النقاط، المكافآت المستخدمة، ومستوى العضوية.</li>
+                    <li><strong>بيانات تقنية:</strong> نوع الجهاز، المتصفح، ونظام التشغيل لتحسين تجربة الاستخدام.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section stagger-3">
+            <div class="section-header"><div class="section-number">٢</div><h2 class="section-title">كيفية استخدام البيانات</h2></div>
+            <div class="section-body">
+                <p>نستخدم بياناتك للأغراض التالية فقط:</p>
+                <ul>
+                    <li><strong>تنفيذ الطلبات:</strong> معالجة طلباتك وتوصيلها بدقة إلى العنوان الصحيح.</li>
+                    <li><strong>تحسين الخدمة:</strong> تحليل أنماط الاستخدام لتطوير وتحسين تجربة المستخدم.</li>
+                    <li><strong>التواصل:</strong> إرسال إشعارات مهمة عن حالة طلبك أو تحديثات الخدمة.</li>
+                    <li><strong>العروض:</strong> إرسال عروض وخصومات مخصصة بناءً على تفضيلاتك (يمكنك إلغاء الاشتراك في أي وقت).</li>
+                    <li><strong>الأمان:</strong> حماية حسابك ومنع الاستخدام غير المصرح به.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section stagger-4">
+            <div class="section-header"><div class="section-number">٣</div><h2 class="section-title">حماية البيانات</h2></div>
+            <div class="section-body">
+                <ul>
+                    <li>نستخدم تقنيات <strong>تشفير SSL/TLS</strong> لحماية البيانات أثناء النقل.</li>
+                    <li>يتم تخزين كلمات السر بشكل <strong>مشفر (hashed)</strong> ولا يمكن لأي شخص الاطلاع عليها.</li>
+                    <li>نستخدم خدمات <strong>Firebase</strong> من Google التي توفر أعلى معايير الأمان العالمية.</li>
+                    <li>لا نشارك بياناتك الشخصية مع أي طرف ثالث إلا بموافقتك أو عند الضرورة القانونية.</li>
+                    <li>يتم تقييد الوصول إلى البيانات الشخصية على الموظفين المصرح لهم فقط.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section stagger-4">
+            <div class="section-header"><div class="section-number">٤</div><h2 class="section-title">ملفات تعريف الارتباط (Cookies)</h2></div>
+            <div class="section-body">
+                <p>نستخدم ملفات تعريف الارتباط لتحسين تجربتك على المنصة:</p>
+                <ul>
+                    <li><strong>ملفات أساسية:</strong> ضرورية لعمل الموقع بشكل صحيح (مثل تسجيل الدخول).</li>
+                    <li><strong>ملفات تحليلية:</strong> لفهم كيفية استخدامك للموقع وتحسين الأداء.</li>
+                    <li><strong>ملفات تفضيلات:</strong> لتذكر إعداداتك المفضلة (مثل اللغة والعنوان).</li>
+                </ul>
+                <p>يمكنك التحكم في إعدادات الكوكيز من خلال إعدادات متصفحك.</p>
+            </div>
+        </div>
+
+        <div class="content-section stagger-5">
+            <div class="section-header"><div class="section-number">٥</div><h2 class="section-title">حقوقك كمستخدم</h2></div>
+            <div class="section-body">
+                <p>لديك الحقوق التالية فيما يخص بياناتك الشخصية:</p>
+                <ul>
+                    <li><strong>حق الوصول:</strong> يمكنك طلب نسخة من بياناتك الشخصية المخزنة لدينا.</li>
+                    <li><strong>حق التعديل:</strong> يمكنك تعديل بياناتك من خلال صفحة البروفايل.</li>
+                    <li><strong>حق الحذف:</strong> يمكنك طلب حذف حسابك وجميع بياناتك نهائياً بالتواصل معنا.</li>
+                    <li><strong>حق الاعتراض:</strong> يمكنك الاعتراض على استخدام بياناتك لأغراض تسويقية.</li>
+                </ul>
+                <p>لممارسة أيٍّ من هذه الحقوق، <a href="../_7/contact.html" style="color:var(--brand-light);text-decoration:none;">تواصل معنا</a>.</p>
+            </div>
+        </div>
+
+        <div class="content-section stagger-5">
+            <div class="section-header"><div class="section-number">٦</div><h2 class="section-title">مشاركة البيانات مع أطراف ثالثة</h2></div>
+            <div class="section-body">
+                <p>قد نشارك بعض بياناتك في الحالات التالية فقط:</p>
+                <ul>
+                    <li><strong>المطاعم:</strong> نشارك اسمك وعنوانك ورقم هاتفك مع المطعم لتنفيذ الطلب.</li>
+                    <li><strong>مقدمو الخدمات:</strong> نستخدم خدمات أطراف ثالثة موثوقة (مثل Google Firebase) لتشغيل المنصة.</li>
+                    <li><strong>الجهات القانونية:</strong> عند الطلب من جهة حكومية مختصة بموجب القانون.</li>
+                </ul>
+                <p>لا نبيع بياناتك الشخصية لأي طرف تحت أي ظرف.</p>
+            </div>
+        </div>
+
+        <div class="content-section stagger-5">
+            <div class="section-header"><div class="section-number">٧</div><h2 class="section-title">التحديثات والتواصل</h2></div>
+            <div class="section-body">
+                <p>قد نقوم بتحديث سياسة الخصوصية من وقت لآخر. سيتم إخطارك بأي تغييرات جوهرية عبر البريد الإلكتروني أو إشعار على المنصة.</p>
+                <p>لأي استفسار حول سياسة الخصوصية، يمكنك التواصل معنا عبر <a href="../_7/contact.html" style="color:var(--brand-light);text-decoration:none;">صفحة المساعدة</a> أو الاتصال على <strong dir="ltr">0103273273</strong>.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand"><div class="nav-brand-icon">4U</div><span>Delivery</span></div>
+                    <p class="footer-desc">أكبر منصة لطلب الطعام وتوصيل الشحنات. بنوصلك اللي بتحبه لحد باب بيتك بأعلى جودة.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>روابط سريعة</h4>
+                    <div class="footer-links">
+                        <a href="../_4/res.html" class="footer-link">المطاعم</a>
+                        <a href="../_5/About.html" class="footer-link">عننا</a>
+                        <a href="../_7/privacy.html" class="footer-link">سياسة الخصوصية</a>
+                        <a href="../_7/terms.html" class="footer-link">الشروط والأحكام</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>تواصل معنا</h4>
+                    <div class="footer-links">
+                        <div class="contact-item"><span class="material-symbols-outlined">location_on</span><span>بني سويف الجديدة - الكورنيش</span></div>
+                        <div class="contact-item"><span class="material-symbols-outlined">call</span><span dir="ltr">0103273273</span></div>
+                        <div class="contact-item"><span class="material-symbols-outlined">call</span><span dir="ltr">01111139271</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom"><p class="footer-copy">© 2026 4U Delivery. جميع الحقوق محفوظة.</p></div>
+        </div>
+    </footer>
+
+    <button class="btn-float ripple-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})"><span class="material-symbols-outlined">arrow_upward</span></button>
+    <script type="module" src="legal.js"></script>
+</body>
+</html>

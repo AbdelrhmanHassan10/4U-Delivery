@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html class="dark" dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>4U Delivery | طلباتي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="profile-pages.css">
+</head>
+<body>
+    <!-- Page Transition Curtain -->
+    <div class="page-transition-curtain"></div>
+
+    <!-- BG Effects -->
+    <div class="bg-effects pointer-events-none">
+        <div class="particles"></div>
+        <div class="glow-brand animate-float"></div>
+        <div class="glow-gold animate-float" style="animation-delay: -3s;"></div>
+    </div>
+
+    <!-- ═══ NAVBAR ═══ -->
+    <nav class="navbar glass-strong" id="navbar">
+        <div class="container navbar-inner">
+            <a href="../_3/home.html" class="nav-brand ripple-btn">
+                <div class="nav-brand-icon">4U</div>
+                <span>Delivery</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="../_3/home.html" class="nav-link">الرئيسية</a>
+                <a href="../_4/res.html" class="nav-link">المطاعم</a>
+                <a href="../_5/About.html" class="nav-link">عننا</a>
+                <a href="../_2/profile.html" class="nav-link active">بروفايلي</a>
+                
+                <!-- Menu Dropdown -->
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn ripple-btn">القائمة <span class="material-symbols-outlined">expand_more</span></button>
+                    <div class="nav-dropdown-content glass">
+                        <a href="../_6/stamp_card.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">card_membership</span> كارت الأختام</a>
+                        <a href="../_7/contact.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">support_agent</span> المساعدة</a>
+                        <a href="../_7/terms.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">rule</span> الشروط والأحكام</a>
+                    </div>
+                </div>
+
+                <!-- Admin Link -->
+                <a href="../_6/admin_stamps.html" class="nav-link text-gradient-gold" style="display:flex;gap:0.25rem;">
+                    <span class="material-symbols-outlined icon-filled">admin_panel_settings</span> الإدارة
+                </a>
+            </div>
+
+            <div class="nav-actions">
+                <a href="../_1/login.html" class="btn-login" onclick="localStorage.setItem('authTab','login'); navigateWithCurtain(this.href); return false;">دخول</a>
+                <a href="../_1/login.html" class="btn-primary ripple-btn" onclick="localStorage.setItem('authTab','register'); navigateWithCurtain(this.href); return false;">اعمل حساب</a>
+                <button class="btn-menu ripple-btn"><span class="material-symbols-outlined">menu</span></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══ HEADER ═══ -->
+    <header class="page-header stagger-1">
+        <div class="page-icon-wrapper icon-red">
+            <span class="material-symbols-outlined icon-filled">restaurant</span>
+        </div>
+        <h1>طلباتي</h1>
+        <p>تتبع طلباتك الحالية وراجع طلباتك السابقة من هنا بكل سهولة</p>
+    </header>
+
+    <!-- ═══ CONTENT ═══ -->
+    <section class="page-content stagger-2">
+        <a href="profile.html" class="btn-back" onclick="navigateWithCurtain(this.href); return false;">
+            <span class="material-symbols-outlined">arrow_forward</span> العودة للبروفايل
+        </a>
+
+        <div class="items-grid">
+            <!-- Active Order -->
+            <div class="item-card">
+                <div class="item-info">
+                    <div class="item-icon"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=150&h=150" alt="Burger"></div>
+                    <div class="item-details">
+                        <h3>بافلو برجر</h3>
+                        <p>رقم الطلب: #10245 • منذ 15 دقيقة</p>
+                        <p>2 ساندوتش دبل, 1 بطاطس كبير, 2 بيبسي</p>
+                    </div>
+                </div>
+                <div class="item-meta">
+                    <div class="status pending">يتم التحضير ⏳</div>
+                    <div class="price">450 ج.م</div>
+                </div>
+                <div class="item-actions">
+                    <a href="javascript:void(0)" class="btn-action btn-primary-action" onclick="window.showToast('تتبع الطلب سيتوفر قريباً!', 'success')">
+                        <span class="material-symbols-outlined">map</span> تتبع
+                    </a>
+                </div>
+            </div>
+
+            <!-- Past Order 1 -->
+            <div class="item-card">
+                <div class="item-info">
+                    <div class="item-icon"><img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=150&h=150" alt="Pizza"></div>
+                    <div class="item-details">
+                        <h3>بيتزا هت</h3>
+                        <p>رقم الطلب: #09832 • أمس، 9:30 مساءً</p>
+                        <p>1 بيتزا سوبر سوبريم وسط, 1 بافلو وينجز</p>
+                    </div>
+                </div>
+                <div class="item-meta">
+                    <div class="status success">تم التوصيل ✅</div>
+                    <div class="price">320 ج.م</div>
+                </div>
+                <div class="item-actions">
+                    <a href="../_4/res.html" class="btn-action btn-secondary-action">
+                        <span class="material-symbols-outlined">replay</span> إعادة طلب
+                    </a>
+                </div>
+            </div>
+
+            <!-- Past Order 2 -->
+            <div class="item-card">
+                <div class="item-info">
+                    <div class="item-icon"><img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&q=80&w=150&h=150" alt="Chicken"></div>
+                    <div class="item-details">
+                        <h3>كنتاكي</h3>
+                        <p>رقم الطلب: #08211 • 5 يوليو 2026</p>
+                        <p>وجبة دينر ميل, كول سلو, بيبسي</p>
+                    </div>
+                </div>
+                <div class="item-meta">
+                    <div class="status success">تم التوصيل ✅</div>
+                    <div class="price">210 ج.م</div>
+                </div>
+                <div class="item-actions">
+                    <a href="../_4/res.html" class="btn-action btn-secondary-action">
+                        <span class="material-symbols-outlined">replay</span> إعادة طلب
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="footer stagger-5">
+        <div class="container footer-inner">
+            <div class="footer-brand">
+                <div class="footer-icon">4U</div>
+                <span class="footer-text">Delivery</span>
+            </div>
+            <div class="footer-links">
+                <a href="../_7/terms.html" class="footer-link">الشروط والأحكام</a>
+                <a href="../_7/privacy.html" class="footer-link">سياسة الخصوصية</a>
+                <a href="../_7/contact.html" class="footer-link">تواصل معنا</a>
+            </div>
+            <p class="footer-copy">© 2026 4U Delivery</p>
+        </div>
+    </footer>
+
+    <!-- Floating -->
+    <button class="btn-float ripple-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <span class="material-symbols-outlined">arrow_upward</span>
+    </button>
+
+    <script type="module" src="profile.js"></script>
+</body>
+</html>

@@ -4,335 +4,237 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>4U Delivery | بروفايلي</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <script>
-        tailwind.config = { darkMode:"class", theme:{ extend:{ colors:{ brand:{DEFAULT:'#c8102e',light:'#ff4757',dark:'#8b0000'}, gold:{DEFAULT:'#f0c040',light:'#ffe085',dark:'#b8860b'}, dark:{50:'#f5f5f5',100:'#e0e0e0',200:'#bdbdbd',300:'#9e9e9e',400:'#757575',500:'#616161',600:'#424242',700:'#303030',800:'#1a1a1a',900:'#0d0d0d',950:'#080808'}}, fontFamily:{cairo:['Cairo','sans-serif']} }}}
-    </script>
-    <style>
-        html { scroll-behavior: smooth; }
-        ::selection { background: rgba(200, 16, 46, 0.9); color: white; }
-        * { margin:0;padding:0;box-sizing:border-box }
-        body { font-family:'Cairo',sans-serif; background:#080808; color:#e0e0e0; overflow-x:hidden; }
-        .glass { background:rgba(26,26,26,0.6); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.06); }
-        .glass-strong { background:rgba(26,26,26,0.85); backdrop-filter:blur(30px); border:1px solid rgba(255,255,255,0.08); }
-        .glow-red { box-shadow:0 0 60px rgba(200,16,46,0.12); }
-        .glow-gold { box-shadow:0 0 40px rgba(240,192,64,0.08); }
-        .text-gradient-gold { background:linear-gradient(135deg,#f0c040,#ffe085,#f0c040); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-        .text-gradient-red { background:linear-gradient(135deg,#ff4757,#c8102e); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-        .card-hover { transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); }
-        .card-hover:hover { transform:translateY(-6px); }
-        .reveal { opacity:0; transform:translateY(30px); transition:all 0.8s cubic-bezier(0.16,1,0.3,1); }
-        .reveal.visible { opacity:1; transform:translateY(0); }
-        ::-webkit-scrollbar { width:6px } ::-webkit-scrollbar-track { background:#080808 } ::-webkit-scrollbar-thumb { background:#c8102e; border-radius:10px }
-        .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
-    </style>
+    <link rel="stylesheet" href="profile.css">
 </head>
 <body>
+    <!-- Page Transition Curtain -->
+    <div class="page-transition-curtain"></div>
+
+    <!-- BG Effects -->
+    <div class="bg-effects pointer-events-none">
+        <div class="particles"></div>
+        <div class="glow-brand animate-float"></div>
+        <div class="glow-gold animate-float" style="animation-delay: -3s;"></div>
+    </div>
 
     <!-- ═══ NAVBAR ═══ -->
-    <nav class="fixed top-0 w-full z-50 glass-strong transition-all duration-500" id="navbar">
-        <div class="max-w-7xl mx-auto px-6 h-[72px] flex items-center justify-between">
-            <a href="../_3/home.html" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 rounded-xl bg-brand flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform">4U</div>
-                <span class="text-xl font-bold text-white group-hover:text-gold transition-colors">Delivery</span>
+    <nav class="navbar glass-strong" id="navbar">
+        <div class="container navbar-inner">
+            <a href="../_3/home.html" class="nav-brand ripple-btn">
+                <div class="nav-brand-icon">4U</div>
+                <span>Delivery</span>
             </a>
-            <div class="hidden md:flex items-center gap-8">
-                <a href="../_3/home.html" class="text-dark-300 hover:text-white text-sm font-medium transition-colors">الرئيسية</a>
-                <a href="../_4/res.html" class="text-dark-300 hover:text-white text-sm font-medium transition-colors">المطاعم</a>
-                <a href="../_5/About.html" class="text-dark-300 hover:text-white text-sm font-medium transition-colors">عننا</a>
-                <a href="../_2/profile.html" class="text-white text-sm font-bold relative after:absolute after:bottom-[-4px] after:right-0 after:w-full after:h-[2px] after:bg-brand">بروفايلي</a>
+            
+            <div class="nav-links">
+                <a href="../_3/home.html" class="nav-link">الرئيسية</a>
+                <a href="../_4/res.html" class="nav-link">المطاعم</a>
+                <a href="../_5/About.html" class="nav-link">عننا</a>
+                <a href="../_2/profile.html" class="nav-link active">بروفايلي</a>
                 
                 <!-- Menu Dropdown -->
-                <div class="relative group">
-                    <button class="text-dark-300 hover:text-white text-sm font-medium transition-colors flex items-center gap-1 py-4">
-                        القائمة <span class="material-symbols-outlined text-sm">expand_more</span>
-                    </button>
-                    <div class="absolute top-full right-0 w-48 glass rounded-xl border border-white/10 shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 flex flex-col overflow-hidden py-2 translate-y-2 group-hover:translate-y-0">
-                        <a href="../_6/stamp_card.html" class="px-4 py-2 text-sm text-dark-200 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">card_membership</span> كارت الأختام</a>
-                        <a href="#" class="px-4 py-2 text-sm text-dark-200 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">support_agent</span> المساعدة</a>
-                        <a href="#" class="px-4 py-2 text-sm text-dark-200 hover:text-white hover:bg-white/5 transition-colors flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">rule</span> الشروط والأحكام</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn ripple-btn">القائمة <span class="material-symbols-outlined">expand_more</span></button>
+                    <div class="nav-dropdown-content glass">
+                        <a href="../_6/stamp_card.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">card_membership</span> كارت الأختام</a>
+                        <a href="../_7/contact.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">support_agent</span> المساعدة</a>
+                        <a href="../_7/terms.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">rule</span> الشروط والأحكام</a>
                     </div>
                 </div>
 
-                <div class="w-px h-4 bg-white/10"></div>
-                <a href="../_6/admin_stamps.html" class="text-gold hover:text-gold-light text-sm font-bold transition-colors flex items-center gap-1 group">
-                    <span class="material-symbols-outlined text-[18px] group-hover:rotate-12 transition-transform">admin_panel_settings</span>
-                    الإدارة
+                <!-- Admin Link -->
+                <a href="../_6/admin_stamps.html" class="nav-link text-gradient-gold" style="display:flex;gap:0.25rem;">
+                    <span class="material-symbols-outlined icon-filled">admin_panel_settings</span> الإدارة
                 </a>
             </div>
-            <div class="flex items-center gap-3">
-                <a href="../_1/login.html" onclick="localStorage.setItem('authTab','login')" class="hidden sm:inline-block text-dark-300 hover:text-white text-sm font-medium transition-colors px-4 py-2">دخول</a>
-                <a href="../_1/login.html" onclick="localStorage.setItem('authTab','register')" class="hidden sm:inline-block bg-brand hover:bg-brand-light text-white text-sm font-bold px-5 py-2 rounded-xl transition-all active:scale-95 shadow-lg shadow-brand/20">اعمل حساب</a>
-                <button id="mobile-menu-btn" class="md:hidden text-white p-2 bg-white/5 rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center">
-                    <span class="material-symbols-outlined">menu</span>
-                </button>
+
+            <div class="nav-actions">
+                <a href="../_1/login.html" class="btn-login" onclick="localStorage.setItem('authTab','login'); navigateWithCurtain(this.href); return false;">دخول</a>
+                <a href="../_1/login.html" class="btn-primary ripple-btn" onclick="localStorage.setItem('authTab','register'); navigateWithCurtain(this.href); return false;">اعمل حساب</a>
+                <button class="btn-menu ripple-btn"><span class="material-symbols-outlined">menu</span></button>
             </div>
         </div>
     </nav>
 
-    <!-- Mobile Menu Overlay -->
-        <div id="mobile-menu" class="md:hidden fixed inset-0 bg-black z-[100] translate-x-full transition-transform duration-300 flex flex-col p-6" style="background-color: #080808 !important;">
-            <div class="flex justify-between items-center mb-10">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-brand flex items-center justify-center text-white font-bold text-lg shadow-[0_0_15px_rgba(200,16,46,0.5)]">4U</div>
-                    <span class="text-xl font-bold text-white">Delivery</span>
-                </div>
-                <button id="close-menu-btn" class="text-white p-2 bg-white/5 rounded-full hover:bg-white/10 transition-colors flex items-center justify-center">
-                    <span class="material-symbols-outlined">close</span>
-                </button>
-            </div>
-            <div class="flex flex-col gap-6 text-right">
-                <a href="../_3/home.html" class="text-2xl font-black text-white hover:text-brand transition-colors">الرئيسية</a>
-                <a href="../_4/res.html" class="text-2xl font-black text-white hover:text-brand transition-colors">المطاعم</a>
-                <a href="../_5/About.html" class="text-2xl font-black text-white hover:text-brand transition-colors">عننا</a>
-                <a href="../_2/profile.html" class="text-2xl font-black text-white hover:text-brand transition-colors">بروفايلي</a>
-                <hr class="border-white/10 my-4">
-                <a href="../_6/stamp_card.html" class="text-xl font-bold text-dark-200 hover:text-white transition-colors flex items-center gap-2"><span class="material-symbols-outlined">card_membership</span> كارت الأختام</a>
-                <a href="../_6/admin_stamps.html" class="text-xl font-black text-gold mt-4 flex items-center gap-2"><span class="material-symbols-outlined">shield_person</span> الإدارة</a>
-                <div class="mt-auto pt-10">
-                    <a href="../_1/login.html" class="w-full block text-center bg-brand hover:bg-brand-light transition-colors text-white font-bold py-4 rounded-xl mb-3">دخول / تسجيل حساب</a>
-                </div>
-            </div>
-        </div>
-        <script>
-            const mBtn = document.getElementById('mobile-menu-btn');
-            const cBtn = document.getElementById('close-menu-btn');
-            const mMenu = document.getElementById('mobile-menu');
-            if(mBtn && cBtn && mMenu) {
-                mBtn.addEventListener('click', () => mMenu.classList.remove('translate-x-full'));
-                cBtn.addEventListener('click', () => mMenu.classList.add('translate-x-full'));
-            }
-        </script>
-
     <!-- ═══ PROFILE HERO ═══ -->
-    <section class="pt-[100px] pb-8 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="glass rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-center gap-8 glow-red relative overflow-hidden">
-                <!-- Decorative -->
-                <div class="absolute top-0 right-0 w-60 h-60 bg-brand/8 rounded-full blur-[80px] pointer-events-none"></div>
-                
-                <!-- Avatar -->
-                <div class="relative group shrink-0">
-                    <div class="w-28 h-28 rounded-2xl border-[3px] border-brand overflow-hidden">
-                        <div class="w-full h-full bg-cover bg-center" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuDFlKLGKMu4KC4OLVplLH4TklVhBVwlQd7IoSwR3X8cRAXbD99YlvX6j8mzXZX_WLnLrZeQg_dNIdICtbQvk_SwlbGTDAYSkJgjzgQhBnXDMLMcdPNaxYLG1rrHk52l4dq6Wzw6cdjxHdtetdTvqz82lOBZr5n9ZFxxiPaVEDadTvLM1SIY6Oqdu4t29jNfyq8kS6TFDYADGUVbRFoseBhmEs92vZcxnYzvza24pErS7hM-uaTStUbF')"></div>
+    <section class="profile-hero container">
+        <div class="profile-card glass stagger-1">
+            
+            <!-- Avatar -->
+            <div class="profile-avatar-wrapper stagger-2">
+                <div class="profile-avatar" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuDFlKLGKMu4KC4OLVplLH4TklVhBVwlQd7IoSwR3X8cRAXbD99YlvX6j8mzXZX_WLnLrZeQg_dNIdICtbQvk_SwlbGTDAYSkJgjzgQhBnXDMLMcdPNaxYLG1rrHk52l4dq6Wzw6cdjxHdtetdTvqz82lOBZr5n9ZFxxiPaVEDadTvLM1SIY6Oqdu4t29jNfyq8kS6TFDYADGUVbRFoseBhmEs92vZcxnYzvza24pErS7hM-uaTStUbF')"></div>
+                <button class="btn-edit-avatar ripple-btn"><span class="material-symbols-outlined">edit</span></button>
+            </div>
+            
+            <!-- Info -->
+            <div class="profile-info">
+                <h1 class="profile-name stagger-2" id="profile-name">...</h1>
+                <p class="profile-email stagger-3" id="profile-email">...</p>
+                <div class="profile-stats stagger-4">
+                    <div class="stat-box">
+                        <p class="stat-value text-gradient-gold" id="stat-points">...</p>
+                        <p class="stat-label">نقطة</p>
                     </div>
-                    <button class="absolute -bottom-2 -left-2 bg-brand hover:bg-brand-light p-2 rounded-xl text-white shadow-lg transition-all hover:scale-110">
-                        <span class="material-symbols-outlined text-sm">edit</span>
-                    </button>
-                </div>
-                
-                <!-- Info -->
-                <div class="flex-1 text-center md:text-right">
-                    <h1 class="text-3xl font-black text-white mb-1">أحمد المحلاوي</h1>
-                    <p class="text-dark-400 text-sm mb-4">ahmed.m@4udelivery.com</p>
-                    <div class="flex flex-wrap gap-3 justify-center md:justify-start">
-                        <div class="bg-dark-800/80 border border-white/5 rounded-xl px-5 py-3 text-center">
-                            <p class="text-gold text-2xl font-black">١,٢٥٠</p>
-                            <p class="text-dark-400 text-xs font-semibold">نقطة</p>
-                        </div>
-                        <div class="bg-dark-800/80 border border-white/5 rounded-xl px-5 py-3 text-center">
-                            <p class="text-brand-light text-2xl font-black">٤٥٠ ج.م</p>
-                            <p class="text-dark-400 text-xs font-semibold">المحفظة</p>
-                        </div>
-                        <div class="bg-dark-800/80 border border-white/5 rounded-xl px-5 py-3 text-center">
-                            <p class="text-white text-2xl font-black">Gold</p>
-                            <p class="text-dark-400 text-xs font-semibold">المستوى</p>
-                        </div>
+                    <div class="stat-box">
+                        <p class="stat-value text-gradient-red" id="stat-wallet">...</p>
+                        <p class="stat-label">المحفظة</p>
+                    </div>
+                    <div class="stat-box">
+                        <p class="stat-value text-white" id="stat-tier">...</p>
+                        <p class="stat-label">المستوى</p>
                     </div>
                 </div>
-                
-                <!-- Actions -->
-                <div class="flex md:flex-col gap-3 shrink-0">
-                    <button class="bg-dark-700 hover:bg-dark-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2"><span class="material-symbols-outlined text-sm">settings</span> إعدادات</button>
-                    <button class="bg-brand/10 hover:bg-brand/20 text-brand border border-brand/20 px-5 py-2.5 rounded-xl text-sm font-bold transition-all flex items-center gap-2"><span class="material-symbols-outlined text-sm">logout</span> خروج</button>
-                </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="profile-actions stagger-5">
+                <button class="btn-secondary ripple-btn"><span class="material-symbols-outlined icon-filled">settings</span> إعدادات</button>
+                <button class="btn-outline ripple-btn" id="btn-logout"><span class="material-symbols-outlined icon-filled">logout</span> خروج</button>
             </div>
         </div>
     </section>
 
     <!-- ═══ LOYALTY PROGRESS ═══ -->
-    <section class="py-4 px-6 reveal">
-        <div class="max-w-7xl mx-auto">
-            <div class="glass rounded-2xl p-6 border border-gold/10 glow-gold">
-                <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-center gap-3">
-                        <span class="material-symbols-outlined text-gold text-2xl" style="font-variation-settings:'FILL'1;">workspace_premium</span>
-                        <div>
-                            <h3 class="text-white font-bold text-sm">عضوية 4U <span class="text-gradient-gold">Gold</span></h3>
-                            <p class="text-dark-400 text-xs">باقيلك ٢٥٠ نقطة عشان توصل لـ Platinum!</p>
-                        </div>
+    <section class="section container stagger-2">
+        <div class="loyalty-card glass">
+            <div class="loyalty-header">
+                <div class="loyalty-title-wrapper">
+                    <span class="material-symbols-outlined icon-filled text-gradient-gold" style="font-size:24px;">workspace_premium</span>
+                    <div>
+                        <h3 class="loyalty-title" id="loyalty-title">عضوية 4U <span class="text-gradient-gold">...</span></h3>
+                        <p class="loyalty-subtitle" id="loyalty-subtitle">...</p>
                     </div>
-                    <a href="../_5/About.html" class="text-gold text-xs font-bold hover:underline">التفاصيل ←</a>
                 </div>
-                <div class="relative h-3 w-full bg-dark-700 rounded-full overflow-hidden">
-                    <div class="h-full bg-gradient-to-r from-gold-dark to-gold rounded-full transition-all duration-1000" style="width: 83%"></div>
-                </div>
-                <div class="flex justify-between text-xs text-dark-500 mt-2">
-                    <span>Gold (1001)</span>
-                    <span>Platinum (1500)</span>
-                </div>
+                <a href="../_5/About.html" class="loyalty-link">التفاصيل ←</a>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="loyalty-progress-fill" style="width: 0%"></div>
+            </div>
+            <div class="loyalty-tiers">
+                <span id="loyalty-current-tier">...</span>
+                <span id="loyalty-next-tier">...</span>
             </div>
         </div>
     </section>
 
     <!-- ═══ DASHBOARD ═══ -->
-    <section class="py-6 px-6 reveal">
-        <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-4">
-            <!-- My Orders -->
-            <div class="glass rounded-2xl p-6 card-hover cursor-pointer group relative overflow-hidden">
-                <div class="absolute -bottom-3 -left-3 text-brand/5"><span class="material-symbols-outlined text-[80px]" style="font-variation-settings:'FILL'1;">restaurant</span></div>
-                <div class="relative z-10">
-                    <div class="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-brand text-2xl" style="font-variation-settings:'FILL'1;">restaurant</span>
-                    </div>
-                    <h3 class="text-white font-bold mb-1">طلباتي</h3>
-                    <p class="text-dark-400 text-xs mb-4">تابع طلباتك الحالية والسابقة</p>
-                    <span class="text-brand text-xs font-bold flex items-center gap-1">عرض الكل <span class="material-symbols-outlined text-xs">arrow_back_ios</span></span>
-                </div>
+    <section class="section container stagger-3">
+        <div class="dashboard-grid">
+            <!-- Orders -->
+            <div class="dash-card glass card-brand ripple-btn" onclick="navigateWithCurtain('orders.html')">
+                <div class="dash-icon-bg"><span class="material-symbols-outlined icon-filled">restaurant</span></div>
+                <div class="dash-icon-wrapper"><span class="material-symbols-outlined icon-filled">restaurant</span></div>
+                <h3 class="dash-title">طلباتي</h3>
+                <p class="dash-desc">تابع طلباتك الحالية والسابقة</p>
+                <span class="dash-link">عرض الكل <span class="material-symbols-outlined" style="font-size:16px;">arrow_back_ios</span></span>
             </div>
             <!-- Favorites -->
-            <div class="glass rounded-2xl p-6 card-hover cursor-pointer group relative overflow-hidden">
-                <div class="absolute -bottom-3 -left-3 text-brand/5"><span class="material-symbols-outlined text-[80px]" style="font-variation-settings:'FILL'1;">favorite</span></div>
-                <div class="relative z-10">
-                    <div class="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-brand text-2xl" style="font-variation-settings:'FILL'1;">favorite</span>
-                    </div>
-                    <h3 class="text-white font-bold mb-1">المفضلة</h3>
-                    <p class="text-dark-400 text-xs mb-4">كل اللي بتحبه في مكان واحد</p>
-                    <span class="text-brand text-xs font-bold flex items-center gap-1">عرض الكل <span class="material-symbols-outlined text-xs">arrow_back_ios</span></span>
-                </div>
+            <div class="dash-card glass card-brand ripple-btn" onclick="navigateWithCurtain('favorites.html')">
+                <div class="dash-icon-bg"><span class="material-symbols-outlined icon-filled">favorite</span></div>
+                <div class="dash-icon-wrapper"><span class="material-symbols-outlined icon-filled">favorite</span></div>
+                <h3 class="dash-title">المفضلة</h3>
+                <p class="dash-desc">كل اللي بتحبه في مكان واحد</p>
+                <span class="dash-link">عرض الكل <span class="material-symbols-outlined" style="font-size:16px;">arrow_back_ios</span></span>
             </div>
             <!-- Addresses -->
-            <div class="glass rounded-2xl p-6 card-hover cursor-pointer group relative overflow-hidden">
-                <div class="absolute -bottom-3 -left-3 text-gold/5"><span class="material-symbols-outlined text-[80px]" style="font-variation-settings:'FILL'1;">location_on</span></div>
-                <div class="relative z-10">
-                    <div class="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-gold text-2xl" style="font-variation-settings:'FILL'1;">location_on</span>
-                    </div>
-                    <h3 class="text-white font-bold mb-1">العناوين</h3>
-                    <p class="text-dark-400 text-xs mb-4">بيتك، مكتبك، أي مكان</p>
-                    <span class="text-gold text-xs font-bold flex items-center gap-1">تعديل <span class="material-symbols-outlined text-xs">arrow_back_ios</span></span>
-                </div>
+            <div class="dash-card glass card-gold ripple-btn" onclick="navigateWithCurtain('addresses.html')">
+                <div class="dash-icon-bg"><span class="material-symbols-outlined icon-filled">location_on</span></div>
+                <div class="dash-icon-wrapper"><span class="material-symbols-outlined icon-filled">location_on</span></div>
+                <h3 class="dash-title">العناوين</h3>
+                <p class="dash-desc">بيتك، مكتبك، أي مكان</p>
+                <span class="dash-link">تعديل <span class="material-symbols-outlined" style="font-size:16px;">arrow_back_ios</span></span>
             </div>
             <!-- Wallet -->
-            <div class="glass rounded-2xl p-6 card-hover cursor-pointer group relative overflow-hidden">
-                <div class="absolute -bottom-3 -left-3 text-gold/5"><span class="material-symbols-outlined text-[80px]" style="font-variation-settings:'FILL'1;">account_balance_wallet</span></div>
-                <div class="relative z-10">
-                    <div class="w-12 h-12 rounded-xl bg-gold/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-gold text-2xl" style="font-variation-settings:'FILL'1;">account_balance_wallet</span>
-                    </div>
-                    <h3 class="text-white font-bold mb-1">المحفظة</h3>
-                    <p class="text-dark-400 text-xs mb-4">رصيدك وطرق الدفع</p>
-                    <span class="text-gold text-xs font-bold flex items-center gap-1">إدارة <span class="material-symbols-outlined text-xs">arrow_back_ios</span></span>
-                </div>
+            <div class="dash-card glass card-gold ripple-btn" onclick="navigateWithCurtain('wallet.html')">
+                <div class="dash-icon-bg"><span class="material-symbols-outlined icon-filled">account_balance_wallet</span></div>
+                <div class="dash-icon-wrapper"><span class="material-symbols-outlined icon-filled">account_balance_wallet</span></div>
+                <h3 class="dash-title">المحفظة</h3>
+                <p class="dash-desc">رصيدك وطرق الدفع</p>
+                <span class="dash-link">إدارة <span class="material-symbols-outlined" style="font-size:16px;">arrow_back_ios</span></span>
             </div>
             <!-- Points -->
-            <div class="glass rounded-2xl p-6 card-hover cursor-pointer group relative overflow-hidden">
-                <div class="absolute -bottom-3 -left-3 text-brand/5"><span class="material-symbols-outlined text-[80px]" style="font-variation-settings:'FILL'1;">stars</span></div>
-                <div class="relative z-10">
-                    <div class="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-brand text-2xl" style="font-variation-settings:'FILL'1;">stars</span>
-                    </div>
-                    <h3 class="text-white font-bold mb-1">النقاط</h3>
-                    <p class="text-dark-400 text-xs mb-4">بدل نقطك بمكافآت</p>
-                    <span class="text-brand text-xs font-bold flex items-center gap-1">استبدال <span class="material-symbols-outlined text-xs">arrow_back_ios</span></span>
-                </div>
+            <div class="dash-card glass card-brand ripple-btn" onclick="navigateWithCurtain('points.html')">
+                <div class="dash-icon-bg"><span class="material-symbols-outlined icon-filled">stars</span></div>
+                <div class="dash-icon-wrapper"><span class="material-symbols-outlined icon-filled">stars</span></div>
+                <h3 class="dash-title">النقاط</h3>
+                <p class="dash-desc">بدل نقطك بمكافآت</p>
+                <span class="dash-link">استبدال <span class="material-symbols-outlined" style="font-size:16px;">arrow_back_ios</span></span>
             </div>
             <!-- Settings -->
-            <div class="glass rounded-2xl p-6 card-hover cursor-pointer group relative overflow-hidden">
-                <div class="absolute -bottom-3 -left-3 text-dark-600/20"><span class="material-symbols-outlined text-[80px]" style="font-variation-settings:'FILL'1;">settings</span></div>
-                <div class="relative z-10">
-                    <div class="w-12 h-12 rounded-xl bg-dark-700 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined text-dark-300 text-2xl" style="font-variation-settings:'FILL'1;">settings</span>
-                    </div>
-                    <h3 class="text-white font-bold mb-1">الإعدادات</h3>
-                    <p class="text-dark-400 text-xs mb-4">اللغة، الإشعارات، الخصوصية</p>
-                    <span class="text-dark-300 text-xs font-bold flex items-center gap-1">تعديل <span class="material-symbols-outlined text-xs">arrow_back_ios</span></span>
-                </div>
+            <div class="dash-card glass card-dark ripple-btn" onclick="navigateWithCurtain('settings.html')">
+                <div class="dash-icon-bg"><span class="material-symbols-outlined icon-filled">settings</span></div>
+                <div class="dash-icon-wrapper"><span class="material-symbols-outlined icon-filled">settings</span></div>
+                <h3 class="dash-title">الإعدادات</h3>
+                <p class="dash-desc">اللغة، الإشعارات، الخصوصية</p>
+                <span class="dash-link">تعديل <span class="material-symbols-outlined" style="font-size:16px;">arrow_back_ios</span></span>
             </div>
         </div>
     </section>
 
     <!-- ═══ RECENT ACTIVITY ═══ -->
-    <section class="py-6 px-6 pb-20 reveal">
-        <div class="max-w-7xl mx-auto">
-            <div class="glass rounded-2xl p-6">
-                <h2 class="text-white font-bold text-lg flex items-center gap-2 mb-6">
-                    <span class="material-symbols-outlined text-gold" style="font-variation-settings:'FILL'1;">history</span>
-                    آخر الحركات
-                </h2>
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between p-4 bg-dark-800/50 rounded-xl border border-white/3 hover:border-white/10 transition-colors">
-                        <div class="flex items-center gap-4">
-                            <div class="w-11 h-11 rounded-xl bg-gold/10 flex items-center justify-center shrink-0">
-                                <span class="material-symbols-outlined text-gold">delivery_dining</span>
-                            </div>
-                            <div>
-                                <p class="text-white font-bold text-sm">تم توصيل طلب #٩٨٤٢</p>
-                                <p class="text-dark-500 text-xs">مطعم حضرموت عنتر - منذ ٢ ساعة</p>
-                            </div>
+    <section class="section activity-section container stagger-4">
+        <div class="glass" style="padding:1.5rem; border-radius:1rem;">
+            <h2 class="activity-header">
+                <span class="material-symbols-outlined icon-filled text-gradient-gold">history</span>
+                آخر الحركات
+            </h2>
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-info">
+                        <div class="activity-icon card-gold" style="background: rgba(240,192,64,0.1); color: var(--gold);"><span class="material-symbols-outlined icon-filled">delivery_dining</span></div>
+                        <div>
+                            <p class="activity-title">تم توصيل طلب #٩٨٤٢</p>
+                            <p class="activity-time">مطعم حضرموت عنتر - منذ ٢ ساعة</p>
                         </div>
-                        <span class="text-gold font-bold text-sm">+ ٥٠ نقطة</span>
                     </div>
-                    <div class="flex items-center justify-between p-4 bg-dark-800/50 rounded-xl border border-white/3 hover:border-white/10 transition-colors">
-                        <div class="flex items-center gap-4">
-                            <div class="w-11 h-11 rounded-xl bg-brand/10 flex items-center justify-center shrink-0">
-                                <span class="material-symbols-outlined text-brand">payments</span>
-                            </div>
-                            <div>
-                                <p class="text-white font-bold text-sm">شحن محفظة</p>
-                                <p class="text-dark-500 text-xs">فيزا بلاتينية - أمس الساعة ٩:٣٠ م</p>
-                            </div>
+                    <span class="activity-value val-gold">+ ٥٠ نقطة</span>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-info">
+                        <div class="activity-icon card-brand" style="background: rgba(200,16,46,0.1); color: var(--brand);"><span class="material-symbols-outlined icon-filled">payments</span></div>
+                        <div>
+                            <p class="activity-title">شحن محفظة</p>
+                            <p class="activity-time">فيزا بلاتينية - أمس الساعة ٩:٣٠ م</p>
                         </div>
-                        <span class="text-brand-light font-bold text-sm">٢٠٠ ج.م</span>
                     </div>
-                    <div class="flex items-center justify-between p-4 bg-dark-800/50 rounded-xl border border-white/3 hover:border-white/10 transition-colors">
-                        <div class="flex items-center gap-4">
-                            <div class="w-11 h-11 rounded-xl bg-gold/10 flex items-center justify-center shrink-0">
-                                <span class="material-symbols-outlined text-gold">delivery_dining</span>
-                            </div>
-                            <div>
-                                <p class="text-white font-bold text-sm">تم توصيل طلب #٩٨٣٥</p>
-                                <p class="text-dark-500 text-xs">بافلو برجر - منذ ٣ أيام</p>
-                            </div>
+                    <span class="activity-value val-brand">٢٠٠ ج.م</span>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-info">
+                        <div class="activity-icon card-gold" style="background: rgba(240,192,64,0.1); color: var(--gold);"><span class="material-symbols-outlined icon-filled">delivery_dining</span></div>
+                        <div>
+                            <p class="activity-title">تم توصيل طلب #٩٨٣٥</p>
+                            <p class="activity-time">بافلو برجر - منذ ٣ أيام</p>
                         </div>
-                        <span class="text-gold font-bold text-sm">+ ٥٠ نقطة</span>
                     </div>
+                    <span class="activity-value val-gold">+ ٥٠ نقطة</span>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ═══ FOOTER ═══ -->
-    <footer class="border-t border-white/5 bg-dark-950">
-        <div class="max-w-6xl mx-auto px-6 py-10">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-lg bg-brand flex items-center justify-center text-white font-bold text-sm">4U</div>
-                    <span class="text-sm font-bold text-white">Delivery</span>
-                </div>
-                <div class="flex gap-6">
-                    <a href="#" class="text-dark-500 hover:text-brand text-xs transition-colors">الشروط والأحكام</a>
-                    <a href="#" class="text-dark-500 hover:text-brand text-xs transition-colors">سياسة الخصوصية</a>
-                    <a href="#" class="text-dark-500 hover:text-brand text-xs transition-colors">تواصل معنا</a>
-                </div>
-                <p class="text-dark-600 text-xs">© 2026 4U Delivery</p>
+    <footer class="footer stagger-5">
+        <div class="container footer-inner">
+            <div class="footer-brand">
+                <div class="footer-icon">4U</div>
+                <span class="footer-text">Delivery</span>
             </div>
+            <div class="footer-links">
+                <a href="../_7/terms.html" class="footer-link">الشروط والأحكام</a>
+                <a href="../_7/privacy.html" class="footer-link">سياسة الخصوصية</a>
+                <a href="../_7/contact.html" class="footer-link">تواصل معنا</a>
+            </div>
+            <p class="footer-copy">© 2026 4U Delivery</p>
         </div>
     </footer>
 
     <!-- Floating -->
-    <div class="fixed bottom-6 left-6 z-50 flex flex-col gap-3">
-        <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="w-12 h-12 rounded-xl bg-dark-700/80 backdrop-blur-md hover:bg-brand text-dark-300 hover:text-white flex items-center justify-center shadow-xl transition-all hover:scale-110"><span class="material-symbols-outlined">arrow_upward</span></button>
-    </div>
+    <button class="btn-float ripple-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <span class="material-symbols-outlined">arrow_upward</span>
+    </button>
 
-    <script>
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => { if(window.scrollY>80){navbar.classList.add('shadow-lg','shadow-black/20');navbar.style.height='60px'}else{navbar.classList.remove('shadow-lg','shadow-black/20');navbar.style.height=''} });
-        const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible') }) }, { threshold:0.1 });
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    </script>
+    <script type="module" src="profile.js"></script>
 </body>
 </html>

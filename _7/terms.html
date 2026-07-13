@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html class="dark" dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>4U Delivery | الشروط والأحكام</title>
+    <meta name="description" content="الشروط والأحكام الخاصة باستخدام خدمات 4U Delivery لتوصيل الطعام"/>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="legal.css">
+</head>
+<body>
+    <div class="page-transition-curtain"></div>
+    <div class="bg-effects"><div class="glow-brand animate-float"></div><div class="glow-gold animate-float" style="animation-delay:-3s;"></div></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-inner">
+            <a href="../_3/home.html" class="nav-brand">
+                <div class="nav-brand-icon">4U</div><span>Delivery</span>
+            </a>
+            <div class="nav-links">
+                <a href="../_3/home.html" class="nav-link">الرئيسية</a>
+                <a href="../_4/res.html" class="nav-link">المطاعم</a>
+                <a href="../_5/About.html" class="nav-link">عننا</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">القائمة <span class="material-symbols-outlined">expand_more</span></button>
+                    <div class="nav-dropdown-content">
+                        <a href="../_6/stamp_card.html" class="nav-dropdown-item"><span class="material-symbols-outlined">card_membership</span> كارت الأختام</a>
+                        <a href="../_7/contact.html" class="nav-dropdown-item"><span class="material-symbols-outlined">support_agent</span> المساعدة</a>
+                        <a href="../_7/terms.html" class="nav-dropdown-item"><span class="material-symbols-outlined">rule</span> الشروط والأحكام</a>
+                    </div>
+                </div>
+                <div style="width:1px;height:16px;background:rgba(255,255,255,0.1);margin:0 0.5rem;"></div>
+                <a href="../_6/admin_stamps.html" class="nav-link" style="color:var(--gold);display:flex;align-items:center;gap:0.25rem;">
+                    <span class="material-symbols-outlined">admin_panel_settings</span> الإدارة
+                </a>
+            </div>
+            <div class="nav-actions">
+                <div id="nav-auth-buttons" style="display:flex;gap:1rem;align-items:center;">
+                    <a href="../_1/login.html" class="btn-login" onclick="localStorage.setItem('authTab','login')">دخول</a>
+                    <a href="../_1/login.html" class="btn-primary ripple-btn" onclick="localStorage.setItem('authTab','register')">اعمل حساب</a>
+                </div>
+                <div id="nav-profile-button" class="hidden">
+                    <a href="../_2/profile.html" class="btn-primary ripple-btn" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);">
+                        <span class="material-symbols-outlined">person</span> <span id="nav-user-name">حسابي</span>
+                    </a>
+                </div>
+                <button id="mobile-menu-btn" class="btn-menu ripple-btn"><span class="material-symbols-outlined">menu</span></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu-overlay">
+        <div class="mobile-header">
+            <div class="nav-brand"><div class="nav-brand-icon">4U</div><span>Delivery</span></div>
+            <button id="close-menu-btn" class="btn-close-menu ripple-btn"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="mobile-nav">
+            <a href="../_3/home.html" class="mobile-link">الرئيسية</a>
+            <a href="../_4/res.html" class="mobile-link">المطاعم</a>
+            <a href="../_5/About.html" class="mobile-link">عننا</a>
+            <a href="../_2/profile.html" class="mobile-link">بروفايلي</a>
+            <div class="mobile-divider"></div>
+            <a href="../_7/contact.html" class="mobile-sublink"><span class="material-symbols-outlined">support_agent</span> المساعدة</a>
+            <a href="../_7/terms.html" class="mobile-sublink"><span class="material-symbols-outlined">rule</span> الشروط والأحكام</a>
+            <a href="../_7/privacy.html" class="mobile-sublink"><span class="material-symbols-outlined">shield</span> سياسة الخصوصية</a>
+        </div>
+        <div class="mobile-bottom">
+            <a href="../_1/login.html" class="btn-mobile-auth ripple-btn" id="mobile-auth-btn">دخول / تسجيل حساب</a>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="page-hero stagger-1">
+        <div class="page-hero-icon brand-bg"><span class="material-symbols-outlined icon-filled">gavel</span></div>
+        <h1>الشروط والأحكام</h1>
+        <p>شروط وأحكام استخدام خدمات 4U Delivery لتوصيل الطعام</p>
+        <p class="last-updated">آخر تحديث: يوليو 2026</p>
+    </section>
+
+    <!-- Content -->
+    <div class="content-wrapper">
+        <div class="content-section stagger-2">
+            <div class="section-header"><div class="section-number">١</div><h2 class="section-title">مقدمة وقبول الشروط</h2></div>
+            <div class="section-body">
+                <p>مرحباً بك في <strong>4U Delivery</strong>. باستخدامك لخدماتنا، فأنت توافق على الالتزام بهذه الشروط والأحكام. نرجو قراءتها بعناية قبل استخدام المنصة.</p>
+                <p>تُعتبر هذه الشروط بمثابة اتفاقية قانونية مُلزمة بينك وبين شركة 4U Delivery. إذا كنت لا توافق على أيٍّ من هذه الشروط، يرجى عدم استخدام خدماتنا.</p>
+            </div>
+        </div>
+
+        <div class="content-section stagger-3">
+            <div class="section-header"><div class="section-number">٢</div><h2 class="section-title">الخدمات المقدمة</h2></div>
+            <div class="section-body">
+                <p>توفر 4U Delivery منصة رقمية تربط بين العملاء والمطاعم المحلية لتسهيل عملية طلب وتوصيل الطعام. تشمل خدماتنا:</p>
+                <ul>
+                    <li><strong>طلب الطعام:</strong> تصفح قوائم الطعام من المطاعم المتعاقدة معنا وإجراء الطلبات.</li>
+                    <li><strong>التوصيل:</strong> توصيل الطلبات إلى العنوان المحدد من قِبل العميل.</li>
+                    <li><strong>نظام النقاط:</strong> كسب نقاط مع كل طلب يمكن استبدالها بمكافآت وخصومات.</li>
+                    <li><strong>كارت الأختام:</strong> نظام ولاء خاص بكل مطعم للحصول على مكافآت إضافية.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section stagger-4">
+            <div class="section-header"><div class="section-number">٣</div><h2 class="section-title">التسجيل وحساب المستخدم</h2></div>
+            <div class="section-body">
+                <ul>
+                    <li>يجب أن يكون عمرك <strong>16 سنة على الأقل</strong> لإنشاء حساب واستخدام خدماتنا.</li>
+                    <li>أنت مسؤول عن الحفاظ على سرية بيانات حسابك (الإيميل وكلمة السر).</li>
+                    <li>يجب تقديم معلومات صحيحة ودقيقة عند التسجيل، بما في ذلك الاسم الحقيقي ورقم الهاتف الفعّال.</li>
+                    <li>يحق لنا تعليق أو إلغاء أي حساب يخالف هذه الشروط دون إشعار مسبق.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section stagger-4">
+            <div class="section-header"><div class="section-number">٤</div><h2 class="section-title">الطلبات والأسعار</h2></div>
+            <div class="section-body">
+                <ul>
+                    <li>الأسعار المعروضة على المنصة هي <strong>نفس أسعار المطعم</strong> بدون أي زيادة.</li>
+                    <li>قد تُضاف رسوم توصيل منفصلة حسب المسافة والمطعم.</li>
+                    <li>نحتفظ بالحق في تحديث الأسعار في أي وقت بالتنسيق مع المطاعم.</li>
+                    <li>بمجرد تأكيد الطلب، يُعتبر مُلزِمًا ولا يمكن تعديله إلا في حالات استثنائية.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section stagger-5">
+            <div class="section-header"><div class="section-number">٥</div><h2 class="section-title">الإلغاء والاسترجاع</h2></div>
+            <div class="section-body">
+                <ul>
+                    <li>يمكنك إلغاء الطلب <strong>قبل بدء تحضيره</strong> من المطعم دون أي رسوم.</li>
+                    <li>بعد بدء التحضير، لا يمكن الإلغاء وسيتم تحصيل المبلغ بالكامل.</li>
+                    <li>في حالة وجود مشكلة في الطلب (أصناف ناقصة أو خاطئة)، تواصل معنا خلال <strong>30 دقيقة</strong> من الاستلام.</li>
+                    <li>سيتم مراجعة الشكوى والتعويض المناسب (استرجاع المبلغ أو إعادة الطلب) خلال 24 ساعة.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section stagger-5">
+            <div class="section-header"><div class="section-number">٦</div><h2 class="section-title">نظام النقاط والمكافآت</h2></div>
+            <div class="section-body">
+                <ul>
+                    <li>يحصل كل مستخدم جديد على <strong>500 نقطة ترحيبية</strong> و <strong>150 جنيه رصيد</strong> عند التسجيل.</li>
+                    <li>يتم كسب النقاط مع كل طلب ناجح يتم توصيله.</li>
+                    <li>النقاط غير قابلة للتحويل النقدي ولا يمكن نقلها لحساب آخر.</li>
+                    <li>يحق لنا تعديل نظام النقاط أو قيمتها مع إخطار المستخدمين مسبقاً.</li>
+                    <li>كارت الأختام يخضع لشروط كل مطعم على حدة ويمكن تعديله.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section stagger-5">
+            <div class="section-header"><div class="section-number">٧</div><h2 class="section-title">المسؤولية والتعويض</h2></div>
+            <div class="section-body">
+                <ul>
+                    <li>4U Delivery هي وسيط بين العميل والمطعم. المطعم هو المسؤول عن جودة الطعام وسلامته.</li>
+                    <li>نبذل قصارى جهدنا لضمان التوصيل في الوقت المحدد، لكن قد تحدث تأخيرات بسبب ظروف خارجة عن إرادتنا.</li>
+                    <li>لا نتحمل مسؤولية أي حساسية غذائية. يرجى إبلاغ المطعم مباشرة عن أي حساسية.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section stagger-5">
+            <div class="section-header"><div class="section-number">٨</div><h2 class="section-title">التواصل والشكاوى</h2></div>
+            <div class="section-body">
+                <p>لأي استفسار أو شكوى، يمكنك التواصل معنا عبر:</p>
+                <ul>
+                    <li><strong>الهاتف:</strong> 0103273273</li>
+                    <li><strong>واتساب:</strong> 01111139271</li>
+                    <li><strong>صفحة المساعدة:</strong> <a href="../_7/contact.html" style="color:var(--brand-light);text-decoration:none;">اضغط هنا</a></li>
+                </ul>
+                <p>نلتزم بالرد على جميع الشكاوى خلال <strong>24 ساعة</strong> كحد أقصى.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand"><div class="nav-brand-icon">4U</div><span>Delivery</span></div>
+                    <p class="footer-desc">أكبر منصة لطلب الطعام وتوصيل الشحنات. بنوصلك اللي بتحبه لحد باب بيتك بأعلى جودة.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>روابط سريعة</h4>
+                    <div class="footer-links">
+                        <a href="../_4/res.html" class="footer-link">المطاعم</a>
+                        <a href="../_5/About.html" class="footer-link">عننا</a>
+                        <a href="../_7/privacy.html" class="footer-link">سياسة الخصوصية</a>
+                        <a href="../_7/terms.html" class="footer-link">الشروط والأحكام</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>تواصل معنا</h4>
+                    <div class="footer-links">
+                        <div class="contact-item"><span class="material-symbols-outlined">location_on</span><span>بني سويف الجديدة - الكورنيش</span></div>
+                        <div class="contact-item"><span class="material-symbols-outlined">call</span><span dir="ltr">0103273273</span></div>
+                        <div class="contact-item"><span class="material-symbols-outlined">call</span><span dir="ltr">01111139271</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom"><p class="footer-copy">© 2026 4U Delivery. جميع الحقوق محفوظة.</p></div>
+        </div>
+    </footer>
+
+    <button class="btn-float ripple-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})"><span class="material-symbols-outlined">arrow_upward</span></button>
+
+    <script type="module" src="legal.js"></script>
+</body>
+</html>

@@ -4,182 +4,127 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>4U Delivery | كارت الأختام</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <script>
-        tailwind.config = { darkMode:"class", theme:{ extend:{ colors:{ brand:{DEFAULT:'#c8102e',light:'#ff4757',dark:'#8b0000'}, gold:{DEFAULT:'#f0c040',light:'#ffe085',dark:'#b8860b'}, dark:{50:'#f5f5f5',100:'#e0e0e0',200:'#bdbdbd',300:'#9e9e9e',400:'#757575',500:'#616161',600:'#424242',700:'#303030',800:'#1a1a1a',900:'#0d0d0d',950:'#080808'}}, fontFamily:{cairo:['Cairo','sans-serif']} }}}
-    </script>
-    <style>
-        * { margin:0;padding:0;box-sizing:border-box }
-        body { font-family:'Cairo',sans-serif; background:#080808; color:#e0e0e0; overflow-x:hidden; min-height:100vh; display:flex; flex-direction:column; }
-        .glass { background:rgba(26,26,26,0.6); backdrop-filter:blur(24px); border:1px solid rgba(255,255,255,0.08); }
-        .stamp-circle { transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); }
-        .stamp-circle.active { background:#c8102e; border-color:#ff4757; box-shadow:0 0 20px rgba(200,16,46,0.4); }
-        .stamp-circle.active .material-symbols-outlined { opacity:1; transform:scale(1) rotate(-10deg); color:#fff; }
-        .stamp-circle .material-symbols-outlined { opacity:0; transform:scale(0) rotate(90deg); transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); }
-        .watermark { position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); opacity:0.03; font-size:180px; font-weight:900; pointer-events:none; white-space:nowrap; user-select:none; }
-        .material-symbols-outlined { font-variation-settings:'FILL' 1,'wght' 600,'GRAD' 0,'opsz' 24; }
-        @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-        .animate-float { animation:float 6s ease-in-out infinite; }
-    </style>
+    <link rel="stylesheet" href="stamps.css">
 </head>
-<body class="relative">
+<body class="stamp-card-layout">
 
-    <!-- BG Effects -->
-    <div class="fixed inset-0 pointer-events-none z-0">
-        <div class="absolute top-[-200px] right-[-200px] w-[600px] h-[600px] bg-brand/10 rounded-full blur-[120px]"></div>
-        <div class="absolute bottom-[-200px] left-[-200px] w-[500px] h-[500px] bg-gold/5 rounded-full blur-[100px]"></div>
+    <!-- Page Transition Curtain -->
+    <div class="page-transition-curtain"></div>
+
+    <!-- Background Effects -->
+    <div class="bg-effects">
+        <div class="glow-brand"></div>
+        <div class="glow-gold"></div>
     </div>
 
     <!-- ═══ NAVBAR ═══ -->
-    <nav class="w-full z-50 glass border-b-0 border-white/5 py-4 px-6 fixed top-0">
-        <div class="max-w-md mx-auto flex items-center justify-between">
-            <a href="../_3/home.html" class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-brand text-2xl">arrow_forward</span>
-                <span class="text-sm font-bold text-white">الرجوع للمطاعم</span>
+    <nav class="stamp-nav glass">
+        <div class="stamp-nav-inner">
+            <a href="../_4/res.html" class="stamp-nav-back ripple-btn" style="padding: 0.5rem; border-radius: 0.5rem;">
+                <span class="material-symbols-outlined">arrow_forward</span>
+                <span>الرجوع للمطاعم</span>
             </a>
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-lg bg-brand flex items-center justify-center text-white font-bold text-sm">4U</div>
-            </div>
+            <div class="stamp-nav-logo">4U</div>
         </div>
     </nav>
 
     <!-- ═══ MAIN CONTENT ═══ -->
-    <main class="flex-1 flex items-center justify-center pt-24 pb-10 px-4 relative z-10">
-        <div class="w-full max-w-md">
+    <main class="stamp-main">
+        <div class="stamp-container">
             
-            <!-- Stamp Card Container -->
-            <div class="glass rounded-[2.5rem] p-8 relative overflow-hidden shadow-2xl shadow-brand/5 border border-white/10">
-                
+            <div class="stamp-box glass-strong">
                 <!-- Watermark Logo -->
                 <div class="watermark" id="brand-watermark">Dots</div>
                 
                 <!-- Header Links -->
-                <div class="flex justify-between items-center mb-8 relative z-10">
+                <div class="stamp-header">
                     <!-- Right (Facebook) -->
-                    <a href="#" class="flex flex-col items-center gap-1 group">
-                        <div class="w-12 h-12 rounded-2xl bg-[#1877F2]/10 border border-[#1877F2]/30 flex items-center justify-center group-hover:bg-[#1877F2]/20 transition-colors">
-                            <svg class="w-6 h-6 fill-[#1877F2]" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    <a href="../_7/contact.html" class="brand-icon-wrapper ripple-btn" style="border-radius:1rem; padding:0.25rem;">
+                        <div class="brand-icon facebook">
+                            <svg style="width:24px; height:24px; fill:#1877F2;" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                         </div>
-                        <span class="text-[10px] font-bold text-dark-300">Face</span>
+                        <span class="brand-icon-text">Face</span>
                     </a>
                     
                     <!-- Title -->
-                    <div class="text-center">
-                        <h1 class="text-4xl font-black text-white" id="brand-name">Dots</h1>
-                        <p class="text-xs text-brand-light font-bold mt-1">بطاقة الولاء</p>
+                    <div class="stamp-title-container">
+                        <h1 class="stamp-title" id="brand-name">Dots</h1>
+                        <p class="stamp-subtitle">بطاقة الولاء</p>
                     </div>
 
                     <!-- Left (4U Delivery) -->
-                    <a href="../_3/home.html" class="flex flex-col items-center gap-1 group">
-                        <div class="w-12 h-12 rounded-2xl bg-brand/10 border border-brand/30 flex items-center justify-center group-hover:bg-brand/20 transition-colors">
-                            <div class="w-6 h-6 rounded-md bg-brand flex items-center justify-center text-white font-black text-[10px]">4U</div>
+                    <a href="../_3/home.html" class="brand-icon-wrapper ripple-btn" style="border-radius:1rem; padding:0.25rem;">
+                        <div class="brand-icon delivery">
+                            <div class="stamp-nav-logo" style="width:24px; height:24px; font-size:10px;">4U</div>
                         </div>
-                        <span class="text-[10px] font-bold text-dark-300">4U Delivery</span>
+                        <span class="brand-icon-text">4U Delivery</span>
                     </a>
                 </div>
 
                 <!-- Pyramid Stamps Container -->
-                <div class="flex flex-col items-center gap-4 py-6 relative z-10">
+                <div class="pyramid-container">
                     
                     <!-- Row 1 (4 circles) -->
-                    <div class="flex justify-center gap-4">
-                        <div class="stamp-circle w-[60px] h-[60px] rounded-full border-2 border-dashed border-dark-600 flex items-center justify-center bg-dark-900/50" data-index="1"><span class="material-symbols-outlined text-3xl">verified</span></div>
-                        <div class="stamp-circle w-[60px] h-[60px] rounded-full border-2 border-dashed border-dark-600 flex items-center justify-center bg-dark-900/50" data-index="2"><span class="material-symbols-outlined text-3xl">verified</span></div>
-                        <div class="stamp-circle w-[60px] h-[60px] rounded-full border-2 border-dashed border-dark-600 flex items-center justify-center bg-dark-900/50" data-index="3"><span class="material-symbols-outlined text-3xl">verified</span></div>
-                        <div class="stamp-circle w-[60px] h-[60px] rounded-full border-2 border-dashed border-dark-600 flex items-center justify-center bg-dark-900/50" data-index="4"><span class="material-symbols-outlined text-3xl">verified</span></div>
+                    <div class="pyramid-row">
+                        <div class="stamp-circle" data-index="1"><span class="material-symbols-outlined">verified</span></div>
+                        <div class="stamp-circle" data-index="2"><span class="material-symbols-outlined">verified</span></div>
+                        <div class="stamp-circle" data-index="3"><span class="material-symbols-outlined">verified</span></div>
+                        <div class="stamp-circle" data-index="4"><span class="material-symbols-outlined">verified</span></div>
                     </div>
                     
                     <!-- Row 2 (3 circles) -->
-                    <div class="flex justify-center gap-4">
-                        <div class="stamp-circle w-[60px] h-[60px] rounded-full border-2 border-dashed border-dark-600 flex items-center justify-center bg-dark-900/50" data-index="5"><span class="material-symbols-outlined text-3xl">verified</span></div>
-                        <div class="stamp-circle w-[60px] h-[60px] rounded-full border-2 border-dashed border-dark-600 flex items-center justify-center bg-dark-900/50" data-index="6"><span class="material-symbols-outlined text-3xl">verified</span></div>
-                        <div class="stamp-circle w-[60px] h-[60px] rounded-full border-2 border-dashed border-dark-600 flex items-center justify-center bg-dark-900/50" data-index="7"><span class="material-symbols-outlined text-3xl">verified</span></div>
+                    <div class="pyramid-row">
+                        <div class="stamp-circle" data-index="5"><span class="material-symbols-outlined">verified</span></div>
+                        <div class="stamp-circle" data-index="6"><span class="material-symbols-outlined">verified</span></div>
+                        <div class="stamp-circle" data-index="7"><span class="material-symbols-outlined">verified</span></div>
                     </div>
                     
                     <!-- Row 3 (2 circles) -->
-                    <div class="flex justify-center gap-4">
-                        <div class="stamp-circle w-[60px] h-[60px] rounded-full border-2 border-dashed border-dark-600 flex items-center justify-center bg-dark-900/50" data-index="8"><span class="material-symbols-outlined text-3xl">verified</span></div>
-                        <div class="stamp-circle w-[60px] h-[60px] rounded-full border-2 border-dashed border-dark-600 flex items-center justify-center bg-dark-900/50" data-index="9"><span class="material-symbols-outlined text-3xl">verified</span></div>
+                    <div class="pyramid-row">
+                        <div class="stamp-circle" data-index="8"><span class="material-symbols-outlined">verified</span></div>
+                        <div class="stamp-circle" data-index="9"><span class="material-symbols-outlined">verified</span></div>
                     </div>
                     
-                    <!-- Row 4 (1 circle) -->
-                    <div class="flex justify-center gap-4 mt-2">
-                        <div class="stamp-circle w-[70px] h-[70px] rounded-full border-2 border-gold flex items-center justify-center bg-gold/10 shadow-[0_0_20px_rgba(240,192,64,0.2)] animate-float" data-index="10">
-                            <span class="material-symbols-outlined text-4xl" style="color:#f0c040;">redeem</span>
+                    <!-- Row 4 (1 circle - The Gold Prize) -->
+                    <div class="pyramid-row" style="margin-top: 0.5rem;">
+                        <div class="stamp-circle golden animate-float" data-index="10">
+                            <span class="material-symbols-outlined">redeem</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Text Instruction -->
-                <div class="text-center mt-6 mb-8 relative z-10">
-                    <p class="text-white font-bold text-lg">
-                        كمل الـ <span class="text-brand-light text-2xl font-black">١٠</span> أختام وخش سحب علي
-                    </p>
-                    <div class="w-20 h-1 bg-gradient-to-r from-transparent via-brand to-transparent mx-auto mt-3"></div>
+                <div class="instruction-text">
+                    <p>كمل الـ <span>١٠</span> أختام وخش سحب علي</p>
+                    <div class="instruction-divider"></div>
                 </div>
 
-                <!-- Rewards Row (3 Boxes) -->
-                <div class="grid grid-cols-3 gap-3 relative z-10">
-                    
-                    <!-- Box 1 (Right) -->
-                    <div class="bg-dark-900/80 border border-white/10 rounded-2xl p-3 flex flex-col items-center justify-center text-center gap-2 hover:bg-dark-800 transition-colors">
-                        <span class="material-symbols-outlined text-gold text-2xl">local_offer</span>
-                        <span class="text-[11px] font-bold text-white">خصم 50%<br>على الاوردر</span>
+                <!-- Rewards Row -->
+                <div class="rewards-grid">
+                    <div class="reward-box reward-box-dark">
+                        <span class="material-symbols-outlined text-gold" style="font-size:24px;">local_offer</span>
+                        <span class="reward-text">خصم 50%<br>على الاوردر</span>
                     </div>
 
-                    <!-- Box 2 (Middle) -->
-                    <div class="bg-brand/10 border border-brand/30 rounded-2xl p-3 flex flex-col items-center justify-center text-center gap-2 hover:bg-brand/20 transition-colors">
-                        <span class="material-symbols-outlined text-brand-light text-2xl">local_shipping</span>
-                        <span class="text-[11px] font-bold text-white">أوردر<br>Free</span>
+                    <div class="reward-box reward-box-brand">
+                        <span class="material-symbols-outlined text-brand-light" style="font-size:24px;">local_shipping</span>
+                        <span class="reward-text">أوردر<br>Free</span>
                     </div>
 
-                    <!-- Box 3 (Left) -->
-                    <div class="bg-dark-900/80 border border-white/10 rounded-2xl p-3 flex flex-col items-center justify-center text-center gap-2 hover:bg-dark-800 transition-colors">
-                        <span class="material-symbols-outlined text-gold text-2xl">inventory_2</span>
-                        <span class="text-[11px] font-bold text-white">بوكس 12<br>قطعة</span>
+                    <div class="reward-box reward-box-dark">
+                        <span class="material-symbols-outlined text-gold" style="font-size:24px;">inventory_2</span>
+                        <span class="reward-text">بوكس 12<br>قطعة</span>
                     </div>
-
                 </div>
                 
             </div>
             
-            <p class="text-center text-dark-500 text-xs mt-6">يتم إضافة الختم بواسطة إدارة المطعم فقط.</p>
+            <p class="stamp-footer-text">يتم إضافة الختم بواسطة إدارة المطعم فقط.</p>
         </div>
     </main>
 
-    <script>
-        // محاكاة لعدد الأختام (بناءً على الداتا اللي هتيجي من الداتابيز)
-        // ده سكريبت توضيحي بيخلي الصفحة "ذكية" عشان مش محتاجين 15 صفحة.
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            // استخراج اسم المطعم وعدد الأختام من الـ URL للتيست 
-            // جرب تحط في اللينك ?brand=Koshari&stamps=5
-            const urlParams = new URLSearchParams(window.location.search);
-            const brandName = urlParams.get('brand') || 'Dots';
-            const stampsCount = parseInt(urlParams.get('stamps') || '0', 10);
-            
-            // تغيير اسم المطعم والعلامة المائية
-            document.getElementById('brand-name').textContent = brandName;
-            document.getElementById('brand-watermark').textContent = brandName;
-            
-            // تفعيل الأختام
-            const circles = document.querySelectorAll('.stamp-circle');
-            circles.forEach(circle => {
-                const index = parseInt(circle.getAttribute('data-index'), 10);
-                if (index <= stampsCount) {
-                    circle.classList.add('active');
-                    // إذا كان الختم الأخير
-                    if(index === 10) {
-                        circle.classList.remove('bg-gold/10', 'border-gold');
-                        circle.innerHTML = '<span class="material-symbols-outlined text-4xl" style="color:#fff;">redeem</span>';
-                    } else {
-                        circle.innerHTML = '<span class="material-symbols-outlined text-3xl">verified</span>';
-                    }
-                }
-            });
-        });
-    </script>
+    <script type="module" src="stamps.js"></script>
 </body>
 </html>

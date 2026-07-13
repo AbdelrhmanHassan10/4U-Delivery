@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html class="dark" dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>4U Delivery | الإعدادات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="profile-pages.css">
+</head>
+<body>
+    <div class="page-transition-curtain"></div>
+    <div class="bg-effects pointer-events-none"><div class="particles"></div><div class="glow-brand animate-float"></div><div class="glow-gold animate-float" style="animation-delay:-3s;"></div></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar glass-strong" id="navbar">
+        <div class="container navbar-inner">
+            <a href="../_3/home.html" class="nav-brand ripple-btn"><div class="nav-brand-icon">4U</div><span>Delivery</span></a>
+            <div class="nav-links">
+                <a href="../_3/home.html" class="nav-link">الرئيسية</a>
+                <a href="../_4/res.html" class="nav-link">المطاعم</a>
+                <a href="../_5/About.html" class="nav-link">عننا</a>
+                <a href="../_2/profile.html" class="nav-link active">بروفايلي</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn ripple-btn">القائمة <span class="material-symbols-outlined">expand_more</span></button>
+                    <div class="nav-dropdown-content glass">
+                        <a href="../_6/stamp_card.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">card_membership</span> كارت الأختام</a>
+                        <a href="../_7/contact.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">support_agent</span> المساعدة</a>
+                        <a href="../_7/terms.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">rule</span> الشروط والأحكام</a>
+                    </div>
+                </div>
+                <a href="../_6/admin_stamps.html" class="nav-link text-gradient-gold" style="display:flex;gap:0.25rem;"><span class="material-symbols-outlined icon-filled">admin_panel_settings</span> الإدارة</a>
+            </div>
+            <div class="nav-actions">
+                <a href="../_1/login.html" class="btn-login" onclick="localStorage.setItem('authTab','login'); navigateWithCurtain(this.href); return false;">دخول</a>
+                <a href="../_1/login.html" class="btn-primary ripple-btn" onclick="localStorage.setItem('authTab','register'); navigateWithCurtain(this.href); return false;">اعمل حساب</a>
+                <button class="btn-menu ripple-btn"><span class="material-symbols-outlined">menu</span></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="page-header stagger-1">
+        <div class="page-icon-wrapper icon-gold"><span class="material-symbols-outlined icon-filled">settings</span></div>
+        <h1>الإعدادات</h1>
+        <p>تخصيص حسابك وتفضيلات الإشعارات</p>
+    </header>
+
+    <!-- CONTENT -->
+    <section class="page-content stagger-2">
+        <a href="profile.html" class="btn-back" onclick="navigateWithCurtain(this.href); return false;"><span class="material-symbols-outlined">arrow_forward</span> العودة للبروفايل</a>
+
+        <!-- Notifications Settings -->
+        <div class="settings-group">
+            <h3><span class="material-symbols-outlined icon-filled">notifications</span> إعدادات الإشعارات</h3>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h4>إشعارات الطلبات</h4>
+                    <p>تنبيهات حالة الطلب وموعد وصول المندوب</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked onchange="window.showToast('تم تحديث الإعدادات')">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h4>العروض والخصومات</h4>
+                    <p>أحدث الكوبونات والعروض الخاصة</p>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked onchange="window.showToast('تم تحديث الإعدادات')">
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Account Settings -->
+        <div class="settings-group">
+            <h3><span class="material-symbols-outlined icon-filled">manage_accounts</span> إدارة الحساب</h3>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h4>اللغة / Language</h4>
+                    <p>العربية</p>
+                </div>
+                <button class="btn-action btn-secondary-action" onclick="window.showToast('سيتم إضافة لغات أخرى قريباً')">تغيير</button>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h4>تغيير كلمة المرور</h4>
+                    <p>تحديث كلمة المرور لحماية حسابك</p>
+                </div>
+                <button class="btn-action btn-secondary-action">تحديث</button>
+            </div>
+
+            <div class="setting-item" style="border-top: 1px solid rgba(255,255,255,0.05); margin-top: 1rem; padding-top: 1.5rem;">
+                <div class="setting-info">
+                    <h4 style="color: var(--brand-light);">حذف الحساب</h4>
+                    <p>مسح جميع بياناتك بشكل نهائي من النظام</p>
+                </div>
+                <button class="btn-action btn-primary-action" onclick="if(confirm('هل أنت متأكد من رغبتك في حذف الحساب؟')) { window.showToast('تم تقديم طلب حذف الحساب'); }">
+                    <span class="material-symbols-outlined">delete_forever</span> حذف
+                </button>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer stagger-5">
+        <div class="container footer-inner">
+            <div class="footer-brand"><div class="footer-icon">4U</div><span class="footer-text">Delivery</span></div>
+            <div class="footer-links">
+                <a href="../_7/terms.html" class="footer-link">الشروط والأحكام</a>
+                <a href="../_7/privacy.html" class="footer-link">سياسة الخصوصية</a>
+                <a href="../_7/contact.html" class="footer-link">تواصل معنا</a>
+            </div>
+            <p class="footer-copy">© 2026 4U Delivery</p>
+        </div>
+    </footer>
+
+    <button class="btn-float ripple-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})"><span class="material-symbols-outlined">arrow_upward</span></button>
+    <script type="module" src="profile.js"></script>
+</body>
+</html>

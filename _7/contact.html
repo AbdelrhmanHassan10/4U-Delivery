@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html class="dark" dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>4U Delivery | المساعدة والتواصل</title>
+    <meta name="description" content="تواصل مع فريق دعم 4U Delivery - نحن هنا لمساعدتك"/>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="legal.css">
+</head>
+<body>
+    <div class="page-transition-curtain"></div>
+    <div class="bg-effects"><div class="glow-brand animate-float"></div><div class="glow-gold animate-float" style="animation-delay:-3s;"></div></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-inner">
+            <a href="../_3/home.html" class="nav-brand"><div class="nav-brand-icon">4U</div><span>Delivery</span></a>
+            <div class="nav-links">
+                <a href="../_3/home.html" class="nav-link">الرئيسية</a>
+                <a href="../_4/res.html" class="nav-link">المطاعم</a>
+                <a href="../_5/About.html" class="nav-link">عننا</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">القائمة <span class="material-symbols-outlined">expand_more</span></button>
+                    <div class="nav-dropdown-content">
+                        <a href="../_6/stamp_card.html" class="nav-dropdown-item"><span class="material-symbols-outlined">card_membership</span> كارت الأختام</a>
+                        <a href="../_7/contact.html" class="nav-dropdown-item"><span class="material-symbols-outlined">support_agent</span> المساعدة</a>
+                        <a href="../_7/terms.html" class="nav-dropdown-item"><span class="material-symbols-outlined">rule</span> الشروط والأحكام</a>
+                    </div>
+                </div>
+                <div style="width:1px;height:16px;background:rgba(255,255,255,0.1);margin:0 0.5rem;"></div>
+                <a href="../_6/admin_stamps.html" class="nav-link" style="color:var(--gold);display:flex;align-items:center;gap:0.25rem;"><span class="material-symbols-outlined">admin_panel_settings</span> الإدارة</a>
+            </div>
+            <div class="nav-actions">
+                <div id="nav-auth-buttons" style="display:flex;gap:1rem;align-items:center;">
+                    <a href="../_1/login.html" class="btn-login" onclick="localStorage.setItem('authTab','login')">دخول</a>
+                    <a href="../_1/login.html" class="btn-primary ripple-btn" onclick="localStorage.setItem('authTab','register')">اعمل حساب</a>
+                </div>
+                <div id="nav-profile-button" class="hidden">
+                    <a href="../_2/profile.html" class="btn-primary ripple-btn" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);"><span class="material-symbols-outlined">person</span> <span id="nav-user-name">حسابي</span></a>
+                </div>
+                <button id="mobile-menu-btn" class="btn-menu ripple-btn"><span class="material-symbols-outlined">menu</span></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu-overlay">
+        <div class="mobile-header">
+            <div class="nav-brand"><div class="nav-brand-icon">4U</div><span>Delivery</span></div>
+            <button id="close-menu-btn" class="btn-close-menu ripple-btn"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="mobile-nav">
+            <a href="../_3/home.html" class="mobile-link">الرئيسية</a>
+            <a href="../_4/res.html" class="mobile-link">المطاعم</a>
+            <a href="../_5/About.html" class="mobile-link">عننا</a>
+            <a href="../_2/profile.html" class="mobile-link">بروفايلي</a>
+            <div class="mobile-divider"></div>
+            <a href="../_7/contact.html" class="mobile-sublink"><span class="material-symbols-outlined">support_agent</span> المساعدة</a>
+            <a href="../_7/terms.html" class="mobile-sublink"><span class="material-symbols-outlined">rule</span> الشروط والأحكام</a>
+            <a href="../_7/privacy.html" class="mobile-sublink"><span class="material-symbols-outlined">shield</span> سياسة الخصوصية</a>
+        </div>
+        <div class="mobile-bottom"><a href="../_1/login.html" class="btn-mobile-auth ripple-btn" id="mobile-auth-btn">دخول / تسجيل حساب</a></div>
+    </div>
+
+    <!-- Hero -->
+    <section class="page-hero stagger-1">
+        <div class="page-hero-icon gold-bg"><span class="material-symbols-outlined icon-filled">support_agent</span></div>
+        <h1>المساعدة والتواصل</h1>
+        <p>فريق الدعم الفني متاح لمساعدتك في أي وقت. اختار الطريقة اللي تناسبك</p>
+    </section>
+
+    <!-- Contact Cards -->
+    <div class="content-wrapper">
+        <div class="contact-grid stagger-2">
+            <!-- Phone -->
+            <div class="contact-card">
+                <div class="contact-card-icon brand"><span class="material-symbols-outlined icon-filled">call</span></div>
+                <h3>اتصل بينا</h3>
+                <p>متاحين من 10 صباحاً لـ 12 بالليل</p>
+                <a href="tel:0103273273" class="btn-brand ripple-btn"><span class="material-symbols-outlined" style="font-size:18px;">call</span> 0103273273</a>
+            </div>
+
+            <!-- WhatsApp -->
+            <div class="contact-card">
+                <div class="contact-card-icon green"><span class="material-symbols-outlined icon-filled">chat</span></div>
+                <h3>واتساب</h3>
+                <p>ابعتلنا رسالة وهنرد فوراً</p>
+                <a href="https://wa.me/201111139271" target="_blank" class="btn-whatsapp ripple-btn"><span class="material-symbols-outlined" style="font-size:18px;">chat</span> ابدأ محادثة</a>
+            </div>
+
+            <!-- Facebook -->
+            <div class="contact-card">
+                <div class="contact-card-icon blue"><span class="material-symbols-outlined icon-filled">public</span></div>
+                <h3>فيسبوك</h3>
+                <p>تابعنا وابعتلنا على صفحتنا</p>
+                <a href="https://facebook.com" target="_blank" class="btn-blue ripple-btn"><span class="material-symbols-outlined" style="font-size:18px;">open_in_new</span> الصفحة</a>
+            </div>
+
+            <!-- Location -->
+            <div class="contact-card">
+                <div class="contact-card-icon gold"><span class="material-symbols-outlined icon-filled">location_on</span></div>
+                <h3>العنوان</h3>
+                <p>بني سويف الجديدة - الكورنيش</p>
+                <a href="https://maps.google.com/?q=بني+سويف+الجديدة+الكورنيش" target="_blank" class="btn-gold ripple-btn"><span class="material-symbols-outlined" style="font-size:18px;">map</span> خريطة</a>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="contact-card contact-form-section">
+                <div class="contact-card-icon brand"><span class="material-symbols-outlined icon-filled">edit_note</span></div>
+                <h3>ابعتلنا رسالة</h3>
+                <p>اكتب رسالتك وهنرد عليك خلال 24 ساعة</p>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">الاسم</label>
+                            <input type="text" class="form-input" placeholder="اسمك إيه؟" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">رقم الموبايل</label>
+                            <input type="tel" class="form-input" placeholder="01xxxxxxxxx" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">الإيميل (اختياري)</label>
+                        <input type="email" class="form-input" placeholder="example@mail.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">موضوع الرسالة</label>
+                        <select class="form-input" required style="cursor:pointer;">
+                            <option value="">اختار الموضوع...</option>
+                            <option value="order">مشكلة في طلب</option>
+                            <option value="delivery">مشكلة في التوصيل</option>
+                            <option value="account">مشكلة في الحساب</option>
+                            <option value="points">استفسار عن النقاط</option>
+                            <option value="suggestion">اقتراح أو ملاحظة</option>
+                            <option value="other">موضوع تاني</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">الرسالة</label>
+                        <textarea class="form-input" placeholder="اكتب رسالتك هنا..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit ripple-btn">
+                        <span class="material-symbols-outlined">send</span> إرسال الرسالة
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <div class="faq-section stagger-3">
+            <h2 class="faq-title">أسئلة شائعة ❓</h2>
+
+            <div class="faq-item">
+                <button class="faq-question">إزاي أطلب أكل من 4U Delivery؟ <span class="material-symbols-outlined">expand_more</span></button>
+                <div class="faq-answer">ببساطة، سجل حسابك على الموقع، ثم ادخل على صفحة المطاعم واختار المطعم اللي عايزه. اختار الأصناف وأكد الطلب. هيوصلك لحد باب بيتك!</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">كم وقت التوصيل المتوقع؟ <span class="material-symbols-outlined">expand_more</span></button>
+                <div class="faq-answer">وقت التوصيل بيختلف حسب المطعم والمنطقة، لكن في المتوسط بيكون من 20 لـ 55 دقيقة. هتلاقي الوقت المتوقع مكتوب جنب كل مطعم.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">إزاي أجمع نقاط؟ <span class="material-symbols-outlined">expand_more</span></button>
+                <div class="faq-answer">كل طلب بتعمله بيضيفلك نقاط تلقائياً. كل مستخدم جديد بيحصل على 500 نقطة ترحيبية. النقاط بتتحول لخصومات ومكافآت تقدر تستخدمها في طلباتك الجاية.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">إيه هو كارت الأختام؟ <span class="material-symbols-outlined">expand_more</span></button>
+                <div class="faq-answer">كارت الأختام هو نظام ولاء خاص بكل مطعم. كل ما تطلب من مطعم معين بتاخد ختم. لما تكمل 10 أختام بتدخل سحب على جوايز زي خصم 50% أو أوردر مجاني أو بوكس 12 قطعة!</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">أقدر ألغي الطلب بعد ما أكده؟ <span class="material-symbols-outlined">expand_more</span></button>
+                <div class="faq-answer">أيوا، تقدر تلغي الطلب قبل ما المطعم يبدأ يحضره. بعد بدء التحضير مش هينفع الإلغاء. لو في مشكلة في الطلب بعد الاستلام، تواصل معنا خلال 30 دقيقة.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">الأسعار زي أسعار المطعم ولا فيه فرق؟ <span class="material-symbols-outlined">expand_more</span></button>
+                <div class="faq-answer">الأسعار هي نفس أسعار المطعم بالظبط بدون أي زيادة! ممكن بس يكون فيه رسوم توصيل منفصلة حسب المسافة.</div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">نسيت كلمة السر، أعمل إيه؟ <span class="material-symbols-outlined">expand_more</span></button>
+                <div class="faq-answer">تواصل مع فريق الدعم الفني عبر الواتساب على الرقم 01111139271 أو اتصل بينا على 0103273273 وهنساعدك تسترجع حسابك.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-brand"><div class="nav-brand-icon">4U</div><span>Delivery</span></div>
+                    <p class="footer-desc">أكبر منصة لطلب الطعام وتوصيل الشحنات. بنوصلك اللي بتحبه لحد باب بيتك بأعلى جودة.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>روابط سريعة</h4>
+                    <div class="footer-links">
+                        <a href="../_4/res.html" class="footer-link">المطاعم</a>
+                        <a href="../_5/About.html" class="footer-link">عننا</a>
+                        <a href="../_7/privacy.html" class="footer-link">سياسة الخصوصية</a>
+                        <a href="../_7/terms.html" class="footer-link">الشروط والأحكام</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>تواصل معنا</h4>
+                    <div class="footer-links">
+                        <div class="contact-item"><span class="material-symbols-outlined">location_on</span><span>بني سويف الجديدة - الكورنيش</span></div>
+                        <div class="contact-item"><span class="material-symbols-outlined">call</span><span dir="ltr">0103273273</span></div>
+                        <div class="contact-item"><span class="material-symbols-outlined">call</span><span dir="ltr">01111139271</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom"><p class="footer-copy">© 2026 4U Delivery. جميع الحقوق محفوظة.</p></div>
+        </div>
+    </footer>
+
+    <button class="btn-float ripple-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})"><span class="material-symbols-outlined">arrow_upward</span></button>
+    <script type="module" src="legal.js"></script>
+</body>
+</html>

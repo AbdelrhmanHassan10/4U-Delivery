@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html class="dark" dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>4U Delivery | النقاط والمكافآت</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="profile-pages.css">
+</head>
+<body>
+    <div class="page-transition-curtain"></div>
+    <div class="bg-effects pointer-events-none"><div class="particles"></div><div class="glow-brand animate-float"></div><div class="glow-gold animate-float" style="animation-delay:-3s;"></div></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar glass-strong" id="navbar">
+        <div class="container navbar-inner">
+            <a href="../_3/home.html" class="nav-brand ripple-btn"><div class="nav-brand-icon">4U</div><span>Delivery</span></a>
+            <div class="nav-links">
+                <a href="../_3/home.html" class="nav-link">الرئيسية</a>
+                <a href="../_4/res.html" class="nav-link">المطاعم</a>
+                <a href="../_5/About.html" class="nav-link">عننا</a>
+                <a href="../_2/profile.html" class="nav-link active">بروفايلي</a>
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn ripple-btn">القائمة <span class="material-symbols-outlined">expand_more</span></button>
+                    <div class="nav-dropdown-content glass">
+                        <a href="../_6/stamp_card.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">card_membership</span> كارت الأختام</a>
+                        <a href="../_7/contact.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">support_agent</span> المساعدة</a>
+                        <a href="../_7/terms.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">rule</span> الشروط والأحكام</a>
+                    </div>
+                </div>
+                <a href="../_6/admin_stamps.html" class="nav-link text-gradient-gold" style="display:flex;gap:0.25rem;"><span class="material-symbols-outlined icon-filled">admin_panel_settings</span> الإدارة</a>
+            </div>
+            <div class="nav-actions">
+                <a href="../_1/login.html" class="btn-login" onclick="localStorage.setItem('authTab','login'); navigateWithCurtain(this.href); return false;">دخول</a>
+                <a href="../_1/login.html" class="btn-primary ripple-btn" onclick="localStorage.setItem('authTab','register'); navigateWithCurtain(this.href); return false;">اعمل حساب</a>
+                <button class="btn-menu ripple-btn"><span class="material-symbols-outlined">menu</span></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="page-header stagger-1">
+        <div class="page-icon-wrapper icon-red"><span class="material-symbols-outlined icon-filled">stars</span></div>
+        <h1>النقاط والمكافآت</h1>
+        <p>بدل نقاطك بخصومات وعروض مميزة</p>
+    </header>
+
+    <!-- CONTENT -->
+    <section class="page-content stagger-2">
+        <a href="profile.html" class="btn-back" onclick="navigateWithCurtain(this.href); return false;"><span class="material-symbols-outlined">arrow_forward</span> العودة للبروفايل</a>
+
+        <!-- Points Balance Card -->
+        <div class="wallet-balance-card" style="background: linear-gradient(135deg, rgba(200, 16, 46, 0.2), rgba(200, 16, 46, 0.05)); border-color: rgba(200, 16, 46, 0.3);">
+            <p>إجمالي النقاط المتاحة</p>
+            <h2 style="color: var(--brand-light); text-shadow: 0 0 20px rgba(200, 16, 46, 0.3);">1,250 نقطة</h2>
+            <p style="font-size: 0.9rem; margin-bottom: 0;">المستوى الحالي: <span style="color: var(--gold); font-weight: 700;">فضي</span> (باقي 750 نقطة للذهبي)</p>
+        </div>
+
+        <h3 style="color: #fff; margin-bottom: 1.5rem; font-size: 1.2rem;">المكافآت المتاحة</h3>
+
+        <div class="items-grid">
+            <!-- Reward 1 -->
+            <div class="item-card">
+                <div class="item-info">
+                    <div class="item-icon" style="background:rgba(240,192,64,0.1); color:var(--gold);"><span class="material-symbols-outlined icon-filled">local_offer</span></div>
+                    <div class="item-details">
+                        <h3>قسيمة خصم 50 ج.م</h3>
+                        <p>صالحة لمدة 30 يوم من الاستبدال</p>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="btn-action btn-primary-action" onclick="window.showToast('تم استبدال 500 نقطة بنجاح!', 'success')">
+                        استبدال بـ 500 نقطة
+                    </button>
+                </div>
+            </div>
+
+            <!-- Reward 2 -->
+            <div class="item-card">
+                <div class="item-info">
+                    <div class="item-icon" style="background:rgba(255,255,255,0.05); color:#fff;"><span class="material-symbols-outlined icon-filled">two_wheeler</span></div>
+                    <div class="item-details">
+                        <h3>توصيل مجاني</h3>
+                        <p>لأي طلب من أي مطعم لمرة واحدة</p>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="btn-action btn-primary-action" onclick="window.showToast('تم استبدال 300 نقطة بنجاح!', 'success')">
+                        استبدال بـ 300 نقطة
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Reward 3 (Disabled) -->
+            <div class="item-card" style="opacity: 0.6;">
+                <div class="item-info">
+                    <div class="item-icon" style="background:rgba(200,16,46,0.1); color:var(--brand-light);"><span class="material-symbols-outlined icon-filled">redeem</span></div>
+                    <div class="item-details">
+                        <h3>قسيمة خصم 150 ج.م</h3>
+                        <p>تتطلب 2000 نقطة لفتحها</p>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="btn-action btn-secondary-action" disabled style="cursor: not-allowed;">
+                        غير متاح
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer stagger-5">
+        <div class="container footer-inner">
+            <div class="footer-brand"><div class="footer-icon">4U</div><span class="footer-text">Delivery</span></div>
+            <div class="footer-links">
+                <a href="../_7/terms.html" class="footer-link">الشروط والأحكام</a>
+                <a href="../_7/privacy.html" class="footer-link">سياسة الخصوصية</a>
+                <a href="../_7/contact.html" class="footer-link">تواصل معنا</a>
+            </div>
+            <p class="footer-copy">© 2026 4U Delivery</p>
+        </div>
+    </footer>
+
+    <button class="btn-float ripple-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})"><span class="material-symbols-outlined">arrow_upward</span></button>
+    <script type="module" src="profile.js"></script>
+</body>
+</html>
