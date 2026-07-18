@@ -145,7 +145,7 @@ onAuthStateChanged(auth, async (user) => {
         navAuthButtons.classList.add('hidden');
         navProfileButton.classList.remove('hidden');
         mobileAuthBtn.textContent = 'حسابي';
-        mobileAuthBtn.href = '../_2/profile.html';
+        mobileAuthBtn.href = './_2/profile.html';
 
         try {
             const docRef = doc(db, "users", user.uid);
@@ -165,20 +165,20 @@ onAuthStateChanged(auth, async (user) => {
         navAuthButtons.classList.remove('hidden');
         navProfileButton.classList.add('hidden');
         mobileAuthBtn.textContent = 'دخول / تسجيل حساب';
-        mobileAuthBtn.href = '../_1/login.html';
+        mobileAuthBtn.href = './_1/login.html';
     }
 });
 
 // --- DYNAMIC DATA FETCHING & SETUP ---
 
 const CATEGORIES = [
-  { name: "بيتزا", icon: "🍕" },
-  { name: "فرايد تشيكن", icon: "🍗" },
-  { name: "مشويات", icon: "🥩" },
-  { name: "حلويات", icon: "🍰" },
-  { name: "برجر", icon: "🍔" },
-  { name: "وجبات سريعة", icon: "🍟" },
-  { name: "مشروبات", icon: "☕" }
+  { name: "بيتزا", image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&auto=format&fit=crop" },
+  { name: "فرايد تشيكن", image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=500&auto=format&fit=crop" },
+  { name: "مشويات", image: "https://images.unsplash.com/photo-1544025162-d76694265947?w=500&auto=format&fit=crop" },
+  { name: "حلويات", image: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500&auto=format&fit=crop" },
+  { name: "برجر", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop" },
+  { name: "شاورما", image: "../shawerma.png" },
+  { name: "مشروبات", image: "https://images.unsplash.com/photo-1544145945-f90425340c7e?w=500&auto=format&fit=crop" }
 ];
 
 const INITIAL_RESTAURANTS = [
@@ -225,8 +225,9 @@ async function loadCategories() {
         
         CATEGORIES.forEach((data) => {
             html += `
-                <a href="../_4/res.html?category=${encodeURIComponent(data.name)}" class="category-card glass" style="text-decoration:none;">
-                    <span class="category-icon">${data.icon || '🍽️'}</span>
+                <a href="./_4/res.html?category=${encodeURIComponent(data.name)}" class="category-card" style="text-decoration:none;">
+                    <div class="category-img-bg" style="background-image:url('${data.image}')"></div>
+                    <div class="category-overlay"></div>
                     <span class="category-name">${data.name}</span>
                 </a>
             `;
@@ -255,13 +256,21 @@ async function loadFeaturedRestaurants() {
     if (!container) return;
     
     try {
-        const q = query(collection(db, "restaurants"), where("isFeatured", "==", true));
-        const querySnapshot = await getDocs(q);
+        const querySnapshot = await getDocs(collection(db, "restaurants"));
+        let allDocs = [];
+        querySnapshot.forEach(d => allDocs.push({ id: d.id, ...d.data() }));
         
-        let docs = [];
-        querySnapshot.forEach(d => docs.push(d.data()));
-        
+        let docs = allDocs.filter(d => d.isFeatured);
+        if (docs.length === 0) {
+            docs = allDocs.slice(0, 3);
+        }
+
         let html = '';
+        if (docs.length === 0) {
+            container.innerHTML = '<p class="text-center w-100" style="color:var(--dark-400);">لا توجد مطاعم حالياً</p>';
+            return;
+        }
+
         docs.forEach((data) => {
             const feeClass = data.deliveryFee === 'مجاني' ? 'text-success' : '';
             let categoryText = '';
@@ -272,21 +281,21 @@ async function loadFeaturedRestaurants() {
             }
 
             html += `
-            <div class="res-card glass">
+            <div class="res-card glass" onclick="window.location.href='./_4/restaurant.html?id=${data.id}'">
                 <div class="res-image-wrapper">
                     <div class="res-image" style="background-image:url('${data.image}')"></div>
                     <div class="res-image-overlay"></div>
                     <div class="res-rating">
                         <span class="material-symbols-outlined icon-filled">star</span>
-                        <span class="res-rating-text">${data.rating}</span>
+                        <span class="res-rating-text">${data.rating || '4.5'}</span>
                     </div>
                 </div>
                 <div class="res-info">
                     <h3 class="res-title">${data.name}</h3>
                     <p class="res-desc">${categoryText}</p>
                     <div class="res-meta">
-                        <div class="res-meta-item"><span class="material-symbols-outlined">schedule</span> ${data.deliveryTime}</div>
-                        <div class="res-meta-item ${feeClass}"><span class="material-symbols-outlined">delivery_dining</span> ${data.deliveryFee}</div>
+                        <div class="res-meta-item"><span class="material-symbols-outlined">schedule</span> ${data.deliveryTime || '30-45 دقيقة'}</div>
+                        <div class="res-meta-item ${feeClass}"><span class="material-symbols-outlined">delivery_dining</span> ${data.deliveryFee || '25 ج.م'}</div>
                     </div>
                 </div>
             </div>
@@ -296,48 +305,42 @@ async function loadFeaturedRestaurants() {
         container.innerHTML = html;
     } catch (error) {
         console.error("Error loading restaurants:", error);
-        // If index error, just fetch all for now
-        if(error.message.includes("requires an index") || error.message.includes("index")) {
-            console.log("Index missing, fetching all restaurants instead");
-            const allSnap = await getDocs(collection(db, "restaurants"));
-            let html = '';
-            allSnap.forEach((doc) => {
-                const data = doc.data();
-                if(data.isFeatured) {
-                    const feeClass = data.deliveryFee === 'مجاني' ? 'text-success' : '';
-                    let categoryText = '';
-                    if (Array.isArray(data.category)) {
-                        categoryText = data.category.join('، ');
-                    } else {
-                        categoryText = data.category || data.desc || '';
-                    }
+        container.innerHTML = '<p class="text-center w-100">فشل تحميل المطاعم</p>';
+    }
+}
 
-                    html += `
-                    <div class="res-card glass">
-                        <div class="res-image-wrapper">
-                            <div class="res-image" style="background-image:url('${data.image}')"></div>
-                            <div class="res-image-overlay"></div>
-                            <div class="res-rating">
-                                <span class="material-symbols-outlined icon-filled">star</span>
-                                <span class="res-rating-text">${data.rating}</span>
-                            </div>
-                        </div>
-                        <div class="res-info">
-                            <h3 class="res-title">${data.name}</h3>
-                            <p class="res-desc">${categoryText}</p>
-                            <div class="res-meta">
-                                <div class="res-meta-item"><span class="material-symbols-outlined">schedule</span> ${data.deliveryTime}</div>
-                                <div class="res-meta-item ${feeClass}"><span class="material-symbols-outlined">delivery_dining</span> ${data.deliveryFee}</div>
-                            </div>
-                        </div>
-                    </div>
-                    `;
-                }
-            });
-            container.innerHTML = html;
-        } else {
-            container.innerHTML = '<p class="text-center w-100">فشل تحميل المطاعم</p>';
+async function loadOffers() {
+    const container = document.getElementById("offers-container");
+    if (!container) return;
+    
+    try {
+        const snapshot = await getDocs(query(collection(db, "offers"), where("isActive", "==", true)));
+        if (snapshot.empty) {
+            // Keep default static HTML if no dynamic offers exist
+            return;
         }
+
+        let html = '';
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            const cardClass = data.type === 'gold' ? 'offer-gold glass glow-gold' : 'offer-brand glow-red';
+            
+            html += `
+            <div class="offer-card ${cardClass}">
+                <div class="offer-card-bg-icon"><span class="material-symbols-outlined icon-filled">${data.icon || 'local_offer'}</span></div>
+                <div class="offer-content">
+                    <div class="offer-badge">${data.badge}</div>
+                    <h4 class="offer-title">${data.title}</h4>
+                    <p class="offer-desc">${data.desc}</p>
+                    <a href="${data.link || './_4/res.html'}" class="btn-offer ripple-btn" style="text-decoration:none;display:inline-block;">اطلب دلوقتي</a>
+                </div>
+            </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+    } catch (error) {
+        console.error("Error loading offers:", error);
     }
 }
 
@@ -345,5 +348,6 @@ async function loadFeaturedRestaurants() {
 document.addEventListener('DOMContentLoaded', async () => {
     await initializeDataIfNeeded();
     await loadCategories();
+    await loadOffers();
     await loadFeaturedRestaurants();
 });
