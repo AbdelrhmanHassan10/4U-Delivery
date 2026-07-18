@@ -1,7 +1,13 @@
 // firebase-config.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// Hide admin links by default globally to prevent non-admins from seeing them
+const adminStyle = document.createElement('style');
+adminStyle.id = 'admin-link-hider';
+adminStyle.innerHTML = `a[href*="admin_stamps.html"] { display: none !important; }`;
+document.head.appendChild(adminStyle);
 
 // TODO: ضع أكواد إعدادات الفايربيز الخاصة بك هنا بدلاً من هذه القيم الفارغة
 const firebaseConfig = {
@@ -18,5 +24,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+// Check if user is admin globally to show admin links
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        try {
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists() && docSnap.data().isAdmin === true) {
+                // User is admin, remove the hider style so admin links appear
+                const hider = document.getElementById('admin-link-hider');
+                if (hider) hider.remove();
+            }
+        } catch (e) {
+            console.error("Error checking admin status:", e);
+        }
+    }
+});
 
 export { app, auth, db };

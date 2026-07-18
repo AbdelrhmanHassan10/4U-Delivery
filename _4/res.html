@@ -115,13 +115,11 @@
                 <!-- Categories -->
                 <div class="filter-group">
                     <h3 class="filter-group-title">الأصناف</h3>
-                    <div class="filter-tags">
-                        <button class="tag-btn active ripple-btn">الكل</button>
-                        <button class="tag-btn ripple-btn">كشري</button>
-                        <button class="tag-btn ripple-btn">مشويات</button>
-                        <button class="tag-btn ripple-btn">سي فود</button>
-                        <button class="tag-btn ripple-btn">حلويات</button>
-                        <button class="tag-btn ripple-btn">برجر</button>
+                    <div class="filter-tags" id="sidebar-categories">
+                        <button class="tag-btn active ripple-btn" data-cat="all">الكل</button>
+                        <!-- Dynamic Categories -->
+                        <div style="width:60px; height:30px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05); border-radius: 999px;"></div>
+                        <div style="width:60px; height:30px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05); border-radius: 999px;"></div>
                     </div>
                 </div>
 
@@ -187,136 +185,11 @@
             </div>
 
             <!-- Grid -->
-            <div class="res-grid">
-                
-                <!-- Card 1 -->
-                <div class="res-card-large glass">
-                    <div class="res-image-wrapper">
-                        <div class="res-image" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuBN_WvbrlHMtciE51w9c_iltMr6PZ6Tu-0Z-TixYL5jMpAkYGBYjDk2m0zbbqoYaPgGLyj5Vnlh1OGNBO6_pbPxNbsfd2MdI9kBf5VmW6jKfX0UOFcUwJ0z2bKYtSOu4B9TPgRa7GfqMnentc4R1pl9SB7Yu2R8YEf_eHNWc07-w71greUubTfXSsju5dJ1emICE8dcuzvZ5lo0lJFXdgTJHyGEC0SgXoZMsITv5pERKiI24LJDB3vL')"></div>
-                        <div class="res-image-overlay"></div>
-                        <div class="res-rating-badge">
-                            <span class="material-symbols-outlined icon-filled">star</span>
-                            <span>4.9</span>
-                        </div>
-                        <button class="res-fav-btn ripple-btn">
-                            <span class="material-symbols-outlined">favorite</span>
-                        </button>
-                    </div>
-                    <div class="res-info">
-                        <div>
-                            <h3 class="res-title">كشري التحرير الأصلي</h3>
-                            <p class="res-desc">كشري، طواجن، مصري أصيل</p>
-                        </div>
-                        <div class="res-meta">
-                            <div class="res-meta-item">
-                                <span class="material-symbols-outlined">schedule</span>
-                                <span>25-35 دقيقة</span>
-                            </div>
-                            <div class="res-meta-item">
-                                <span class="material-symbols-outlined">delivery_dining</span>
-                                <span>15 ج.م توصيل</span>
-                            </div>
-                        </div>
-                        <button class="btn-primary btn-order ripple-btn">اطلب دلوقتي</button>
-                    </div>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="res-card-large glass">
-                    <div class="res-image-wrapper">
-                        <div class="res-image" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuBhvvo4QUPaqNQGtOBvPhz4qLi8LqsuXJuYZu1y603QOLne2NL4povYvS_I6e8bTE1E_Mk1NjoWyKNewArWeD5MEkjCZ55HO8c5eOnw0uJ2WzNkoCAjIPaRB0CVVIAnOU1-B-j_naI_E-oNa5bIMW0YHqXRI_aVpTjpx-Jm6L7WP-p6UP5Ko9KRwTo9D8NI9rGdGpbaV48eSj_dnJZVoKFPQNDvKRi8t7hZFbL8o2eX4PAlpGLrkO8i')"></div>
-                        <div class="res-image-overlay"></div>
-                        <div class="res-rating-badge">
-                            <span class="material-symbols-outlined icon-filled">star</span>
-                            <span>4.7</span>
-                        </div>
-                        <button class="res-fav-btn ripple-btn">
-                            <span class="material-symbols-outlined">favorite</span>
-                        </button>
-                    </div>
-                    <div class="res-info">
-                        <div>
-                            <h3 class="res-title">مشويات قصر الكبابجي</h3>
-                            <p class="res-desc">مشويات، كباب وكفتة، فخارة</p>
-                        </div>
-                        <div class="res-meta">
-                            <div class="res-meta-item">
-                                <span class="material-symbols-outlined">schedule</span>
-                                <span>45-55 دقيقة</span>
-                            </div>
-                            <div class="res-meta-item">
-                                <span class="material-symbols-outlined">delivery_dining</span>
-                                <span>30 ج.م توصيل</span>
-                            </div>
-                        </div>
-                        <button class="btn-primary btn-order ripple-btn">اطلب دلوقتي</button>
-                    </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="res-card-large glass">
-                    <div class="res-image-wrapper">
-                        <div class="res-image" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuCkqJTd7UfPybfF4VdA6olv-C8MQT9VCemlU7L7bM9y-TyOpLOhw8zmuuuyYVmx1KxCZSmoxFQFaxVh1rYP7UKvk2lNlPe9IrfLlyPgAqmOXNtmljRvoK0IQkHPI2ZUEuIvK6DCeQLxpBP6gPq8cOlW1SuRMBP6xPbyc84SSh3k_5PRITrkcAYA7zRobTlZywTnefxAMXJDn_CzXJXWbSX9iM-ZePJG-OwXgUwdMWVx97lv4IeeIasI')"></div>
-                        <div class="res-image-overlay"></div>
-                        <div class="res-rating-badge">
-                            <span class="material-symbols-outlined icon-filled">star</span>
-                            <span>4.8</span>
-                        </div>
-                        <div class="res-offer-badge">عرض خاص</div>
-                        <button class="res-fav-btn ripple-btn">
-                            <span class="material-symbols-outlined">favorite</span>
-                        </button>
-                    </div>
-                    <div class="res-info">
-                        <div>
-                            <h3 class="res-title">أسماك البرج</h3>
-                            <p class="res-desc">سي فود، شوربة جمبري، أرز صيدية</p>
-                        </div>
-                        <div class="res-meta">
-                            <div class="res-meta-item">
-                                <span class="material-symbols-outlined">schedule</span>
-                                <span>40-50 دقيقة</span>
-                            </div>
-                            <div class="res-meta-item text-success">
-                                <span class="material-symbols-outlined">delivery_dining</span>
-                                <span>توصيل مجاني</span>
-                            </div>
-                        </div>
-                        <button class="btn-primary btn-order ripple-btn">اطلب دلوقتي</button>
-                    </div>
-                </div>
-
-                <!-- Card 4 -->
-                <div class="res-card-large glass">
-                    <div class="res-image-wrapper">
-                        <div class="res-image" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuABSXqONXdj65qLAymky8qzi2ZoHmdTqFb5lP927jji-4FtbaglQvLPWi8lR_x3fkXWZvNt6ihF7IEKeBO_nieWjdj3_m13p95ycstEB32JWQxznhh14u-XNeUHtW2eCPqz0zhnH0tiNC_WBZmpOFw0j2S4qqRcQO-Gp8fwdXTPtBRL78uJKuBeQbqtDVbA7h2SvDfTWNq1YwA6A3bNWzS669wBgm9pt9dbb40m_1kNa2Yc8hXIYyeU')"></div>
-                        <div class="res-image-overlay"></div>
-                        <div class="res-rating-badge">
-                            <span class="material-symbols-outlined icon-filled">star</span>
-                            <span>4.5</span>
-                        </div>
-                        <button class="res-fav-btn ripple-btn">
-                            <span class="material-symbols-outlined">favorite</span>
-                        </button>
-                    </div>
-                    <div class="res-info">
-                        <div>
-                            <h3 class="res-title">بافلو برجر - فرع التجمع</h3>
-                            <p class="res-desc">برجر، أمريكاني، فرايز</p>
-                        </div>
-                        <div class="res-meta">
-                            <div class="res-meta-item">
-                                <span class="material-symbols-outlined">schedule</span>
-                                <span>20-30 دقيقة</span>
-                            </div>
-                            <div class="res-meta-item">
-                                <span class="material-symbols-outlined">delivery_dining</span>
-                                <span>20 ج.م توصيل</span>
-                            </div>
-                        </div>
-                        <button class="btn-primary btn-order ripple-btn">اطلب دلوقتي</button>
-                    </div>
-                </div>
+            <div class="res-grid" id="restaurants-container">
+                <!-- Skeleton Loaders -->
+                <div class="res-card-large glass" style="height: 350px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
+                <div class="res-card-large glass" style="height: 350px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
+                <div class="res-card-large glass" style="height: 350px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
             </div>
 
             <!-- Load More -->

@@ -15,26 +15,30 @@
 
     <!-- ═══ SIDEBAR ADMIN ═══ -->
     <aside class="admin-sidebar glass">
-        <div class="sidebar-header">
+        <a href="../_3/home.html" style="text-decoration: none; color: inherit;"><div class="sidebar-header">
             <div class="sidebar-logo">4U</div>
             <div>
                 <h2 class="sidebar-title">Admin</h2>
                 <p class="sidebar-subtitle">نظام الأختام</p>
             </div>
-        </div>
+        </div></a>
         
         <nav class="sidebar-nav">
             <a href="javascript:void(0)" class="sidebar-link active ripple-btn">
                 <span class="material-symbols-outlined">qr_code_scanner</span>
                 إضافة أختام
             </a>
-            <a href="javascript:void(0)" class="sidebar-link inactive ripple-btn" onclick="window.showToast('سجل العملاء سيتوفر قريباً!', 'success')">
+            <a href="admin_users.html" class="sidebar-link inactive ripple-btn">
                 <span class="material-symbols-outlined">group</span>
-                سجل العملاء <span style="font-size: 0.7rem; background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 0.5rem; margin-right: auto;">قريباً</span>
+                سجل العملاء
             </a>
-            <a href="javascript:void(0)" class="sidebar-link inactive ripple-btn" onclick="window.showToast('إدارة المطاعم ستتوفر قريباً!', 'success')">
+            <a href="admin_restaurants.html" class="sidebar-link inactive ripple-btn">
                 <span class="material-symbols-outlined">storefront</span>
-                إدارة المطاعم <span style="font-size: 0.7rem; background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 0.5rem; margin-right: auto;">قريباً</span>
+                إدارة المطاعم
+            </a>
+            <a href="admin_orders.html" class="sidebar-link inactive ripple-btn">
+                <span class="material-symbols-outlined">receipt_long</span>
+                إدارة الطلبات
             </a>
         </nav>
         
@@ -64,51 +68,82 @@
                 
                 <div class="form-group">
                     <div class="input-wrapper">
-                        <input type="text" placeholder="رقم الموبايل (مثال: 010xxxxxxxx)" class="input-control" dir="rtl"/>
+                        <input type="text" id="admin-search-phone" placeholder="رقم الموبايل (مثال: 010xxxxxxxx)" class="input-control" dir="rtl"/>
                         <span class="material-symbols-outlined">search</span>
                     </div>
-                    <button class="btn-search ripple-btn">بحث</button>
+                    <button class="btn-search ripple-btn" id="admin-search-btn">بحث</button>
                 </div>
 
                 <!-- Search Result (Simulated) -->
-                <div class="search-result">
+                <div class="search-result hidden" id="admin-search-result">
                     <div class="user-info">
                         <div class="user-avatar">
                             <span class="material-symbols-outlined">person</span>
                         </div>
                         <div>
-                            <p class="user-name">أحمد المحلاوي</p>
-                            <p class="user-phone">01012345678</p>
+                            <p class="user-name" id="admin-user-name">أحمد المحلاوي</p>
+                            <p class="user-phone" id="admin-user-phone">01012345678</p>
                         </div>
                     </div>
                     <span class="status-badge">عميل مسجل</span>
                 </div>
             </div>
 
-            <!-- 2. Select Restaurant & Add Stamp -->
+            <!-- 2. Manage Points and Wallet -->
+            <div class="admin-card glass hidden" id="admin-points-wallet-card" style="margin-bottom: 2rem;">
+                <h2 class="admin-card-title text-gold" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                    <span class="material-symbols-outlined" style="vertical-align: middle;">account_balance_wallet</span>
+                    إدارة النقاط والرصيد
+                </h2>
+                
+                <div class="admin-grid" style="grid-template-columns: 1fr 1fr;">
+                    <!-- Points -->
+                    <div>
+                        <label class="label-text">إضافة نقاط (Points)</label>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <div class="input-wrapper">
+                                <input type="number" id="admin-add-points-input" placeholder="العدد..." class="input-control" dir="rtl" />
+                                <span class="material-symbols-outlined">stars</span>
+                            </div>
+                            <button class="btn-search ripple-btn" id="admin-add-points-btn" style="background: var(--gold); color: #000; margin-top: 10px;">إضافة نقاط</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Wallet -->
+                    <div>
+                        <label class="label-text">إضافة رصيد (Wallet)</label>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <div class="input-wrapper">
+                                <input type="number" id="admin-add-wallet-input" placeholder="المبلغ (ج.م)..." class="input-control" dir="rtl" />
+                                <span class="material-symbols-outlined">payments</span>
+                            </div>
+                            <button class="btn-search ripple-btn" id="admin-add-wallet-btn" style="background: var(--brand); color: #fff; margin-top: 10px;">إضافة رصيد</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Select Restaurant & Add Stamp -->
             <div class="admin-card glass">
                 <h2 class="admin-card-title">
-                    <span class="step-badge">٢</span>
+                    <span class="step-badge">٣</span>
                     اختيار المطعم وإضافة الختم
                 </h2>
                 
                 <div class="admin-grid">
                     <!-- Brand Select -->
                     <div>
-                        <label class="label-text">اختر المطعم (من الـ 15 براند)</label>
-                        <select class="input-control" id="admin-restaurant-select" style="cursor: pointer;">
-                            <option value="Dots">Dots</option>
-                            <option value="Koshary">كشري التحرير</option>
-                            <option value="Prince">البرنس للمشويات</option>
-                            <option value="Buffalo">بافلو برجر</option>
+                        <label class="label-text">اختر المطعم</label>
+                        <select class="input-control" id="admin-restaurant-select" style="cursor: pointer;" disabled>
+                            <option value="">جاري التحميل...</option>
                         </select>
                         
-                        <div class="stamp-action-area">
+                        <div class="stamp-action-area hidden" id="admin-stamp-action-area">
                             <p class="stamp-action-title">الأختام الحالية لهذا العميل</p>
                             <div class="stamp-count-display">
-                                <span id="admin-current-stamps">٤</span> <span class="stamp-count-total">/ ١٠</span>
+                                <span id="admin-current-stamps">٠</span> <span class="stamp-count-total">/ ١٠</span>
                             </div>
-                            <p class="stamp-warning">باقي <span id="admin-remaining-stamps">٦</span> أختام لدخول السحب!</p>
+                            <p class="stamp-warning">باقي <span id="admin-remaining-stamps">١٠</span> أختام لدخول السحب!</p>
                             
                             <button class="btn-add-stamp ripple-btn" id="btn-add-stamp-action">
                                 <span class="material-symbols-outlined text-brand">verified</span>
@@ -122,11 +157,11 @@
                         <label class="label-text">رؤية كارت العميل (Live Preview)</label>
                         <div class="live-preview-container">
                             <!-- iFrame to show the smart template -->
-                            <iframe src="../_6/stamp_card.html?brand=Dots&stamps=4" id="admin-live-preview-iframe" class="live-preview-iframe"></iframe>
+                            <iframe src="../_6/stamp_card.html?brand=&stamps=0" id="admin-live-preview-iframe" class="live-preview-iframe"></iframe>
                             
                             <!-- Overlay CTA to open full -->
                             <div class="live-preview-overlay">
-                                <a href="../_6/stamp_card.html?brand=Dots&stamps=4" id="admin-full-screen-link" target="_blank" class="btn-open-preview ripple-btn">فتح الكارت كامل</a>
+                                <a href="../_6/stamp_card.html?brand=&stamps=0" id="admin-full-screen-link" target="_blank" class="btn-open-preview ripple-btn">فتح الكارت كامل</a>
                             </div>
                         </div>
                     </div>

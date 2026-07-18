@@ -706,3 +706,5 @@ body {
     transition: background 0.3s;
 }
 .btn-open-preview:hover { background: var(--brand-light); }
+
+.hidden { display: none !important; }

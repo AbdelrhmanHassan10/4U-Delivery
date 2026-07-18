@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html class="dark" dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>4U Delivery | المطعم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="restaurant.css">
+</head>
+<body>
+    <!-- Page Transition Curtain -->
+    <div class="page-transition-curtain"></div>
+
+    <!-- BG Effects -->
+    <div class="bg-effects">
+        <div class="particles"></div>
+        <div class="glow-brand animate-float"></div>
+        <div class="glow-gold animate-float" style="animation-delay: -3s;"></div>
+    </div>
+
+    <!-- ═══ NAVBAR ═══ -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-inner">
+            <a href="../_3/home.html" class="nav-brand group">
+                <div class="nav-brand-icon group-hover:scale-110">4U</div>
+                <span class="group-hover:text-gold">Delivery</span>
+            </a>
+            
+            <button id="mobile-menu-btn" class="btn-menu ripple-btn">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ═══ MAIN LAYOUT ═══ -->
+    <main class="main-layout">
+        
+        <!-- Skeleton Loaders -->
+        <div id="loading-state" class="glass" style="border-radius: 1.5rem; padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);">
+            <div style="height: 250px; background: rgba(255,255,255,0.05); border-radius: 1rem;"></div>
+            <div style="height: 40px; width: 60%; background: rgba(255,255,255,0.05); border-radius: 0.5rem;"></div>
+            <div style="height: 20px; width: 40%; background: rgba(255,255,255,0.05); border-radius: 0.5rem;"></div>
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <div style="height: 150px; width: 100px; background: rgba(255,255,255,0.05); border-radius: 1rem;"></div>
+                <div style="height: 150px; width: 100px; background: rgba(255,255,255,0.05); border-radius: 1rem;"></div>
+            </div>
+        </div>
+
+        <div id="restaurant-content" class="hidden">
+            <!-- Restaurant Header -->
+            <section class="res-header glass glow-red">
+                <div class="res-cover">
+                    <div id="res-cover-img" class="res-cover-img"></div>
+                    <div class="res-cover-overlay"></div>
+                </div>
+                
+                <div class="res-info-container">
+                    <div class="res-details">
+                        <h1 id="res-name" class="res-name">اسم المطعم</h1>
+                        <p id="res-category" class="res-category">تصنيف المطعم</p>
+                        
+                        <div class="res-meta">
+                            <div class="res-meta-item">
+                                <span class="material-symbols-outlined icon-filled" style="color: var(--gold);">star</span>
+                                <span id="res-rating" style="color: white; font-weight: 700;">4.5</span>
+                            </div>
+                            <div class="res-meta-item">
+                                <span class="material-symbols-outlined">schedule</span>
+                                <span id="res-time">30-45 دقيقة</span>
+                            </div>
+                            <div class="res-meta-item text-success" id="res-fee-container">
+                                <span class="material-symbols-outlined">delivery_dining</span>
+                                <span id="res-fee">توصيل مجاني</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Menu Gallery -->
+            <section class="menu-section">
+                <h2 class="section-title">
+                    <span class="material-symbols-outlined">menu_book</span>
+                    المنيو
+                </h2>
+                
+                <div id="menu-gallery" class="menu-gallery">
+                    <!-- Images will be injected here -->
+                </div>
+                
+                <div id="no-menu-msg" class="hidden" style="text-align: center; color: var(--dark-400); padding: 3rem; background: rgba(255,255,255,0.02); border-radius: 1rem; margin-top: 1.5rem;">
+                    <span class="material-symbols-outlined" style="font-size: 3rem; margin-bottom: 1rem;">image_not_supported</span>
+                    <p>لا يوجد صور للمنيو حالياً</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Sticky Order Bar -->
+    <div class="sticky-order-bar glass-strong">
+        <button id="btn-open-order" class="btn-primary ripple-btn" style="width: 100%; font-size: 1.25rem; padding: 1rem; border-radius: 1rem;">
+            <span class="material-symbols-outlined">shopping_basket</span>
+            اطلب من المنيو
+        </button>
+    </div>
+
+    <!-- Image Viewer Modal (Lightbox) -->
+    <div id="image-viewer-modal" class="modal-overlay hidden">
+        <button id="btn-close-viewer" class="btn-close-modal ripple-btn">
+            <span class="material-symbols-outlined">close</span>
+        </button>
+        <div class="viewer-content">
+            <img id="viewer-img" src="" alt="Menu Image">
+        </div>
+        <div class="viewer-controls">
+            <button id="btn-viewer-prev" class="btn-viewer-control ripple-btn"><span class="material-symbols-outlined">arrow_forward_ios</span></button>
+            <span id="viewer-counter" style="color: white; font-weight: bold; background: rgba(0,0,0,0.5); padding: 0.5rem 1rem; border-radius: 2rem;">1 / 1</span>
+            <button id="btn-viewer-next" class="btn-viewer-control ripple-btn"><span class="material-symbols-outlined">arrow_back_ios</span></button>
+        </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div id="order-modal" class="modal-overlay hidden">
+        <div class="modal-content glass glow-red">
+            <div class="modal-header">
+                <h2>أكمل طلبك</h2>
+                <button id="btn-close-order" class="btn-close-modal-inline ripple-btn">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form id="order-form" class="order-form">
+                <div class="form-group">
+                    <label>طلبك بالتفصيل *</label>
+                    <textarea id="order-details" placeholder="اكتب الأصناف اللي عايزها من المنيو والمقاسات والكمية..." required rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>العنوان بالتفصيل *</label>
+                    <input type="text" id="order-address" placeholder="المنطقة، الشارع، العمارة، رقم الشقة..." required>
+                </div>
+                <div class="form-group">
+                    <label>رقم التليفون *</label>
+                    <input type="tel" id="order-phone" placeholder="رقم متاح للتواصل" required dir="ltr" style="text-align: right;">
+                </div>
+                <div class="form-group">
+                    <label>ملاحظات إضافية</label>
+                    <input type="text" id="order-notes" placeholder="بدون شطة، عيش زيادة، الخ...">
+                </div>
+                
+                <button type="submit" id="btn-submit-order" class="btn-primary ripple-btn" style="width: 100%; margin-top: 1rem; font-size: 1.1rem; padding: 0.8rem;">
+                    تأكيد الطلب
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+    <script type="module" src="restaurant.js"></script>
+</body>
+</html>

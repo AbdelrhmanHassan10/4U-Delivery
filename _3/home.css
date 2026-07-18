@@ -129,8 +129,8 @@ input { font-family: inherit; }
 .particles::after { content: ""; position: absolute; top: 100vh; left: 0; width: 3px; height: 3px; background: transparent; box-shadow: inherit; border-radius: 50%; }
 @keyframes floatParticles { 0% { transform: translateY(0); } 100% { transform: translateY(-100vh); } }
 
-.glow-brand { position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(200, 16, 46, 0.15) 0%, transparent 70%); border-radius: 50%; }
-.glow-gold { position: absolute; bottom: -200px; left: -200px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(240, 192, 64, 0.12) 0%, transparent 70%); border-radius: 50%; }
+.bg-glow-brand { position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(200, 16, 46, 0.15) 0%, transparent 70%); border-radius: 50%; }
+.bg-glow-gold { position: absolute; bottom: -200px; left: -200px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(240, 192, 64, 0.12) 0%, transparent 70%); border-radius: 50%; }
 
 /* Layout Constraints */
 .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
@@ -214,23 +214,45 @@ input { font-family: inherit; }
 .category-name { font-size: 0.75rem; font-weight: 700; color: var(--dark-300); transition: color 0.3s; }
 
 /* Points Banner */
-.points-banner { border-radius: 1.5rem; padding: 2rem; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 1.5rem; border: 1px solid rgba(240,192,64,0.1); }
-@media (min-width: 768px) { .points-banner { flex-direction: row; padding: 2.5rem; } }
+.points-banner { 
+    width: 100%;
+    border-radius: 1.5rem; 
+    padding: 2.5rem 1.5rem; 
+    position: relative; 
+    overflow: hidden; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    text-align: center;
+    gap: 2.5rem; 
+    border: 1px solid rgba(240,192,64,0.1); 
+    background: rgba(15, 15, 15, 0.7);
+    backdrop-filter: blur(16px);
+}
+@media (min-width: 768px) { 
+    .points-banner { 
+        flex-direction: row; 
+        padding: 3.5rem; 
+        text-align: right;
+        justify-content: space-between;
+    } 
+}
 .points-banner-bg { position: absolute; inset: 0; background: linear-gradient(to left, transparent, rgba(200,16,46,0.1)); pointer-events: none; }
-.points-banner-glow { position: absolute; top: 0; right: 0; width: 15rem; height: 15rem; background: radial-gradient(circle, rgba(240,192,64,0.1) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
-.points-banner-content { position: relative; z-index: 10; text-align: right; flex: 1; }
-.points-banner-badge { display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 9999px; padding: 0.25rem 0.75rem; margin-bottom: 1rem; }
-.points-banner-badge-text { color: var(--gold); font-size: 0.75rem; font-weight: 700; }
-.points-banner-title { font-size: 1.5rem; font-weight: 900; color: white; margin-bottom: 0.75rem; }
-@media (min-width: 768px) { .points-banner-title { font-size: 1.875rem; } }
-.points-banner-desc { color: var(--dark-300); line-height: 1.6; max-width: 36rem; font-size: 1rem; margin-bottom: 1rem; }
-.btn-gold { display: inline-flex; gap: 0.5rem; background: var(--gold); color: var(--dark-900); font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 0.75rem; transition: all 0.3s; margin-top: 1rem; }
-.btn-gold:hover { background: var(--gold-light); box-shadow: 0 10px 15px -3px rgba(240,192,64,0.2); }
+.points-banner-glow { position: absolute; top: -50%; right: -10%; width: 30rem; height: 30rem; background: radial-gradient(circle, rgba(240,192,64,0.08) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+.points-banner-content { position: relative; z-index: 10; flex: 1; width: 100%; }
+.points-banner-badge { display: inline-flex; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 9999px; padding: 0.35rem 1.25rem; margin-bottom: 1.5rem; }
+.points-banner-badge-text { color: var(--gold); font-size: 0.85rem; font-weight: 800; }
+.points-banner-title { font-size: 1.8rem; font-weight: 900; color: white; margin-bottom: 1rem; line-height: 1.3; }
+@media (min-width: 768px) { .points-banner-title { font-size: 2.5rem; } }
+.points-banner-desc { color: var(--dark-200); line-height: 1.8; max-width: 100%; font-size: 1.1rem; margin-bottom: 2rem; }
+@media (min-width: 768px) { .points-banner-desc { max-width: 36rem; } }
+.btn-gold { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--gold); color: var(--dark-900); font-weight: 800; padding: 0.85rem 2rem; border-radius: 0.75rem; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); font-size: 1.1rem; text-decoration: none; }
+.btn-gold:hover { background: var(--gold-light); box-shadow: 0 10px 20px rgba(240,192,64,0.3); transform: translateY(-3px); }
 .btn-gold:active { transform: scale(0.95); }
-.points-banner-image { position: relative; z-index: 10; width: 12rem; height: 12rem; flex-shrink: 0; }
-@media (min-width: 768px) { .points-banner-image { width: 14rem; height: 14rem; } }
-.points-banner-image-glow { position: absolute; inset: 0; background: radial-gradient(circle, rgba(200,16,46,0.3) 0%, transparent 60%); border-radius: 50%; }
-.points-banner-img { position: relative; z-index: 10; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 25px 25px rgba(0,0,0,0.5)); transition: transform 0.5s; }
+.points-banner-image { position: relative; z-index: 10; width: 14rem; height: 14rem; flex-shrink: 0; margin: 0 auto; }
+@media (min-width: 768px) { .points-banner-image { width: 18rem; height: 18rem; margin: 0; } }
+.points-banner-image-glow { position: absolute; inset: -20%; background: radial-gradient(circle, rgba(200,16,46,0.4) 0%, transparent 70%); border-radius: 50%; animation: pulse 3s infinite; }
+.points-banner-img { position: relative; z-index: 10; width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 30px 30px rgba(0,0,0,0.6)); transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
 .points-banner:hover .points-banner-img { transform: scale(1.1); }
 
 /* Section Headers */

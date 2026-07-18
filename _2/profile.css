@@ -175,7 +175,47 @@ ul { list-style: none; }
 /* Profile Hero */
 .profile-hero { padding-top: 100px; padding-bottom: 2rem; }
 .profile-card { padding: 2rem; border-radius: 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 2rem; position: relative; overflow: hidden; box-shadow: 0 0 60px rgba(200,16,46,0.12); }
-@media (min-width: 768px) { .profile-card { flex-direction: row; padding: 2.5rem; } }
+@media (max-width: 768px) {
+    .btn-float {
+        bottom: 2rem;
+        right: 1.5rem;
+    }
+}
+
+/* ═══ EDIT PROFILE MODAL CSS ═══ */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+.modal-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+.modal-content {
+    background: rgba(20, 20, 20, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(240, 192, 64, 0.1);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    width: 90%;
+    max-width: 450px;
+    transform: scale(1);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.modal-overlay.hidden .modal-content {
+    transform: scale(0.8);
+}
 
 .profile-avatar-wrapper { position: relative; flex-shrink: 0; }
 .profile-avatar { width: 7rem; height: 7rem; border-radius: 1rem; border: 3px solid var(--brand); background-size: cover; background-position: center; }

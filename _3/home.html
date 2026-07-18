@@ -15,8 +15,8 @@
     <!-- BG Effects -->
     <div class="bg-effects">
         <div class="particles"></div>
-        <div class="glow-brand animate-float"></div>
-        <div class="glow-gold animate-float" style="animation-delay: -3s;"></div>
+        <div class="bg-glow-brand animate-float"></div>
+        <div class="bg-glow-gold animate-float" style="animation-delay: -3s;"></div>
     </div>
 
     <!-- ═══ NAVBAR ═══ -->
@@ -133,39 +133,12 @@
 
     <!-- ═══ CATEGORIES ═══ -->
     <section class="section container reveal">
-        <div class="category-grid">
-            <a href="../_4/res.html" class="category-card glass active" style="text-decoration:none;">
-                <span class="category-icon">🍔</span>
-                <span class="category-name">برجر</span>
-            </a>
-            <a href="../_4/res.html" class="category-card glass" style="text-decoration:none;">
-                <span class="category-icon">🍕</span>
-                <span class="category-name">بيتزا</span>
-            </a>
-            <a href="../_4/res.html" class="category-card glass" style="text-decoration:none;">
-                <span class="category-icon">🍗</span>
-                <span class="category-name">فرايد تشيكن</span>
-            </a>
-            <a href="../_4/res.html" class="category-card glass" style="text-decoration:none;">
-                <span class="category-icon">🥩</span>
-                <span class="category-name">مشويات</span>
-            </a>
-            <a href="../_4/res.html" class="category-card glass" style="text-decoration:none;">
-                <span class="category-icon">🍟</span>
-                <span class="category-name">وجبات سريعة</span>
-            </a>
-            <a href="../_4/res.html" class="category-card glass" style="text-decoration:none;">
-                <span class="category-icon">🍰</span>
-                <span class="category-name">حلويات</span>
-            </a>
-            <a href="../_4/res.html" class="category-card glass" style="text-decoration:none;">
-                <span class="category-icon">☕</span>
-                <span class="category-name">مشروبات</span>
-            </a>
-            <a href="../_4/res.html" class="category-card glass" style="text-decoration:none;">
-                <span class="category-icon">🥗</span>
-                <span class="category-name">أكل صحي</span>
-            </a>
+        <div class="category-grid" id="categories-container">
+            <!-- Skeleton Loaders -->
+            <div class="category-card glass" style="height: 100px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
+            <div class="category-card glass" style="height: 100px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
+            <div class="category-card glass" style="height: 100px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
+            <div class="category-card glass" style="height: 100px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
         </div>
     </section>
 
@@ -205,63 +178,11 @@
             <a href="../_4/res.html" class="section-link">عرض الكل <span class="material-symbols-outlined" style="font-size:1rem;">arrow_back_ios</span></a>
         </div>
         
-        <div class="res-grid">
-            <div class="res-card glass">
-                <div class="res-image-wrapper">
-                    <div class="res-image" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuBd7vrccaZ2Pgsqt79vc1ddonOmxNNauM5-JI9yQ4lHv6b4Ulhj8gfw_nU5-lCoMsb1F7Xp_2BfkQCP7vxFlgEYaF8Q2DybTB1kEsgdTTsgDyU_zFXNx6mPp8QgxcIe92lJhaIQY3fANlBv5Mt9UUFSRxPjyfZaJW5Ong2AfB1Ep8NV61t7RF7CCld9MQlklhA26VPSvDOBGl0cOpL-P9sZM17GOmG2nxN6vjM9doM_rnrgTF-xqR8w')"></div>
-                    <div class="res-image-overlay"></div>
-                    <div class="res-rating">
-                        <span class="material-symbols-outlined icon-filled">star</span>
-                        <span class="res-rating-text">4.9</span>
-                    </div>
-                </div>
-                <div class="res-info">
-                    <h3 class="res-title">البرنس للمشويات</h3>
-                    <p class="res-desc">مشويات مصرية أصيلة بالخلطة السرية</p>
-                    <div class="res-meta">
-                        <div class="res-meta-item"><span class="material-symbols-outlined">schedule</span> 30-45 دقيقة</div>
-                        <div class="res-meta-item"><span class="material-symbols-outlined">delivery_dining</span> 25 ج.م</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="res-card glass">
-                <div class="res-image-wrapper">
-                    <div class="res-image" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuBxpljn1Pk1qEnAD8jwgMD9n0t3cO0qeHoQkEhLZTWnbKv3dWi508bR7bBnPQ9qgGb315JeWFRhkbfEO02y3qFQT2Kcaa18yyOQJAVJvUL4Zik2rtoEECwvs0cVKTB_z5Y0V3b5R5elx1Ffgwyc7667S7f2uvYvl85UEZ8Hwaq5MzqbSktJTCQqnm-JXKQ0cBfonf7Upq2miSR0pb0TeFrrIB8s7ac-ZNH1v3u5t7b8ZEgjTMZZ7XHF')"></div>
-                    <div class="res-image-overlay"></div>
-                    <div class="res-rating">
-                        <span class="material-symbols-outlined icon-filled">star</span>
-                        <span class="res-rating-text">4.7</span>
-                    </div>
-                </div>
-                <div class="res-info">
-                    <h3 class="res-title">كشري التحرير</h3>
-                    <p class="res-desc">ملك الكشري في مصر بلا منازع</p>
-                    <div class="res-meta">
-                        <div class="res-meta-item"><span class="material-symbols-outlined">schedule</span> 20-30 دقيقة</div>
-                        <div class="res-meta-item text-success"><span class="material-symbols-outlined">delivery_dining</span> مجاني</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="res-card glass">
-                <div class="res-image-wrapper">
-                    <div class="res-image" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuAy-D2WotH7O8BhVK58zR9Dv5PuYJjD_w_BfIc7iDrkdwL-ovUqy_Tl6oVxBw21BH5t_SPmKcjx3F5lvIcsOvKg_apc4BbD56bageNnXgsDjGQwhvfjgF9MaRTDiqrNdiYur6DNWDynDsOuGJa0z2DVq0gDB-8TY4RGb9me5KAgEyIvdvOpwNUBOZ2Osf_xaIU7Xb5YgyrygPKjzOvVjjoKESi_VXVl7_17IrwOlvv31tsyvaVJr1YY')"></div>
-                    <div class="res-image-overlay"></div>
-                    <div class="res-rating">
-                        <span class="material-symbols-outlined icon-filled">star</span>
-                        <span class="res-rating-text">4.8</span>
-                    </div>
-                </div>
-                <div class="res-info">
-                    <h3 class="res-title">حلويات ديوكس</h3>
-                    <p class="res-desc">أحلى حلويات شرقية وغربية بلمسة عصرية</p>
-                    <div class="res-meta">
-                        <div class="res-meta-item"><span class="material-symbols-outlined">schedule</span> 40-55 دقيقة</div>
-                        <div class="res-meta-item"><span class="material-symbols-outlined">delivery_dining</span> 30 ج.م</div>
-                    </div>
-                </div>
-            </div>
+        <div class="res-grid" id="featured-res-container">
+            <!-- Skeleton Loaders -->
+            <div class="res-card glass" style="height: 300px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
+            <div class="res-card glass" style="height: 300px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
+            <div class="res-card glass" style="height: 300px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
         </div>
     </section>
 

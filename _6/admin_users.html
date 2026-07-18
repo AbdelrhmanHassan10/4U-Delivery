@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html class="dark" dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>4U Delivery | سجل العملاء</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="stamps.css">
+    <style>
+        .table-wrapper {
+            background: rgba(26,26,26,0.6);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-top: 2rem;
+        }
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: right;
+            min-width: 700px;
+        }
+        .users-table th {
+            color: var(--dark-400);
+            font-size: 0.875rem;
+            font-weight: 700;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .users-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: white;
+            font-weight: 500;
+        }
+        .users-table tbody tr {
+            transition: background 0.3s;
+        }
+        .users-table tbody tr:hover {
+            background: rgba(255,255,255,0.02);
+        }
+        .tier-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .tier-silver { background: rgba(192, 192, 192, 0.2); color: #c0c0c0; }
+        .tier-gold { background: rgba(240, 192, 64, 0.2); color: var(--gold); }
+        .tier-platinum { background: rgba(229, 228, 226, 0.2); color: #e5e4e2; }
+        .tier-vip { background: rgba(200, 16, 46, 0.2); color: var(--brand-light); }
+        
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .user-initials {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: var(--dark-800);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--brand);
+            flex-shrink: 0;
+            border: 1px solid rgba(200,16,46,0.3);
+        }
+    </style>
+</head>
+<body class="admin-layout">
+
+    <!-- Page Transition Curtain -->
+    <div class="page-transition-curtain"></div>
+
+    <!-- ═══ SIDEBAR ADMIN ═══ -->
+    <aside class="admin-sidebar glass">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">4U</div>
+            <div>
+                <h2 class="sidebar-title">Admin</h2>
+                <p class="sidebar-subtitle">نظام الأختام</p>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <a href="admin_stamps.html" class="sidebar-link inactive ripple-btn">
+                <span class="material-symbols-outlined">qr_code_scanner</span>
+                إضافة أختام
+            </a>
+            <a href="javascript:void(0)" class="sidebar-link active ripple-btn">
+                <span class="material-symbols-outlined">group</span>
+                سجل العملاء
+            </a>
+            <a href="admin_restaurants.html" class="sidebar-link inactive ripple-btn">
+                <span class="material-symbols-outlined">storefront</span>
+                إدارة المطاعم
+            </a>
+            <a href="admin_orders.html" class="sidebar-link inactive ripple-btn">
+                <span class="material-symbols-outlined">receipt_long</span>
+                إدارة الطلبات
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="../_3/home.html" class="sidebar-logout ripple-btn">
+                <span class="material-symbols-outlined">logout</span>
+                خروج
+            </a>
+        </div>
+    </aside>
+
+    <!-- ═══ MAIN DASHBOARD ═══ -->
+    <main class="admin-main">
+        <div class="admin-container" style="max-width: 100%;">
+            
+            <header class="admin-page-header">
+                <h1 class="admin-page-title">سجل العملاء</h1>
+                <p class="admin-page-desc">قائمة بجميع المستخدمين المسجلين في النظام وعملياتهم.</p>
+            </header>
+
+            <div class="form-group" style="max-width: 400px;">
+                <div class="input-wrapper">
+                    <input type="text" id="users-search-input" placeholder="ابحث بالاسم أو رقم الموبايل..." class="input-control" dir="rtl"/>
+                    <span class="material-symbols-outlined">search</span>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>العميل</th>
+                            <th>رقم الموبايل</th>
+                            <th>المستوى (Tier)</th>
+                            <th>إجمالي الأختام</th>
+                            <th>النقاط</th>
+                            <th>المحفظة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body">
+                        <tr>
+                            <td colspan="6" style="text-align: center; color: var(--dark-400);">جاري التحميل <span class="material-symbols-outlined animate-spin" style="font-size: 1rem; vertical-align: middle;">progress_activity</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+    <script type="module" src="admin_users.js"></script>
+</body>
+</html>

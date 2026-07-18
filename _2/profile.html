@@ -63,8 +63,14 @@
             
             <!-- Avatar -->
             <div class="profile-avatar-wrapper stagger-2">
-                <div class="profile-avatar" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuDFlKLGKMu4KC4OLVplLH4TklVhBVwlQd7IoSwR3X8cRAXbD99YlvX6j8mzXZX_WLnLrZeQg_dNIdICtbQvk_SwlbGTDAYSkJgjzgQhBnXDMLMcdPNaxYLG1rrHk52l4dq6Wzw6cdjxHdtetdTvqz82lOBZr5n9ZFxxiPaVEDadTvLM1SIY6Oqdu4t29jNfyq8kS6TFDYADGUVbRFoseBhmEs92vZcxnYzvza24pErS7hM-uaTStUbF')"></div>
-                <button class="btn-edit-avatar ripple-btn"><span class="material-symbols-outlined">edit</span></button>
+                <div class="profile-avatar" id="profile-avatar-bg" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuDFlKLGKMu4KC4OLVplLH4TklVhBVwlQd7IoSwR3X8cRAXbD99YlvX6j8mzXZX_WLnLrZeQg_dNIdICtbQvk_SwlbGTDAYSkJgjzgQhBnXDMLMcdPNaxYLG1rrHk52l4dq6Wzw6cdjxHdtetdTvqz82lOBZr5n9ZFxxiPaVEDadTvLM1SIY6Oqdu4t29jNfyq8kS6TFDYADGUVbRFoseBhmEs92vZcxnYzvza24pErS7hM-uaTStUbF')">
+                    <!-- Overlay for loading state -->
+                    <div id="avatar-loading-overlay" class="hidden" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); border-radius:50%; display:flex; justify-content:center; align-items:center;">
+                        <span class="material-symbols-outlined animate-spin" style="color:white;">progress_activity</span>
+                    </div>
+                </div>
+                <button class="btn-edit-avatar ripple-btn" id="btn-edit-avatar"><span class="material-symbols-outlined">edit</span></button>
+                <input type="file" id="profile-avatar-upload" hidden accept="image/*">
             </div>
             
             <!-- Info -->
@@ -73,15 +79,15 @@
                 <p class="profile-email stagger-3" id="profile-email">...</p>
                 <div class="profile-stats stagger-4">
                     <div class="stat-box">
-                        <p class="stat-value text-gradient-gold" id="stat-points">...</p>
+                        <p class="stat-value text-gradient-gold" id="stat-points">0</p>
                         <p class="stat-label">نقطة</p>
                     </div>
                     <div class="stat-box">
-                        <p class="stat-value text-gradient-red" id="stat-wallet">...</p>
-                        <p class="stat-label">المحفظة</p>
+                        <p class="stat-value text-gradient-red" id="stat-cards">0</p>
+                        <p class="stat-label">عدد الكروت</p>
                     </div>
                     <div class="stat-box">
-                        <p class="stat-value text-white" id="stat-tier">...</p>
+                        <p class="stat-value text-white" id="stat-tier">Classic</p>
                         <p class="stat-label">المستوى</p>
                     </div>
                 </div>
@@ -145,14 +151,6 @@
                 <p class="dash-desc">بيتك، مكتبك، أي مكان</p>
                 <span class="dash-link">تعديل <span class="material-symbols-outlined" style="font-size:16px;">arrow_back_ios</span></span>
             </div>
-            <!-- Wallet -->
-            <div class="dash-card glass card-gold ripple-btn" onclick="navigateWithCurtain('wallet.html')">
-                <div class="dash-icon-bg"><span class="material-symbols-outlined icon-filled">account_balance_wallet</span></div>
-                <div class="dash-icon-wrapper"><span class="material-symbols-outlined icon-filled">account_balance_wallet</span></div>
-                <h3 class="dash-title">المحفظة</h3>
-                <p class="dash-desc">رصيدك وطرق الدفع</p>
-                <span class="dash-link">إدارة <span class="material-symbols-outlined" style="font-size:16px;">arrow_back_ios</span></span>
-            </div>
             <!-- Points -->
             <div class="dash-card glass card-brand ripple-btn" onclick="navigateWithCurtain('points.html')">
                 <div class="dash-icon-bg"><span class="material-symbols-outlined icon-filled">stars</span></div>
@@ -179,37 +177,10 @@
                 <span class="material-symbols-outlined icon-filled text-gradient-gold">history</span>
                 آخر الحركات
             </h2>
-            <div class="activity-list">
-                <div class="activity-item">
-                    <div class="activity-info">
-                        <div class="activity-icon card-gold" style="background: rgba(240,192,64,0.1); color: var(--gold);"><span class="material-symbols-outlined icon-filled">delivery_dining</span></div>
-                        <div>
-                            <p class="activity-title">تم توصيل طلب #٩٨٤٢</p>
-                            <p class="activity-time">مطعم حضرموت عنتر - منذ ٢ ساعة</p>
-                        </div>
-                    </div>
-                    <span class="activity-value val-gold">+ ٥٠ نقطة</span>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-info">
-                        <div class="activity-icon card-brand" style="background: rgba(200,16,46,0.1); color: var(--brand);"><span class="material-symbols-outlined icon-filled">payments</span></div>
-                        <div>
-                            <p class="activity-title">شحن محفظة</p>
-                            <p class="activity-time">فيزا بلاتينية - أمس الساعة ٩:٣٠ م</p>
-                        </div>
-                    </div>
-                    <span class="activity-value val-brand">٢٠٠ ج.م</span>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-info">
-                        <div class="activity-icon card-gold" style="background: rgba(240,192,64,0.1); color: var(--gold);"><span class="material-symbols-outlined icon-filled">delivery_dining</span></div>
-                        <div>
-                            <p class="activity-title">تم توصيل طلب #٩٨٣٥</p>
-                            <p class="activity-time">بافلو برجر - منذ ٣ أيام</p>
-                        </div>
-                    </div>
-                    <span class="activity-value val-gold">+ ٥٠ نقطة</span>
-                </div>
+            <div class="activity-list" id="recent-activity-list">
+                <!-- Skeleton Loader -->
+                <div style="width: 100%; height: 60px; background: rgba(255,255,255,0.05); border-radius: 0.5rem; animation: pulse 1.5s infinite;"></div>
+                <div style="width: 100%; height: 60px; background: rgba(255,255,255,0.05); border-radius: 0.5rem; animation: pulse 1.5s infinite; margin-top: 1rem;"></div>
             </div>
         </div>
     </section>

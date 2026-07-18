@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html class="dark" dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>4U Delivery | إدارة الطلبات</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="stamps.css">
+    <style>
+        .order-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .order-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 1rem;
+        }
+        .order-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        .order-id { font-family: monospace; color: var(--gold); font-size: 0.9rem; }
+        .order-time { color: var(--dark-300); font-size: 0.85rem; }
+        .res-name { font-weight: bold; font-size: 1.25rem; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
+        
+        .order-status {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .status-pending { background: rgba(240, 192, 64, 0.2); color: var(--gold); border: 1px solid rgba(240, 192, 64, 0.4); }
+        .status-on_the_way { background: rgba(52, 152, 219, 0.2); color: #3498db; border: 1px solid rgba(52, 152, 219, 0.4); }
+        .status-delivered { background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.4); }
+        
+        .order-details-box {
+            background: rgba(0,0,0,0.3);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            border: 1px dashed rgba(255,255,255,0.1);
+        }
+        .order-details-text {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            color: var(--dark-100);
+        }
+        
+        .customer-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--dark-200);
+            font-size: 0.95rem;
+        }
+        
+        .order-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 1rem;
+        }
+        .btn-status {
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        .btn-status:hover { filter: brightness(1.2); }
+        .btn-pending { background: rgba(240, 192, 64, 0.1); color: var(--gold); border-color: rgba(240, 192, 64, 0.3); }
+        .btn-on_the_way { background: rgba(52, 152, 219, 0.1); color: #3498db; border-color: rgba(52, 152, 219, 0.3); }
+        .btn-delivered { background: rgba(46, 204, 113, 0.1); color: #2ecc71; border-color: rgba(46, 204, 113, 0.3); }
+        
+        /* Toast */
+        .toast-container { position: fixed; top: 1rem; right: 1rem; z-index: 99999; display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none; }
+        .toast { background: rgba(20,20,20,0.95); backdrop-filter: blur(10px); color: white; padding: 1rem 1.5rem; border-radius: 1rem; display: flex; align-items: center; gap: 0.75rem; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); animation: slideIn 0.3s cubic-bezier(0.16,1,0.3,1) forwards; }
+        .toast.success { border-right: 4px solid #2ecc71; }
+        .toast.error { border-right: 4px solid var(--brand); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeOut { to { opacity: 0; transform: translateY(-10px); } }
+    </style>
+</head>
+<body class="admin-layout">
+
+    <div class="page-transition-curtain"></div>
+
+    <!-- ═══ SIDEBAR ADMIN ═══ -->
+    <aside class="admin-sidebar glass">
+        <a href="../_3/home.html" style="text-decoration: none; color: inherit;"><div class="sidebar-header">
+            <div class="sidebar-logo">4U</div>
+            <div>
+                <h2 class="sidebar-title">Admin</h2>
+                <p class="sidebar-subtitle">إدارة النظام</p>
+            </div>
+        </div></a>
+        
+        <nav class="sidebar-nav">
+            <a href="admin_stamps.html" class="sidebar-link inactive ripple-btn">
+                <span class="material-symbols-outlined">qr_code_scanner</span>
+                إضافة أختام
+            </a>
+            <a href="admin_users.html" class="sidebar-link inactive ripple-btn">
+                <span class="material-symbols-outlined">group</span>
+                سجل العملاء
+            </a>
+            <a href="admin_restaurants.html" class="sidebar-link inactive ripple-btn">
+                <span class="material-symbols-outlined">storefront</span>
+                إدارة المطاعم
+            </a>
+            <a href="admin_orders.html" class="sidebar-link active ripple-btn">
+                <span class="material-symbols-outlined">receipt_long</span>
+                إدارة الطلبات
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="../_3/home.html" class="sidebar-logout ripple-btn">
+                <span class="material-symbols-outlined">logout</span>
+                خروج
+            </a>
+        </div>
+    </aside>
+
+    <!-- ═══ MAIN DASHBOARD ═══ -->
+    <main class="admin-main">
+        <div class="admin-container">
+            
+            <header class="admin-page-header">
+                <h1 class="admin-page-title">الطلبات الواردة</h1>
+                <p class="admin-page-desc">تابع طلبات العملاء من المطاعم وقم بتحديث حالتها أولاً بأول.</p>
+            </header>
+
+            <div class="glass" style="border-radius: 1.5rem; padding: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
+                    <h2 style="font-size: 1.25rem; font-weight: 800; color: white;">سجل الطلبات</h2>
+                    <button id="btn-refresh" class="btn-primary ripple-btn" style="padding: 0.5rem 1rem;">
+                        <span class="material-symbols-outlined">refresh</span>
+                        تحديث القائمة
+                    </button>
+                </div>
+                
+                <div id="orders-list-container" class="order-list">
+                    <div style="text-align: center; padding: 3rem; color: #aaa;">جاري تحميل الطلبات...</div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="toast-container" class="toast-container"></div>
+    <script type="module" src="admin_orders.js"></script>
+</body>
+</html>

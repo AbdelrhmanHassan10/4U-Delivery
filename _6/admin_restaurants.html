@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html class="dark" dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>4U Delivery | إدارة المطاعم</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="stamps.css">
+    <style>
+        .restaurant-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .res-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 1rem;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            position: relative;
+        }
+        .res-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+            background: #222;
+        }
+        .res-title { font-weight: bold; font-size: 1.1rem; color: #fff; margin-top: 0.5rem; }
+        .res-category { color: var(--gold); font-size: 0.9rem; }
+        .res-info { display: flex; justify-content: space-between; color: #aaa; font-size: 0.85rem; margin-top: 0.5rem; }
+        .btn-delete {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(200, 16, 46, 0.8);
+            border: none;
+            color: #fff;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+        }
+        .btn-delete:hover { background: var(--brand); transform: scale(1.1); transition: 0.3s; }
+        .avatar-preview { width: 80px; height: 80px; border-radius: 1rem; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; cursor: pointer; object-fit: cover; overflow: hidden;}
+    </style>
+</head>
+<body class="admin-layout">
+
+    <div class="page-transition-curtain"></div>
+
+    <!-- ═══ SIDEBAR ADMIN ═══ -->
+    <aside class="admin-sidebar glass">
+        <a href="../_3/home.html" style="text-decoration: none; color: inherit;"><div class="sidebar-header">
+            <div class="sidebar-logo">4U</div>
+            <div>
+                <h2 class="sidebar-title">Admin</h2>
+                <p class="sidebar-subtitle">إدارة النظام</p>
+            </div>
+        </div></a>
+        
+        <nav class="sidebar-nav">
+            <a href="admin_stamps.html" class="sidebar-link inactive ripple-btn">
+                <span class="material-symbols-outlined">qr_code_scanner</span>
+                إضافة أختام
+            </a>
+            <a href="admin_users.html" class="sidebar-link inactive ripple-btn">
+                <span class="material-symbols-outlined">group</span>
+                سجل العملاء
+            </a>
+            <a href="admin_restaurants.html" class="sidebar-link active ripple-btn">
+                <span class="material-symbols-outlined">storefront</span>
+                إدارة المطاعم
+            </a>
+            <a href="admin_orders.html" class="sidebar-link inactive ripple-btn">
+                <span class="material-symbols-outlined">receipt_long</span>
+                إدارة الطلبات
+            </a>
+        </nav>
+        
+        <div class="sidebar-footer">
+            <a href="../_3/home.html" class="sidebar-logout ripple-btn">
+                <span class="material-symbols-outlined">logout</span>
+                خروج
+            </a>
+        </div>
+    </aside>
+
+    <!-- ═══ MAIN DASHBOARD ═══ -->
+    <main class="admin-main">
+        <div class="admin-container">
+            
+            <header class="admin-page-header">
+                <h1 class="admin-page-title">إضافة مطعم جديد</h1>
+                <p class="admin-page-desc">قم بإدخال بيانات المطعم وصورته لإضافته فوراً في التطبيق للعملاء.</p>
+            </header>
+
+            <!-- 1. Add Restaurant Form -->
+            <div class="admin-card glass" style="border-color: rgba(200,16,46,0.2);">
+                <form id="add-res-form" class="admin-grid" style="grid-template-columns: 1fr 1fr;">
+                    <div style="grid-column: span 2; display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;">
+                        <input type="file" id="res-image-upload" hidden accept="image/*">
+                        <img id="res-image-preview" class="avatar-preview" src="" alt="صورة المطعم" title="اضغط لاختيار صورة" />
+                        <div>
+                            <p style="color:#fff; font-weight:bold;">صورة المطعم أو اللوجو</p>
+                            <p style="color:#aaa; font-size:0.85rem;">يفضل أن تكون صورة مربعة.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label-text">اسم المطعم *</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="res-name" placeholder="مثال: دوتس برجر" class="input-control" dir="rtl" required />
+                            <span class="material-symbols-outlined">storefront</span>
+                        </div>
+                    </div>
+
+                    <style>
+                        .category-chips {
+                            display: flex;
+                            flex-wrap: wrap;
+                            gap: 0.5rem;
+                            margin-top: 0.5rem;
+                        }
+                        .chip {
+                            padding: 0.4rem 1rem;
+                            background: rgba(255, 255, 255, 0.05);
+                            border: 1px solid rgba(255, 255, 255, 0.1);
+                            border-radius: 2rem;
+                            color: #fff;
+                            cursor: pointer;
+                            font-size: 0.9rem;
+                            transition: all 0.3s;
+                            user-select: none;
+                        }
+                        .chip:has(input:checked) {
+                            background: var(--brand);
+                            border-color: var(--brand);
+                        }
+                        .chip input {
+                            display: none;
+                        }
+                    </style>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label class="label-text">الأقسام (Categories) *</label>
+                        <div class="category-chips" id="res-category-container">
+                            <label class="chip"><input type="checkbox" value="بيتزا" class="category-checkbox"> بيتزا</label>
+                            <label class="chip"><input type="checkbox" value="فرايد تشيكن" class="category-checkbox"> فرايد تشيكن</label>
+                            <label class="chip"><input type="checkbox" value="مشاوي" class="category-checkbox"> مشويات</label>
+                            <label class="chip"><input type="checkbox" value="حلويات" class="category-checkbox"> حلويات</label>
+                            <label class="chip"><input type="checkbox" value="برجر" class="category-checkbox"> برجر</label>
+                            <label class="chip"><input type="checkbox" value="وجبات سريعة" class="category-checkbox"> وجبات سريعة</label>
+                            <label class="chip"><input type="checkbox" value="مشروبات" class="category-checkbox"> مشروبات</label>
+                            
+                            <div style="display:flex; align-items:center; gap:0.5rem; background:rgba(255,255,255,0.05); padding:0.25rem 0.5rem; border-radius:2rem; border:1px dashed rgba(255,255,255,0.3);">
+                                <input type="text" id="custom-category-input" placeholder="قسم آخر..." style="background:transparent; border:none; outline:none; color:#fff; width:80px; font-size:0.9rem; text-align:center;">
+                                <button type="button" id="add-custom-category" style="background:var(--brand); color:#fff; border:none; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; cursor:pointer;"><span class="material-symbols-outlined" style="font-size:1rem;">add</span></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label-text">التقييم *</label>
+                        <div class="input-wrapper">
+                            <input type="number" step="0.1" min="1" max="5" id="res-rating" placeholder="مثال: 4.8" class="input-control" dir="rtl" required />
+                            <span class="material-symbols-outlined">star</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label-text">وقت التوصيل *</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="res-time" placeholder="مثال: 30-45 دقيقة" class="input-control" dir="rtl" required />
+                            <span class="material-symbols-outlined">schedule</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="label-text">سعر التوصيل *</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="res-fee" placeholder="مثال: 20 ج.م" class="input-control" dir="rtl" required />
+                            <span class="material-symbols-outlined">local_shipping</span>
+                        </div>
+                    </div>
+
+                    <div style="grid-column: span 2; display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <input type="file" id="res-menu-upload" hidden accept="image/*" multiple>
+                            <button type="button" class="btn-search ripple-btn" style="width: auto; height: 45px; padding: 0 1.5rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);" onclick="document.getElementById('res-menu-upload').click()">
+                                <span class="material-symbols-outlined" style="vertical-align: middle; margin-left: 0.5rem;">photo_library</span>
+                                اختر صور المنيو
+                            </button>
+                            <div>
+                                <p style="color:#fff; font-weight:bold;">صور المنيو (اختياري)</p>
+                                <p style="color:#aaa; font-size:0.85rem;">يمكنك اختيار أكثر من صورة (حتى 20 صورة).</p>
+                            </div>
+                        </div>
+                        <div id="res-menu-preview-container" style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <!-- Thumbnails will be injected here -->
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="display:flex; align-items:flex-end;">
+                        <button type="submit" class="btn-search ripple-btn" id="btn-add-res" style="width: 100%; height: 50px;">إضافة المطعم</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 2. Restaurant List -->
+            <div class="admin-card glass" style="margin-top: 2rem;">
+                <h2 class="admin-card-title">المطاعم الحالية</h2>
+                <div class="restaurant-list" id="restaurant-list-container">
+                    <div style="text-align: center; width: 100%; grid-column: span 3; color: #aaa;">جاري التحميل...</div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="toast-container" class="toast-container"></div>
+    <script type="module" src="admin_restaurants.js"></script>
+</body>
+</html>

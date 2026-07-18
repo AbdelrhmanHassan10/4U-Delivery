@@ -1,6 +1,6 @@
 import { auth, db } from "../firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // Navbar scroll effect
 const navbar = document.getElementById('navbar');
@@ -29,27 +29,7 @@ if(mBtn && cBtn && mMenu) {
     cBtn.addEventListener('click', () => mMenu.classList.remove('open'));
 }
 
-// Filter Tags Logic
-const filterTags = document.querySelectorAll('.tag-btn');
-filterTags.forEach(tag => {
-    tag.addEventListener('click', () => {
-        filterTags.forEach(t => t.classList.remove('active'));
-        tag.classList.add('active');
-    });
-});
-
-// Dynamic background effect based on mouse movement
-document.addEventListener('mousemove', (e) => {
-    const glows = document.querySelectorAll('.glow-brand, .glow-gold');
-    const x = e.clientX / window.innerWidth;
-    const y = e.clientY / window.innerHeight;
-    
-    if (glows.length >= 2) {
-        glows[0].style.transform = `translate(${x * -40}px, ${y * -40}px)`;
-        glows[1].style.transform = `translate(${x * 40}px, ${y * 40}px)`;
-    }
-});
-
+// Static Filter tags logic removed, will be added dynamically
 // Ripple Effect Logic
 document.addEventListener('click', function(e) {
     const btn = e.target.closest('.ripple-btn');
@@ -74,18 +54,56 @@ document.addEventListener('click', function(e) {
 });
 
 // Page Transition Exit Logic
-function navigateWithCurtain(url) {
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+        const curtain = document.querySelector('.page-transition-curtain');
+        if (curtain) {
+            curtain.classList.remove('wipe-in');
+            curtain.style.transform = 'scaleY(0)';
+        }
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const curtain = document.querySelector('.page-transition-curtain');
+    if (curtain && !curtain.innerHTML.trim()) {
+        curtain.innerHTML = `
+            <div class="curtain-logo">
+                <div class="nav-brand-icon" style="width:70px;height:70px;border-radius:1.2rem;background:#fff;color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:900;box-shadow:0 10px 25px rgba(0,0,0,0.2);">4U</div>
+                <span style="font-size:3rem;font-weight:900;color:#fff;text-shadow:0 4px 10px rgba(0,0,0,0.3);">Delivery</span>
+            </div>
+        `;
+        curtain.style.display = 'flex';
+        curtain.style.alignItems = 'center';
+        curtain.style.justifyContent = 'center';
+        curtain.style.zIndex = '99999';
+        
+        if (!document.getElementById('curtain-style')) {
+            const style = document.createElement('style');
+            style.id = 'curtain-style';
+            style.textContent = `
+                .page-transition-curtain { display: flex !important; align-items: center !important; justify-content: center !important; }
+                .curtain-logo { display: flex; align-items: center; gap: 1.2rem; opacity: 0; transform: scale(0.5); transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+                .page-transition-curtain.wipe-in .curtain-logo { opacity: 1; transform: scale(1); transition-delay: 0.3s; }
+            `;
+            document.head.appendChild(style);
+        }
+    }
+});
+
+window.navigateWithCurtain = function(url) {
     const curtain = document.querySelector('.page-transition-curtain');
     if (curtain) {
+        curtain.style.transform = '';
         curtain.classList.remove('wipe-out');
         curtain.classList.add('wipe-in');
-        setTimeout(() => {
-            window.location.href = url;
-        }, 800);
+        setTimeout(() => { window.location.href = url; }, 800);
     } else {
         window.location.href = url;
     }
-}
+};
+
+function navigateWithCurtain(url) { window.navigateWithCurtain(url); }
 
 document.addEventListener('DOMContentLoaded', () => {
     // Intercept all links for curtain effect
@@ -135,4 +153,183 @@ onAuthStateChanged(auth, async (user) => {
         mobileAuthBtn.textContent = 'دخول / تسجيل حساب';
         mobileAuthBtn.href = '../_1/login.html';
     }
+});
+
+// --- DYNAMIC DATA FETCHING & FILTERING ---
+let allRestaurants = [];
+let currentCategory = 'all';
+
+const CATEGORIES = [
+  "بيتزا",
+  "فرايد تشيكن",
+  "مشويات",
+  "حلويات",
+  "برجر",
+  "وجبات سريعة",
+  "مشروبات"
+];
+
+async function loadSidebarCategories() {
+    const container = document.getElementById("sidebar-categories");
+    if (!container) return;
+    
+    try {
+        let html = '<button class="tag-btn ripple-btn" data-cat="all">الكل</button>';
+        
+        CATEGORIES.forEach((catName) => {
+            html += `<button class="tag-btn ripple-btn" data-cat="${catName}">${catName}</button>`;
+        });
+        
+        container.innerHTML = html;
+        
+        // Add event listeners to tags
+        const tags = container.querySelectorAll('.tag-btn');
+        tags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                tags.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+                currentCategory = tag.getAttribute('data-cat');
+                renderRestaurants(); // apply filter
+            });
+        });
+        
+        // Initial setup for active category from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const catParam = urlParams.get('category');
+        if (catParam) {
+            const matchingBtn = container.querySelector(`.tag-btn[data-cat="${catParam}"]`);
+            if (matchingBtn) {
+                matchingBtn.classList.add('active');
+                currentCategory = catParam;
+            } else {
+                tags[0].classList.add('active');
+            }
+        } else {
+            tags[0].classList.add('active');
+        }
+        
+    } catch (e) {
+        console.error("Error loading categories:", e);
+    }
+}
+
+async function fetchRestaurants() {
+    const container = document.getElementById("restaurants-container");
+    if (!container) return;
+    
+    try {
+        const querySnapshot = await getDocs(collection(db, "restaurants"));
+        allRestaurants = [];
+        querySnapshot.forEach(doc => {
+            allRestaurants.push({ id: doc.id, ...doc.data() });
+        });
+        
+        renderRestaurants();
+    } catch (e) {
+        console.error("Error loading restaurants:", e);
+        container.innerHTML = '<p class="text-center w-100">فشل تحميل المطاعم</p>';
+    }
+}
+
+function renderRestaurants() {
+    const container = document.getElementById("restaurants-container");
+    if (!container) return;
+    
+    const searchInput = document.querySelector('.search-input');
+    const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+    
+    // Filter
+    let filtered = allRestaurants.filter(res => {
+        // Name filter
+        const matchName = res.name && res.name.toLowerCase().includes(searchTerm);
+        
+        // Category filter
+        let matchCat = true;
+        if (currentCategory !== 'all') {
+            const checkMatch = (val) => {
+                if (!val) return false;
+                if (currentCategory === 'مشويات' || currentCategory === 'مشاوي') {
+                    return val.includes('مشويات') || val.includes('مشاوي');
+                }
+                return val.includes(currentCategory);
+            };
+            
+            if (Array.isArray(res.category)) {
+                matchCat = res.category.some(c => checkMatch(c));
+            } else if (res.category) {
+                matchCat = checkMatch(res.category);
+            } else if (res.desc) {
+                matchCat = checkMatch(res.desc);
+            } else {
+                matchCat = false;
+            }
+        }
+        
+        return matchName && matchCat;
+    });
+    
+    let html = '';
+    if (filtered.length === 0) {
+        html = '<p class="text-center w-100" style="padding: 2rem;">لا توجد مطاعم مطابقة للبحث.</p>';
+    } else {
+        filtered.forEach(data => {
+            const feeClass = data.deliveryFee === 'مجاني' ? 'text-success' : '';
+            
+            let categoryText = '';
+            if (Array.isArray(data.category)) {
+                categoryText = data.category.join('، ');
+            } else {
+                categoryText = data.category || data.desc || '';
+            }
+
+            html += `
+            <div class="res-card-large glass">
+                <div class="res-image-wrapper">
+                    <div class="res-image" style="background-image:url('${data.image}')"></div>
+                    <div class="res-image-overlay"></div>
+                    <div class="res-rating-badge">
+                        <span class="material-symbols-outlined icon-filled">star</span>
+                        <span>${data.rating}</span>
+                    </div>
+                    ${data.isFeatured ? '<div class="res-offer-badge">مميز</div>' : ''}
+                    <button class="res-fav-btn ripple-btn">
+                        <span class="material-symbols-outlined">favorite</span>
+                    </button>
+                </div>
+                <div class="res-info">
+                    <div>
+                        <h3 class="res-title">${data.name}</h3>
+                        <p class="res-desc">${categoryText}</p>
+                    </div>
+                    <div class="res-meta">
+                        <div class="res-meta-item">
+                            <span class="material-symbols-outlined">schedule</span>
+                            <span>${data.deliveryTime}</span>
+                        </div>
+                        <div class="res-meta-item ${feeClass}">
+                            <span class="material-symbols-outlined">delivery_dining</span>
+                            <span>${data.deliveryFee} ${data.deliveryFee !== 'مجاني' ? 'توصيل' : ''}</span>
+                        </div>
+                    </div>
+                    <a href="restaurant.html?id=${data.id}" class="btn-primary btn-order ripple-btn" style="text-decoration:none;">اطلب دلوقتي</a>
+                </div>
+            </div>
+            `;
+        });
+    }
+    
+    container.innerHTML = html;
+}
+
+// Setup search listener
+const searchInput = document.querySelector('.search-input');
+if(searchInput) {
+    searchInput.addEventListener('input', () => {
+        renderRestaurants();
+    });
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadSidebarCategories();
+    await fetchRestaurants();
 });
