@@ -1,570 +1,351 @@
 <!DOCTYPE html>
 <html class="dark" dir="rtl" lang="ar">
 <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>4U Delivery | دخول</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-    <style>
-        /* login.css */
-        :root {
-            --brand: #c8102e;
-            --brand-light: #ff4757;
-            --brand-dark: #8b0000;
-            --gold: #f0c040;
-            --gold-light: #ffe085;
-            --dark-50: #f5f5f5;
-            --dark-100: #e0e0e0;
-            --dark-200: #bdbdbd;
-            --dark-300: #9e9e9e;
-            --dark-400: #757575;
-            --dark-500: #616161;
-            --dark-600: #424242;
-            --dark-700: #303030;
-            --dark-800: #1a1a1a;
-            --dark-900: #0d0d0d;
-            --dark-950: #080808;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Cairo', sans-serif; background: #080808; color: #e0e0e0; overflow-x: hidden; min-height: 100vh; }
-        
-        .page-body { position: relative; padding: 1rem; display: flex; align-items: center; justify-content: center; }
-        @media (min-width: 768px) { .page-body { padding: 2rem; } }
-        
-        .glass { background: rgba(26,26,26,0.7); backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.06); }
-        .glow-red { box-shadow: 0 0 80px rgba(200,16,46,0.1), 0 0 160px rgba(200,16,46,0.05); }
-        
-        @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
-        @keyframes scaleInFade { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        
-        .stagger-1 { animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both; }
-        .stagger-2 { animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both; }
-        .stagger-3 { animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both; }
-        .stagger-4 { animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both; }
-        .stagger-5 { animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both; }
-        
-        .animate-scale-in { animation: scaleInFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
-        .animate-float { animation: float 6s ease-in-out infinite; }
-        
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .animate-spin { animation: spin 1s linear infinite; }
-        
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        input:focus { outline: none; }
-        
-        .hidden { display: none !important; }
-        .pointer-events-none { pointer-events: none; }
-        
-        /* Background Effects */
-        .bg-effects { position: fixed; inset: 0; overflow: hidden; z-index: 0; }
-        .particles {
-            position: absolute; width: 3px; height: 3px; background: transparent;
-            box-shadow: 15vw 20vh var(--brand), 80vw 40vh var(--gold), 40vw 80vh var(--brand-light), 
-                        70vw 90vh rgba(255,255,255,0.8), 10vw 60vh var(--gold-light), 90vw 10vh var(--brand),
-                        25vw 10vh var(--gold), 55vw 50vh var(--brand);
-            border-radius: 50%; animation: floatParticles 30s linear infinite;
-        }
-        .particles::after {
-            content: ""; position: absolute; top: 100vh; left: 0; width: 3px; height: 3px; background: transparent;
-            box-shadow: inherit; border-radius: 50%;
-        }
-        @keyframes floatParticles { 0% { transform: translateY(0); } 100% { transform: translateY(-100vh); } }
-        
-        .glow-brand {
-            position: absolute; top: -200px; right: -200px; width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(200, 16, 46, 0.15) 0%, transparent 70%); border-radius: 50%; pointer-events: none;
-        }
-        .glow-gold {
-            position: absolute; bottom: -200px; left: -200px; width: 500px; height: 500px;
-            background: radial-gradient(circle, rgba(240, 192, 64, 0.12) 0%, transparent 70%); border-radius: 50%; pointer-events: none;
-        }
-        .bg-gradient-overlay { position: absolute; inset: 0; background: radial-gradient(circle at 50% 30%, rgba(200, 16, 46, 0.06), transparent 50%); }
-        
-        /* Page Transition Curtain */
-        .page-transition-curtain {
-            position: fixed; inset: 0; background-color: var(--brand); z-index: 9999;
-            transform-origin: top; animation: wipeOut 0.8s cubic-bezier(0.77, 0, 0.175, 1) forwards; pointer-events: none;
-        }
-        @keyframes wipeOut { 0% { transform: scaleY(1); } 100% { transform: scaleY(0); } }
-        .page-transition-curtain.wipe-in {
-            transform-origin: bottom; animation: wipeIn 0.8s cubic-bezier(0.77, 0, 0.175, 1) forwards; pointer-events: auto;
-        }
-        @keyframes wipeIn { 0% { transform: scaleY(0); } 100% { transform: scaleY(1); } }
-        
-        /* Ripple Effect */
-        .ripple-btn { position: relative; overflow: hidden; }
-        .ripple {
-            position: absolute; border-radius: 50%; transform: scale(0);
-            animation: ripple-anim 0.6s linear; background-color: rgba(255, 255, 255, 0.3); pointer-events: none;
-        }
-        @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
-        .pop-click:active { animation: pop 0.3s ease-out; }
-        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(0.9); } 100% { transform: scale(1); } }
-        
-        /* Auth Container */
-        .auth-container { width: 100%; max-width: 440px; position: relative; z-index: 10; }
-        
-        /* Logo */
-        .logo-link { text-align: center; margin-bottom: 2.5rem; display: block; text-decoration: none; }
-        .logo-wrapper { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.5rem; }
-        .logo-icon {
-            width: 3rem; height: 3rem; border-radius: 0.75rem; background-color: var(--brand);
-            display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 1.25rem; transition: transform 0.3s;
-        }
-        .logo-text { font-size: 1.875rem; font-weight: 900; color: white; transition: color 0.3s; }
-        .logo-subtitle { color: var(--dark-500); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; }
-        .logo-link:hover .logo-icon { transform: scale(1.1); }
-        .logo-link:hover .logo-text { color: var(--gold); }
-        
-        /* Auth Card */
-        .auth-card { border-radius: 1.5rem; padding: 2rem; }
-        .auth-title { font-size: 1.5rem; font-weight: 900; color: white; margin-bottom: 0.25rem; }
-        .auth-subtitle { color: var(--dark-400); font-size: 0.875rem; margin-bottom: 2rem; }
-        .auth-form { display: flex; flex-direction: column; gap: 1.25rem; }
-        .form-group { display: flex; flex-direction: column; }
-        .form-label { color: var(--dark-300); font-size: 0.75rem; font-weight: 700; display: block; margin-bottom: 0.5rem; }
-        .input-wrapper { position: relative; }
-        .form-input {
-            width: 100%; background-color: var(--dark-800); border: 1px solid var(--dark-600);
-            border-radius: 0.75rem; padding: 0.875rem 2.75rem 0.875rem 1rem; color: white; transition: all 0.3s;
-            text-align: right; font-family: inherit; font-size: 1rem;
-        }
-        .form-input::placeholder { color: var(--dark-500); }
-        .form-input:focus { border-color: var(--brand); box-shadow: 0 0 0 1px rgba(200, 16, 46, 0.3); }
-        .input-icon { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--dark-500); font-size: 1.25rem; pointer-events: none; }
-        
-        .password-toggle { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--dark-400); font-size: 1.25rem; cursor: pointer; transition: color 0.3s; user-select: none; z-index: 10; }
-        .password-toggle:hover { color: var(--gold); }
-        
-        .forgot-password { text-align: left; margin-top: 0.5rem; }
-        .link-brand { color: var(--brand); font-size: 0.75rem; font-weight: 600; text-decoration: none; }
-        .link-brand:hover { text-decoration: underline; }
-        
-        /* Button */
-        .btn-primary {
-            width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.5rem;
-            background-color: var(--brand); color: white; padding: 1rem; border-radius: 0.75rem;
-            font-weight: 700; font-size: 1.125rem; border: none; cursor: pointer; transition: all 0.3s; font-family: inherit;
-        }
-        .btn-primary:hover { background-color: var(--brand-light); box-shadow: 0 10px 15px -3px rgba(200, 16, 46, 0.2), 0 4px 6px -2px rgba(200, 16, 46, 0.1); }
-        .btn-primary:active { transform: scale(0.98); }
-        .btn-primary:disabled { opacity: 0.8; cursor: not-allowed; }
-        
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-        
-        .checkbox-wrapper { display: flex; align-items: center; gap: 0.5rem; padding-top: 0.25rem; cursor: pointer; }
-        .form-checkbox { width: 1rem; height: 1rem; border-radius: 0.25rem; background-color: var(--dark-800); border: 1px solid var(--dark-600); accent-color: var(--brand); }
-        .checkbox-label { color: var(--dark-400); font-size: 0.75rem; }
-        
-        /* Auth Footer */
-        .auth-footer { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, 0.05); text-align: center; }
-        .auth-footer-text { color: var(--dark-400); font-size: 0.875rem; }
-        .link-gold { color: var(--gold); font-weight: 700; background: none; border: none; cursor: pointer; font-family: inherit; font-size: 0.875rem; margin-right: 0.25rem; }
-        .link-gold:hover { text-decoration: underline; }
-        
-        /* Page Footer */
-        .page-footer { position: fixed; bottom: 0; width: 100%; padding: 0.75rem 1.5rem; display: flex; justify-content: space-between; align-items: center; z-index: 50; }
-        .footer-text { color: var(--dark-600); font-size: 0.75rem; }
-        .footer-link { color: var(--dark-600); font-size: 0.75rem; text-decoration: none; transition: color 0.3s; }
-        .footer-link:hover { color: var(--brand); }
-        
-        .opacity-80 { opacity: 0.8; }
-        .cursor-not-allowed { cursor: not-allowed; }
-        
-        /* Toast */
-        .toast-container { position: fixed; top: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 99999; display: flex; flex-direction: column; gap: 0.75rem; pointer-events: none; width: 90%; max-width: 400px; }
-        .custom-toast { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.25rem; border-radius: 1rem; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); color: white; font-weight: 600; font-size: 0.95rem; animation: toastSlideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .custom-toast.hide { animation: toastSlideUp 0.3s ease-in forwards; }
-        .toast-error { border-color: rgba(200, 16, 46, 0.3); background: linear-gradient(90deg, rgba(200, 16, 46, 0.1) 0%, rgba(20, 20, 20, 0.95) 100%); }
-        .toast-error .toast-icon { color: var(--brand-light); }
-        .toast-success { border-color: rgba(46, 204, 113, 0.3); background: linear-gradient(90deg, rgba(46, 204, 113, 0.1) 0%, rgba(20, 20, 20, 0.95) 100%); }
-        .toast-success .toast-icon { color: #2ecc71; }
-        @keyframes toastSlideDown { 0% { transform: translateY(-20px) scale(0.95); opacity: 0; } 100% { transform: translateY(0) scale(1); opacity: 1; } }
-        @keyframes toastSlideUp { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-20px) scale(0.95); opacity: 0; } }
-    </style>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>4U Delivery | الرئيسية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="./_3/home.css">
 </head>
-<body class="page-body">
+<body>
     <!-- Page Transition Curtain -->
     <div class="page-transition-curtain"></div>
 
     <!-- BG Effects -->
-    <div class="bg-effects pointer-events-none">
+    <div class="bg-effects">
         <div class="particles"></div>
-        <div class="glow-brand animate-float"></div>
-        <div class="glow-gold animate-float" style="animation-delay: -3s;"></div>
-        <div class="bg-gradient-overlay"></div>
+        <div class="bg-glow-brand animate-float"></div>
+        <div class="bg-glow-gold animate-float" style="animation-delay: -3s;"></div>
     </div>
 
-    <!-- Main Container -->
-    <div class="auth-container" id="auth-container">
-        <!-- Logo -->
-        <a href="_3/home.html" class="logo-link group stagger-1">
-            <div class="logo-wrapper">
-                <div class="logo-icon group-hover-scale">4U</div>
-                <span class="logo-text group-hover-text-gold">Delivery</span>
+    <!-- ═══ NAVBAR ═══ -->
+    <nav class="navbar" id="navbar">
+        <div class="container navbar-inner">
+            <a href="../_3/home.html" class="nav-brand group">
+                <div class="nav-brand-icon group-hover:scale-110">4U</div>
+                <span class="group-hover:text-gold">Delivery</span>
+            </a>
+            
+            <div class="nav-links">
+                <a href="../_3/home.html" class="nav-link active">الرئيسية</a>
+                <a href="../_4/res.html" class="nav-link">المطاعم</a>
+                <a href="../_5/About.html" class="nav-link">عننا</a>
+                
+                <!-- Dropdown -->
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">
+                        القائمة <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <div class="nav-dropdown-content">
+                        <a href="../_6/stamp_card.html" class="nav-dropdown-item"><span class="material-symbols-outlined">card_membership</span> كارت الأختام</a>
+                        <a href="../_7/contact.html" class="nav-dropdown-item"><span class="material-symbols-outlined">support_agent</span> المساعدة</a>
+                        <a href="../_7/terms.html" class="nav-dropdown-item"><span class="material-symbols-outlined">rule</span> الشروط والأحكام</a>
+                    </div>
+                </div>
+
+                <div style="width: 1px; height: 16px; background: rgba(255,255,255,0.1); margin: 0 0.5rem;"></div>
+                <a href="../_6/admin_stamps.html" class="nav-link" style="color: var(--gold); display: flex; align-items: center; gap: 0.25rem;">
+                    <span class="material-symbols-outlined">admin_panel_settings</span> الإدارة
+                </a>
             </div>
-            <p class="logo-subtitle">Premium Delivery Service</p>
-        </a>
 
-        <!-- LOGIN FORM -->
-        <div class="auth-card glass glow-red animate-scale-in" id="login-screen">
-            <h2 class="auth-title stagger-2">أهلاً بيك</h2>
-            <p class="auth-subtitle stagger-3">سجل دخولك وابدأ اطلب</p>
+            <div class="nav-actions">
+                <!-- Logged Out State -->
+                <div id="nav-auth-buttons" style="display: flex; gap: 1rem; align-items: center;">
+                    <a href="../_1/login.html" class="btn-login" onclick="localStorage.setItem('authTab','login')">دخول</a>
+                    <a href="../_1/login.html" class="btn-primary ripple-btn" onclick="localStorage.setItem('authTab','register')">اعمل حساب</a>
+                </div>
+                <!-- Logged In State -->
+                <div id="nav-profile-button" class="hidden">
+                    <a href="../_2/profile.html" class="btn-primary ripple-btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+                        <span class="material-symbols-outlined">person</span> <span id="nav-user-name">حسابي</span>
+                    </a>
+                </div>
 
-            <form class="auth-form" id="loginForm">
-                <div class="form-group stagger-4">
-                    <label class="form-label">الإيميل</label>
-                    <div class="input-wrapper">
-                        <input type="email" id="loginEmail" placeholder="example@mail.com" class="form-input" required />
-                        <span class="material-symbols-outlined input-icon">person</span>
-                    </div>
-                </div>
-                <div class="form-group stagger-4" style="animation-delay: 0.5s;">
-                    <label class="form-label">كلمة السر</label>
-                    <div class="input-wrapper">
-                        <input type="password" id="loginPassword" placeholder="••••••••" class="form-input" required />
-                        <span class="material-symbols-outlined input-icon">lock</span>
-                        <span class="material-symbols-outlined password-toggle" onclick="window.togglePasswordVisibility('loginPassword', this)">visibility_off</span>
-                    </div>
-                    <div class="forgot-password">
-                        <a href="_7/contact.html" class="link-brand">نسيت كلمة السر؟</a>
-                    </div>
-                </div>
-                <button type="submit" class="btn-primary stagger-5 ripple-btn">
-                    دخول
+                <button id="mobile-menu-btn" class="btn-menu ripple-btn">
+                    <span class="material-symbols-outlined">menu</span>
                 </button>
-            </form>
-
-            <div class="auth-footer stagger-5">
-                <p class="auth-footer-text">
-                    معندكش حساب؟
-                    <button class="link-gold" onclick="window.toggleAuth('register')" type="button">اعمل حساب جديد</button>
-                </p>
             </div>
         </div>
+    </nav>
 
-        <!-- REGISTER FORM -->
-        <div class="auth-card glass glow-red hidden animate-scale-in" id="register-screen">
-            <h2 class="auth-title stagger-2">اعمل حساب جديد </h2>
-            <p class="auth-subtitle stagger-3">سجل معانا وابدأ تجمع نقاطك</p>
-
-            <form class="auth-form" id="registerForm">
-                <div class="form-group stagger-4">
-                    <label class="form-label">الاسم بالكامل</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="registerName" placeholder="اسمك إيه؟" class="form-input" required />
-                        <span class="material-symbols-outlined input-icon">badge</span>
-                    </div>
-                </div>
-                <div class="form-group stagger-4">
-                    <label class="form-label">رقم الموبايل</label>
-                    <div class="input-wrapper">
-                        <input type="tel" id="registerPhone" placeholder="01xxxxxxxxx" class="form-input" required />
-                        <span class="material-symbols-outlined input-icon">call</span>
-                    </div>
-                </div>
-                <div class="form-group stagger-4">
-                    <label class="form-label">الإيميل</label>
-                    <div class="input-wrapper">
-                        <input type="email" id="registerEmail" placeholder="example@mail.com" class="form-input" required />
-                        <span class="material-symbols-outlined input-icon">mail</span>
-                    </div>
-                </div>
-                <div class="form-grid stagger-4">
-                    <div class="form-group">
-                        <label class="form-label">كلمة السر</label>
-                        <div class="input-wrapper">
-                            <input type="password" id="registerPassword" placeholder="••••••••" class="form-input" required />
-                            <span class="material-symbols-outlined input-icon">lock</span>
-                            <span class="material-symbols-outlined password-toggle" onclick="window.togglePasswordVisibility('registerPassword', this)">visibility_off</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">تأكيد كلمة السر</label>
-                        <div class="input-wrapper">
-                            <input type="password" id="registerConfirm" placeholder="••••••••" class="form-input" required />
-                            <span class="material-symbols-outlined input-icon">lock</span>
-                            <span class="material-symbols-outlined password-toggle" onclick="window.togglePasswordVisibility('registerConfirm', this)">visibility_off</span>
-                        </div>
-                    </div>
-                </div>
-                <label class="checkbox-wrapper stagger-5">
-                    <input type="checkbox" class="form-checkbox" />
-                    <span class="checkbox-label">أنا موافق على الشروط والأحكام</span>
-                </label>
-                <button type="submit" class="btn-primary stagger-5 ripple-btn">
-                    تسجيل
-                </button>
-            </form>
-
-            <div class="auth-footer stagger-5">
-                <p class="auth-footer-text">
-                    عندك حساب فعلاً؟
-                    <button class="link-gold" onclick="window.toggleAuth('login')" type="button">سجل دخولك</button>
-                </p>
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="mobile-menu-overlay">
+        <div class="mobile-header">
+            <div class="nav-brand">
+                <div class="nav-brand-icon">4U</div>
+                <span>Delivery</span>
             </div>
+            <button id="close-menu-btn" class="btn-close-menu ripple-btn">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="mobile-nav">
+            <a href="../_3/home.html" class="mobile-link">الرئيسية</a>
+            <a href="../_4/res.html" class="mobile-link">المطاعم</a>
+            <a href="../_5/About.html" class="mobile-link">عننا</a>
+            <a href="../_2/profile.html" class="mobile-link">بروفايلي</a>
+            <div class="mobile-divider"></div>
+            <a href="../_6/stamp_card.html" class="mobile-sublink"><span class="material-symbols-outlined">card_membership</span> كارت الأختام</a>
+            <a href="../_6/admin_stamps.html" class="mobile-admin-link"><span class="material-symbols-outlined">shield_person</span> الإدارة</a>
+        </div>
+        <div class="mobile-bottom">
+            <a href="../_1/login.html" class="btn-mobile-auth ripple-btn" id="mobile-auth-btn">دخول / تسجيل حساب</a>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="page-footer stagger-5">
-        <p class="footer-text">© 2026 4U Delivery</p>
-        <a href="_7/terms.html" class="footer-link">الشروط والأحكام</a>
+    <!-- ═══ HERO ═══ -->
+    <section class="hero-section">
+        <div class="hero-bg">
+            <div class="hero-bg-img" style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuDNH9L_B8_mjsVlOGr0jnndHIaNIs3lsiX1PnsnYFH7FurWIV9N4KYygXhfDP9C7ObtuIQnXCvGcQSvR6KQg41AFNQdqKzr82MtxPQIx9IiKdne3VK-ydFAoSeigK-wU6bl6DqoQJhkuKOBadB0cb_WNRa7d1umUO75cbJ4_Js4BFwqTQuyc4kN0LjbTrxi1n0cdCOD4KtJFvuc8252YBSXOX0xnF5TASEGs5JpWinuSANWwlUJDHZr')"></div>
+            <div class="hero-bg-overlay-1"></div>
+            <div class="hero-bg-overlay-2"></div>
+        </div>
+        
+        <div class="hero-content stagger-1">
+            <div class="hero-badge">
+                <span class="hero-badge-dot"></span>
+                <span class="hero-badge-text">أسرع خدمة توصيل في منطقتك</span>
+            </div>
+            <h1 class="hero-title">
+                معيار جديد<br>
+                <span class="text-gradient-red">لاحترافية التوصيل</span>
+            </h1>
+            <p class="hero-subtitle">
+                سرعة بلا تنازلات.. وجودة تليق بتطلعاتك الاستثنائية.
+            </p>
+            
+            <div class="hero-search-wrapper stagger-2">
+                <a href="../_4/res.html" class="glass hero-search-box glow-red" style="text-decoration:none;">
+                    <span class="material-symbols-outlined hero-search-icon">search</span>
+                    <input type="text" placeholder="بتدور على مطعم أو أكلة معينة؟" class="hero-search-input" onclick="window.location.href='../_4/res.html'" readonly style="cursor:pointer;"/>
+                    <button class="hero-search-btn ripple-btn" onclick="window.location.href='../_4/res.html'">بحث</button>
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-scroll-down animate-float">
+            <span>اكتشف أكتر</span>
+            <span class="material-symbols-outlined">expand_more</span>
+        </div>
+    </section>
+
+    <!-- ═══ CATEGORIES ═══ -->
+    <section class="section container reveal">
+        <div class="category-grid" id="categories-container">
+            <!-- Skeleton Loaders -->
+            <div class="category-card glass" style="height: 100px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
+            <div class="category-card glass" style="height: 100px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
+            <div class="category-card glass" style="height: 100px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
+            <div class="category-card glass" style="height: 100px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
+        </div>
+    </section>
+
+    <!-- ═══ POINTS BANNER ═══ -->
+    <section class="section container reveal">
+        <div class="points-banner glass glow-gold">
+            <div class="points-banner-bg"></div>
+            <div class="points-banner-glow"></div>
+            
+            <div class="points-banner-content">
+                <div class="points-banner-badge">
+                    <span class="points-banner-badge-text">🏆 الجائزة الكبرى: سحب على iPhone 13</span>
+                </div>
+                <h2 class="points-banner-title">نظام النقاط والليفلات ✨</h2>
+                <p class="points-banner-desc">
+                    كل أوردر بيوصل معانا.. مش بس بيوصل بسرعة واحترافية، لكن كمان بتجمع نقاط بتتحول لمكافآت وخصومات وجوايز حقيقية. لأننا بنعتبرك <span class="text-gradient-gold" style="font-weight:bold;">شريك نجاح</span>!
+                </p>
+                <a href="../_5/About.html" class="btn-gold ripple-btn">
+                    <span class="material-symbols-outlined" style="font-size:1.25rem;">arrow_back</span> اعرف أكتر
+                </a>
+            </div>
+
+            <div class="points-banner-image animate-float">
+                <div class="points-banner-image-glow"></div>
+                <img src="../_5/iphone_reward_1782958644420.png" alt="iPhone" class="points-banner-img" />
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FEATURED RESTAURANTS ═══ -->
+    <section class="section container reveal">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title">أهم المطاعم</h2>
+                <p class="section-subtitle">اختياراتنا المميزة ليك النهاردة</p>
+            </div>
+            <a href="../_4/res.html" class="section-link">عرض الكل <span class="material-symbols-outlined" style="font-size:1rem;">arrow_back_ios</span></a>
+        </div>
+        
+        <div class="res-grid" id="featured-res-container">
+            <!-- Skeleton Loaders -->
+            <div class="res-card glass" style="height: 300px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
+            <div class="res-card glass" style="height: 300px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
+            <div class="res-card glass" style="height: 300px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
+        </div>
+    </section>
+
+    <!-- ═══ TODAY'S OFFERS ═══ -->
+    <div class="bg-dark-overlay">
+        <section class="section container reveal">
+            <h2 class="section-title" style="margin-bottom: 2.5rem;">عروض النهاردة</h2>
+            <div class="offers-grid">
+                <div class="offer-card offer-brand glow-red">
+                    <div class="offer-card-bg-icon"><span class="material-symbols-outlined icon-filled">fastfood</span></div>
+                    <div class="offer-content">
+                        <div class="offer-badge">خصم 50%</div>
+                        <h4 class="offer-title">وجبة التوفير من برجر كينج</h4>
+                        <p class="offer-desc">ساندوتش دبل شيز + بطاطس + كولا</p>
+                        <a href="../_4/res.html" class="btn-offer ripple-btn" style="text-decoration:none;display:inline-block;">اطلب دلوقتي</a>
+                    </div>
+                </div>
+                <div class="offer-card offer-gold glass glow-gold">
+                    <div class="offer-card-bg-icon"><span class="material-symbols-outlined icon-filled">local_shipping</span></div>
+                    <div class="offer-content">
+                        <div class="offer-badge">عرض خاص</div>
+                        <h4 class="offer-title">توصيل مجاني لطلبات العيلة</h4>
+                        <p class="offer-desc">لأي طلب فوق الـ 300 جنيه النهاردة بس</p>
+                        <a href="../_4/res.html" class="btn-offer ripple-btn" style="text-decoration:none;display:inline-block;">اطلب واستمتع</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ═══ REVIEWS ═══ -->
+    <section class="section container reveal">
+        <h2 class="section-title" style="text-align:center; margin-bottom: 3rem;">قالوا إيه عننا؟ 💬</h2>
+        <div class="review-grid">
+            <div class="review-card glass">
+                <div class="review-header">
+                    <div class="review-avatar brand">أ</div>
+                    <div>
+                        <div class="review-name">أحمد علي</div>
+                        <div class="review-stars">
+                            <span class="material-symbols-outlined icon-filled">star</span>
+                            <span class="material-symbols-outlined icon-filled">star</span>
+                            <span class="material-symbols-outlined icon-filled">star</span>
+                            <span class="material-symbols-outlined icon-filled">star</span>
+                            <span class="material-symbols-outlined icon-filled">star</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="review-text">"أسرع دليفري جربته في حياتي، الأكل وصل سخن جداً كأني في المطعم بالظبط. والخدمة ممتازة."</p>
+            </div>
+            <div class="review-card glass">
+                <div class="review-header">
+                    <div class="review-avatar gold">س</div>
+                    <div>
+                        <div class="review-name">سارة محمود</div>
+                        <div class="review-stars">
+                            <span class="material-symbols-outlined icon-filled">star</span>
+                            <span class="material-symbols-outlined icon-filled">star</span>
+                            <span class="material-symbols-outlined icon-filled">star</span>
+                            <span class="material-symbols-outlined icon-filled">star</span>
+                            <span class="material-symbols-outlined">star</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="review-text">"الابلكيشن سهل جداً في الاستخدام، وفيه عروض حقيقية مش مجرد كلام. بجد شابوه ليكم."</p>
+            </div>
+            <div class="review-card glass">
+                <div class="review-header">
+                    <div class="review-avatar brand">م</div>
+                    <div>
+                        <div class="review-name">محمد خالد</div>
+                        <div class="review-stars">
+                            <span class="material-symbols-outlined icon-filled">star</span>
+                            <span class="material-symbols-outlined icon-filled">star</span>
+                            <span class="material-symbols-outlined icon-filled">star</span>
+                            <span class="material-symbols-outlined icon-filled">star</span>
+                            <span class="material-symbols-outlined icon-filled">star</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="review-text">"تجربة روعة، الأسعار فعلاً هي هي أسعار المطعم من غير زيادة، وتنوع المطاعم كبير جداً."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ CTA SECTION ═══ -->
+    <section class="download-section reveal">
+        <div class="container" style="max-width: 1024px;">
+            <div class="download-card glow-red">
+                <div class="download-bg-icon"><span class="material-symbols-outlined icon-filled">restaurant</span></div>
+                
+                <div class="download-content-wrapper">
+                    <div class="download-content">
+                        <h2 class="download-title">جوعان؟ ابدأ اطلب دلوقتي! 🍕</h2>
+                        <p class="download-desc">اختار من أكتر من 15 مطعم وعشرات الأصناف. الأكل هيوصلك لحد باب بيتك في أقل وقت.</p>
+                        <div class="download-btns">
+                            <a href="../_4/res.html" class="btn-store ripple-btn" style="text-decoration:none;">
+                                <div class="btn-store-text">
+                                    <div class="btn-store-label">تصفح الآن</div>
+                                    <div class="btn-store-name">المطاعم</div>
+                                </div>
+                                <span class="material-symbols-outlined">restaurant_menu</span>
+                            </a>
+                            <a href="../_7/contact.html" class="btn-store ripple-btn" style="text-decoration:none;">
+                                <div class="btn-store-text">
+                                    <div class="btn-store-label">محتاج مساعدة؟</div>
+                                    <div class="btn-store-name">تواصل معنا</div>
+                                </div>
+                                <span class="material-symbols-outlined">support_agent</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="download-image-wrapper">
+                        <div class="mockup-1"></div>
+                        <div class="mockup-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">
+                        <div class="footer-icon">4U</div>
+                        <span class="footer-brand-text">Delivery</span>
+                    </div>
+                    <p class="footer-desc">أكبر منصة لطلب الطعام وتوصيل الشحنات. بنوصلك اللي بتحبه لحد باب بيتك بأعلى جودة.</p>
+                </div>
+                <div>
+                    <h4 class="footer-title">روابط سريعة</h4>
+                    <div class="footer-links">
+                        <a href="../_4/res.html" class="footer-link">المطاعم</a>
+                        <a href="../_5/About.html" class="footer-link">عننا</a>
+                        <a href="../_7/privacy.html" class="footer-link">سياسة الخصوصية</a>
+                        <a href="../_7/terms.html" class="footer-link">الشروط والأحكام</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer-title">تواصل معنا</h4>
+                    <div class="footer-contact">
+                        <div class="contact-item"><span class="material-symbols-outlined">location_on</span>بني سويف الجديدة - الكورنيش</div>
+                        <div class="contact-item"><span class="material-symbols-outlined">call</span><span dir="ltr">0103273273</span></div>
+                        <div class="contact-item"><span class="material-symbols-outlined">call</span><span dir="ltr">01111139271</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copy">© 2026 4U Delivery. جميع الحقوق محفوظة.</p>
+            </div>
+        </div>
     </footer>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    <!-- Floating Buttons -->
+    <div class="float-btns">
+        <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="btn-float-up ripple-btn"><span class="material-symbols-outlined">arrow_upward</span></button>
+        <a href="https://wa.me/201111139271" target="_blank" class="btn-float-chat ripple-btn" style="text-decoration:none;"><span class="material-symbols-outlined icon-filled">chat</span></a>
+    </div>
 
-        // INLINED FIREBASE CONFIG
-        const firebaseConfig = {
-            apiKey: "AIzaSyA8XCsxwI-s6dFj9JRsZneFE-a2UP-OQ_8",
-            authDomain: "u-delivery-21587.firebaseapp.com",
-            projectId: "u-delivery-21587",
-            storageBucket: "u-delivery-21587.firebasestorage.app",
-            messagingSenderId: "1068821875416",
-            appId: "1:1068821875416:web:578a7f3ca44deed189e5ad",
-            measurementId: "G-LMZH3FSHSB"
-        };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        // INLINED JS LOGIC
-        window.toggleAuth = function(type) {
-            const login = document.getElementById('login-screen');
-            const register = document.getElementById('register-screen');
-            const container = document.getElementById('auth-container');
-            
-            container.style.opacity = '0';
-            container.style.transform = 'translateY(10px)';
-            container.style.transition = 'all 0.3s ease';
-            
-            setTimeout(() => {
-                if (type === 'register') { 
-                    login.classList.add('hidden'); 
-                    register.classList.remove('hidden'); 
-                    document.title = "4U Delivery | حساب جديد"; 
-                } else { 
-                    register.classList.add('hidden'); 
-                    login.classList.remove('hidden'); 
-                    document.title = "4U Delivery | دخول"; 
-                }
-                container.style.opacity = '1';
-                container.style.transform = 'translateY(0)';
-            }, 300);
-        };
-
-        window.togglePasswordVisibility = function(inputId, iconElement) {
-            const input = document.getElementById(inputId);
-            if (input.type === 'password') {
-                input.type = 'text';
-                iconElement.textContent = 'visibility';
-                iconElement.style.color = 'var(--brand)';
-            } else {
-                input.type = 'password';
-                iconElement.textContent = 'visibility_off';
-                iconElement.style.color = 'var(--dark-400)';
-            }
-        };
-
-        window.showToast = function(message, type = 'error') {
-            let container = document.querySelector('.toast-container');
-            if (!container) {
-                container = document.createElement('div');
-                container.className = 'toast-container';
-                document.body.appendChild(container);
-            }
-
-            const toast = document.createElement('div');
-            toast.className = `custom-toast ${type === 'error' ? 'toast-error' : 'toast-success'}`;
-            const icon = type === 'error' ? 'error' : 'check_circle';
-            
-            toast.innerHTML = `
-                <span class="material-symbols-outlined toast-icon">${icon}</span>
-                <span class="toast-message">${message}</span>
-            `;
-
-            container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.classList.add('hide');
-                toast.addEventListener('animationend', () => {
-                    toast.remove();
-                });
-            }, 3500);
-        };
-
-        window.addEventListener('pageshow', (event) => {
-            if (event.persisted) {
-                const curtain = document.querySelector('.page-transition-curtain');
-                if (curtain) {
-                    curtain.classList.remove('wipe-in');
-                    curtain.style.transform = 'scaleY(0)';
-                }
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const curtain = document.querySelector('.page-transition-curtain');
-            if (curtain && !curtain.innerHTML.trim()) {
-                curtain.innerHTML = `
-                    <div class="curtain-logo">
-                        <div class="nav-brand-icon" style="width:70px;height:70px;border-radius:1.2rem;background:#fff;color:var(--brand);display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:900;box-shadow:0 10px 25px rgba(0,0,0,0.2);">4U</div>
-                        <span style="font-size:3rem;font-weight:900;color:#fff;text-shadow:0 4px 10px rgba(0,0,0,0.3);">Delivery</span>
-                    </div>
-                `;
-                curtain.style.display = 'flex';
-                curtain.style.alignItems = 'center';
-                curtain.style.justifyContent = 'center';
-                curtain.style.zIndex = '99999';
-                
-                if (!document.getElementById('curtain-style')) {
-                    const style = document.createElement('style');
-                    style.id = 'curtain-style';
-                    style.textContent = `
-                        .page-transition-curtain { display: flex !important; align-items: center !important; justify-content: center !important; }
-                        .curtain-logo { display: flex; align-items: center; gap: 1.2rem; opacity: 0; transform: scale(0.5); transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
-                        .page-transition-curtain.wipe-in .curtain-logo { opacity: 1; transform: scale(1); transition-delay: 0.3s; }
-                    `;
-                    document.head.appendChild(style);
-                }
-            }
-        });
-
-        window.navigateWithCurtain = function(url) {
-            const curtain = document.querySelector('.page-transition-curtain');
-            if (curtain) {
-                curtain.style.transform = '';
-                curtain.classList.remove('wipe-out');
-                curtain.classList.add('wipe-in');
-                setTimeout(() => { window.location.href = url; }, 800);
-            } else {
-                window.location.href = url;
-            }
-        };
-
-        function navigateWithCurtain(url) { window.navigateWithCurtain(url); }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const tab = localStorage.getItem('authTab');
-            if (tab === 'register') {
-                window.toggleAuth('register');
-                localStorage.removeItem('authTab');
-            }
-
-            const links = document.querySelectorAll('a');
-            links.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const href = link.getAttribute('href');
-                    if (href && href !== '#' && !href.startsWith('javascript')) {
-                        e.preventDefault();
-                        navigateWithCurtain(href);
-                    }
-                });
-            });
-        });
-
-        document.addEventListener('click', function(e) {
-            const btn = e.target.closest('.ripple-btn');
-            if (!btn) return;
-            const circle = document.createElement('span');
-            const diameter = Math.max(btn.clientWidth, btn.clientHeight);
-            const radius = diameter / 2;
-            const rect = btn.getBoundingClientRect();
-            circle.style.width = circle.style.height = `${diameter}px`;
-            circle.style.left = `${e.clientX - rect.left - radius}px`;
-            circle.style.top = `${e.clientY - rect.top - radius}px`;
-            circle.classList.add('ripple');
-            const existingRipple = btn.querySelector('.ripple');
-            if (existingRipple) existingRipple.remove();
-            btn.appendChild(circle);
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            const glows = document.querySelectorAll('.glow-brand, .glow-gold');
-            const x = e.clientX / window.innerWidth;
-            const y = e.clientY / window.innerHeight;
-            if (glows.length >= 2) {
-                glows[0].style.transform = `translate(${x * -30}px, ${y * -30}px)`;
-                glows[1].style.transform = `translate(${x * 30}px, ${y * 30}px)`;
-            }
-        });
-
-        document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = e.currentTarget.querySelector('button[type="submit"]');
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-
-            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span> جاري الدخول...';
-            btn.disabled = true;
-            btn.classList.add('opacity-80', 'cursor-not-allowed');
-
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                navigateWithCurtain('_3/home.html');
-            } catch (error) {
-                console.error("Login Error:", error);
-                window.showToast("فشل تسجيل الدخول. تأكد من الإيميل وكلمة السر.", "error");
-                btn.innerHTML = 'دخول';
-                btn.disabled = false;
-                btn.classList.remove('opacity-80', 'cursor-not-allowed');
-            }
-        });
-
-        document.getElementById('registerForm')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = e.currentTarget.querySelector('button[type="submit"]');
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const phone = document.getElementById('registerPhone').value;
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerConfirm').value;
-
-            if (password !== confirmPassword) {
-                window.showToast("كلمة السر غير متطابقة!", "error");
-                return;
-            }
-
-            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span> جاري التسجيل...';
-            btn.disabled = true;
-            btn.classList.add('opacity-80', 'cursor-not-allowed');
-
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                await updateProfile(user, { displayName: name });
-
-                await setDoc(doc(db, "users", user.uid), {
-                    name: name,
-                    email: email,
-                    phone: phone,
-                    points: 500,
-                    wallet: 150,
-                    tier: "Silver",
-                    createdAt: new Date().toISOString()
-                });
-
-                navigateWithCurtain('_3/home.html');
-            } catch (error) {
-                console.error("Register Error:", error);
-                let errorMsg = "حدث خطأ أثناء التسجيل.";
-                if (error.code === 'auth/email-already-in-use') errorMsg = "هذا الإيميل مسجل بالفعل!";
-                if (error.code === 'auth/weak-password') errorMsg = "كلمة السر ضعيفة، يجب أن تكون 6 أحرف على الأقل.";
-                if (error.code === 'auth/invalid-email') errorMsg = "الإيميل غير صحيح.";
-
-                window.showToast(errorMsg, "error");
-                btn.innerHTML = 'تسجيل';
-                btn.disabled = false;
-                btn.classList.remove('opacity-80', 'cursor-not-allowed');
-            }
-        });
-    </script>
+    <script type="module" src="./_3/home.js"></script>
 </body>
 </html>
