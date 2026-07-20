@@ -143,6 +143,7 @@ onAuthStateChanged(auth, async (user) => {
                 const firstName = userData.name ? userData.name.split(' ')[0] : 'حسابي';
                 navUserName.textContent = firstName;
                 userFavorites = userData.favorites || [];
+                window.userStampsMap = userData.stamps || {}; // For loyalty highlighting
                 renderRestaurants(); // Update UI if favorites loaded after restaurants
             }
         } catch (error) {
@@ -203,16 +204,6 @@ window.toggleFavorite = async function(resId, btnElement) {
     }
 };
 
-const CATEGORIES = [
-  "بيتزا",
-  "فرايد تشيكن",
-  "مشويات",
-  "حلويات",
-  "برجر",
-  "وجبات سريعة",
-  "مشروبات"
-];
-
 async function loadSidebarCategories() {
     const container = document.getElementById("sidebar-categories");
     if (!container) return;
@@ -220,7 +211,16 @@ async function loadSidebarCategories() {
     try {
         let html = '<button class="tag-btn ripple-btn" data-cat="all">الكل</button>';
         
-        CATEGORIES.forEach((catName) => {
+        const categoriesSet = new Set();
+        allRestaurants.forEach(res => {
+            if (Array.isArray(res.category)) {
+                res.category.forEach(c => categoriesSet.add(c));
+            } else if (res.category) {
+                categoriesSet.add(res.category);
+            }
+        });
+        
+        Array.from(categoriesSet).forEach((catName) => {
             html += `<button class="tag-btn ripple-btn" data-cat="${catName}">${catName}</button>`;
         });
         
@@ -282,6 +282,12 @@ function renderRestaurants() {
     const searchInput = document.querySelector('.search-input');
     const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
     
+    const filterRating45 = document.getElementById('filter-rating-45');
+    const filterRating40 = document.getElementById('filter-rating-40');
+    const filterTime30 = document.getElementById('filter-time-30');
+    const filterTime45 = document.getElementById('filter-time-45');
+    const filterSortSelect = document.getElementById('filter-sort-select');
+    
     // Filter
     let filtered = allRestaurants.filter(res => {
         // Name filter
@@ -309,8 +315,30 @@ function renderRestaurants() {
             }
         }
         
-        return matchName && matchCat;
+        // Rating filter
+        let matchRating = true;
+        let ratingValue = parseFloat(res.rating) || 0;
+        if (filterRating45 && filterRating45.checked && ratingValue < 4.5) matchRating = false;
+        if (filterRating40 && filterRating40.checked && ratingValue < 4.0) matchRating = false;
+        
+        // Time filter
+        let matchTime = true;
+        let timeValue = parseInt(res.deliveryTime) || 999;
+        if (filterTime30 && filterTime30.checked && timeValue > 30) matchTime = false;
+        if (filterTime45 && filterTime45.checked && timeValue > 45) matchTime = false;
+        
+        return matchName && matchCat && matchRating && matchTime;
     });
+    
+    // Sort
+    if (filterSortSelect) {
+        const sortVal = filterSortSelect.value;
+        if (sortVal === 'rating') {
+            filtered.sort((a, b) => (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0));
+        } else if (sortVal === 'time') {
+            filtered.sort((a, b) => (parseInt(a.deliveryTime) || 999) - (parseInt(b.deliveryTime) || 999));
+        }
+    }
     
     let html = '';
     if (filtered.length === 0) {
@@ -326,11 +354,20 @@ function renderRestaurants() {
                 categoryText = data.category || data.desc || '';
             }
 
+            // Stamp logic
+            const count = window.userStampsMap ? (window.userStampsMap[data.name] || 0) : 0;
+            const stampClass = window.userStampsMap ? (count > 0 ? 'has-stamps' : 'no-stamps') : '';
+            const activeCount = count % 10 === 0 && count > 0 ? 10 : count % 10;
+            const badgeHtml = window.userStampsMap && count > 0 
+                ? `<div class="stamp-badge"><span class="stamp-count">${activeCount}</span> <span class="material-symbols-outlined" style="font-size: 14px;">card_giftcard</span></div>`
+                : `<div class="stamp-badge hidden"><span class="stamp-count"></span> <span class="material-symbols-outlined" style="font-size: 14px;">card_giftcard</span></div>`;
+
             html += `
-            <div class="res-card-large glass">
+            <div class="res-card-large glass ${stampClass}">
                 <div class="res-image-wrapper">
                     <div class="res-image" style="background-image:url('${data.image}')"></div>
                     <div class="res-image-overlay"></div>
+                    ${badgeHtml}
                     <div class="res-rating-badge">
                         <span class="material-symbols-outlined icon-filled">star</span>
                         <span>${data.rating}</span>
@@ -374,6 +411,13 @@ if(searchInput) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    await loadSidebarCategories();
     await fetchRestaurants();
+    await loadSidebarCategories();
+    
+    const filterInputs = document.querySelectorAll('#filter-rating-45, #filter-rating-40, #filter-time-all, #filter-time-30, #filter-time-45, #filter-sort-select');
+    filterInputs.forEach(input => {
+        input.addEventListener('change', () => {
+            renderRestaurants();
+        });
+    });
 });

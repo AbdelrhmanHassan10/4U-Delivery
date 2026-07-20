@@ -1,5 +1,5 @@
 import { auth, db } from "../firebase-config.js";
-import { collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { collection, getDocs, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 // Auth Check
@@ -197,10 +197,19 @@ const renderTable = (users) => {
                     </div>
                 </td>
                 <td>
-                    <button onclick="this.innerHTML = '<span class=\\'material-symbols-outlined animate-spin\\' style=\\'font-size:1.1rem;\\'>progress_activity</span> لحظات...'; this.style.opacity = '0.7'; this.disabled = true; window.navigateWithCurtain('admin_stamps.html?phone=${encodeURIComponent(phone)}');" class="btn-action edit ripple-btn" style="border:none; cursor:pointer; display:inline-flex; align-items:center; gap:0.5rem; background:rgba(200,16,46,0.1); color:var(--brand-light); border:1px solid rgba(200,16,46,0.3); padding:0.5rem 1rem; border-radius:0.5rem; font-weight:600; font-size:0.85rem;" title="عرض وإدارة العميل">
-                        <span class="material-symbols-outlined" style="font-size:1.1rem;">manage_accounts</span>
-                        عرض وإدارة
-                    </button>
+                    <div style="display:flex; gap:0.5rem; flex-wrap:nowrap; justify-content:flex-end; align-items:center;">
+                        <button onclick="this.innerHTML = '<span class=\\'material-symbols-outlined animate-spin\\' style=\\'font-size:1.1rem;\\'>progress_activity</span>'; this.style.opacity = '0.7'; this.disabled = true; window.navigateWithCurtain('admin_stamps.html?phone=${encodeURIComponent(phone)}');" class="btn-action edit ripple-btn" style="border:none; cursor:pointer; display:inline-flex; align-items:center; gap:0.5rem; background:rgba(200,16,46,0.1); color:var(--brand-light); border:1px solid rgba(200,16,46,0.3); padding:0.5rem 1rem; border-radius:0.5rem; font-weight:600; font-size:0.85rem; white-space:nowrap;" title="عرض وإدارة العميل">
+                            <span class="material-symbols-outlined" style="font-size:1.1rem;">manage_accounts</span>
+                            إدارة
+                        </button>
+                        ${user.isAdmin ? 
+                            `<span style="display:inline-flex; align-items:center; gap:0.25rem; color:var(--gold); font-size:0.85rem; font-weight:700; padding:0.5rem 1rem; background:rgba(240,192,64,0.1); border-radius:0.5rem; border:1px solid rgba(240,192,64,0.3); white-space:nowrap;"><span class="material-symbols-outlined" style="font-size:1.1rem;">admin_panel_settings</span> أدمن</span>` : 
+                            `<button onclick="window.makeUserAdmin('${user.id}', this)" class="btn-action ripple-btn" style="border:none; cursor:pointer; display:inline-flex; align-items:center; gap:0.5rem; background:rgba(240,192,64,0.1); color:var(--gold); border:1px solid rgba(240,192,64,0.3); padding:0.5rem 1rem; border-radius:0.5rem; font-weight:600; font-size:0.85rem; white-space:nowrap;" title="منح صلاحيات الأدمن">
+                                <span class="material-symbols-outlined" style="font-size:1.1rem;">security</span>
+                                ترقية
+                            </button>`
+                        }
+                    </div>
                 </td>
             </tr>
         `;
@@ -224,3 +233,27 @@ document.getElementById('users-search-input')?.addEventListener('input', (e) => 
 document.addEventListener('DOMContentLoaded', () => {
     // loadUsers() is now called after auth check
 });
+
+// Make User Admin Logic
+window.makeUserAdmin = async function(userId, btnElement) {
+    if(!confirm("هل أنت متأكد أنك تريد منح هذا العميل صلاحيات الأدمن كاملة؟")) return;
+    
+    btnElement.disabled = true;
+    const originalHtml = btnElement.innerHTML;
+    btnElement.innerHTML = '<span class="material-symbols-outlined animate-spin" style="font-size:1.1rem;">progress_activity</span>';
+    
+    try {
+        await updateDoc(doc(db, "users", userId), {
+            isAdmin: true
+        });
+        alert("تم منح صلاحيات الأدمن بنجاح!");
+        const u = allUsers.find(u => u.id === userId);
+        if(u) u.isAdmin = true;
+        renderTable(allUsers);
+    } catch(e) {
+        console.error("Error making user admin:", e);
+        alert("حدث خطأ أثناء تنفيذ الطلب!");
+        btnElement.disabled = false;
+        btnElement.innerHTML = originalHtml;
+    }
+};

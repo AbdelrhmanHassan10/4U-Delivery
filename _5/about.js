@@ -14,6 +14,15 @@ if (navbar) {
     });
 }
 
+// Mobile Menu
+const mBtn = document.getElementById('mobile-menu-btn');
+const cBtn = document.getElementById('close-menu-btn');
+const mMenu = document.getElementById('mobile-menu');
+if (mBtn && cBtn && mMenu) {
+    mBtn.addEventListener('click', () => mMenu.classList.add('open'));
+    cBtn.addEventListener('click', () => mMenu.classList.remove('open'));
+}
+
 // Intersection Observer for Reveal
 const observer = new IntersectionObserver((entries) => { 
     entries.forEach(e => { 

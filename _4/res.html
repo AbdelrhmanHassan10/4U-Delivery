@@ -82,13 +82,14 @@
             </button>
         </div>
         <div class="mobile-nav">
-            <a href="../_3/home.html" class="mobile-link">الرئيسية</a>
-            <a href="../_4/res.html" class="mobile-link">المطاعم</a>
-            <a href="../_5/About.html" class="mobile-link">عننا</a>
-            <a href="../_2/profile.html" class="mobile-link">بروفايلي</a>
+            <a href="../_3/home.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">home</span> الرئيسية</a>
+            <a href="../_4/res.html" class="mobile-link active" style="color: var(--brand);"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">restaurant</span> المطاعم</a>
+            <a href="../_6/stamp_card.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">card_membership</span> المكافآت</a>
+            <a href="../_5/About.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">info</span> عننا</a>
             <div class="mobile-divider"></div>
-            <a href="../_6/stamp_card.html" class="mobile-sublink"><span class="material-symbols-outlined">card_membership</span> كارت الأختام</a>
-            <a href="../_6/admin_stamps.html" class="mobile-admin-link"><span class="material-symbols-outlined">shield_person</span> الإدارة</a>
+            <a href="../_7/contact.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">support_agent</span> المساعدة</a>
+            <a href="../_7/terms.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">rule</span> الشروط والأحكام</a>
+            <a href="../_6/admin_stamps.html" class="mobile-admin-link" style="color:var(--gold); display:flex; align-items:center; gap:0.5rem; margin-top: 1rem;"><span class="material-symbols-outlined">admin_panel_settings</span> لوحة الإدارة</a>
         </div>
         <div class="mobile-bottom">
             <a href="../_1/login.html" class="btn-mobile-auth ripple-btn" id="mobile-auth-btn">دخول / تسجيل حساب</a>
@@ -108,7 +109,7 @@
 
                 <!-- Search Input -->
                 <div class="search-input-wrapper">
-                    <input class="search-input" placeholder="بتدور على مطعم معين؟" type="text"/>
+                    <input id="filter-search-input" class="search-input" placeholder="بتدور على مطعم معين؟" type="text"/>
                     <span class="material-symbols-outlined search-input-icon">search</span>
                 </div>
 
@@ -128,7 +129,7 @@
                     <h3 class="filter-group-title">التقييم</h3>
                     <div class="filter-group" style="gap: 0.5rem;">
                         <label class="custom-label">
-                            <input class="custom-checkbox" type="checkbox" checked/>
+                            <input id="filter-rating-45" class="custom-checkbox" type="checkbox" />
                             <div class="rating-stars">
                                 <span class="material-symbols-outlined icon-filled">star</span>
                                 <span class="material-symbols-outlined icon-filled">star</span>
@@ -138,7 +139,7 @@
                             </div>
                         </label>
                         <label class="custom-label">
-                            <input class="custom-checkbox" type="checkbox"/>
+                            <input id="filter-rating-40" class="custom-checkbox" type="checkbox" />
                             <div class="rating-stars">
                                 <span class="material-symbols-outlined icon-filled">star</span>
                                 <span class="material-symbols-outlined icon-filled">star</span>
@@ -155,11 +156,15 @@
                     <h3 class="filter-group-title">وقت التوصيل</h3>
                     <div class="filter-group" style="gap: 0.5rem;">
                         <label class="custom-label">
-                            <input class="custom-radio" name="delivery" type="radio"/>
+                            <input id="filter-time-all" class="custom-radio" name="delivery" type="radio" value="all" checked/>
+                            <span class="delivery-text">الكل</span>
+                        </label>
+                        <label class="custom-label">
+                            <input id="filter-time-30" class="custom-radio" name="delivery" type="radio" value="30"/>
                             <span class="delivery-text">أقل من 30 دقيقة</span>
                         </label>
                         <label class="custom-label">
-                            <input class="custom-radio" name="delivery" type="radio" checked/>
+                            <input id="filter-time-45" class="custom-radio" name="delivery" type="radio" value="45"/>
                             <span class="delivery-text">أقل من 45 دقيقة</span>
                         </label>
                     </div>
@@ -176,10 +181,10 @@
                 </div>
                 <div class="sort-box">
                     <span class="sort-label">ترتيب حسب:</span>
-                    <select class="sort-select">
-                        <option>الأكثر طلباً</option>
-                        <option>الأعلى تقييماً</option>
-                        <option>الأسرع توصيلاً</option>
+                    <select id="filter-sort-select" class="sort-select">
+                        <option value="none">بدون ترتيب</option>
+                        <option value="rating">الأعلى تقييماً</option>
+                        <option value="time">الأسرع توصيلاً</option>
                     </select>
                 </div>
             </div>

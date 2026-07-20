@@ -155,10 +155,18 @@ onAuthStateChanged(auth, async (user) => {
                 // Get first name only for navbar
                 const firstName = userData.name ? userData.name.split(' ')[0] : 'حسابي';
                 navUserName.textContent = firstName;
+                
+                // Store stamps for loyalty highlighting
+                window.userStampsMap = userData.stamps || {};
+            } else {
+                window.userStampsMap = {};
             }
         } catch (error) {
             console.error("Error fetching user data for navbar:", error);
+            window.userStampsMap = {};
         }
+
+        if (window.updateRestaurantLoyaltyUI) window.updateRestaurantLoyaltyUI();
 
     } else {
         // User is logged out
@@ -168,6 +176,43 @@ onAuthStateChanged(auth, async (user) => {
         mobileAuthBtn.href = '../_1/login.html';
     }
 });
+
+// Update Restaurant Cards based on loyalty stamps
+window.updateRestaurantLoyaltyUI = function() {
+    const cards = document.querySelectorAll('.res-card[data-res-name]');
+    if (!cards || cards.length === 0) return;
+    
+    // If not logged in or no stamps fetched, revert to normal
+    if (!window.userStampsMap) {
+        cards.forEach(card => {
+            card.classList.remove('has-stamps', 'no-stamps');
+            const badge = card.querySelector('.stamp-badge');
+            if (badge) badge.classList.add('hidden');
+        });
+        return;
+    }
+    
+    // Check stamps
+    cards.forEach(card => {
+        const rName = card.getAttribute('data-res-name');
+        const count = window.userStampsMap[rName] || 0;
+        const badge = card.querySelector('.stamp-badge');
+        
+        if (count > 0) {
+            card.classList.add('has-stamps');
+            card.classList.remove('no-stamps');
+            if (badge) {
+                const activeCount = count % 10 === 0 ? 10 : count % 10;
+                badge.querySelector('.stamp-count').textContent = activeCount;
+                badge.classList.remove('hidden');
+            }
+        } else {
+            card.classList.remove('has-stamps');
+            card.classList.add('no-stamps');
+            if (badge) badge.classList.add('hidden');
+        }
+    });
+};
 
 // --- DYNAMIC DATA FETCHING & SETUP ---
 
@@ -281,10 +326,11 @@ async function loadFeaturedRestaurants() {
             }
 
             html += `
-            <div class="res-card glass" onclick="window.location.href='../_4/restaurant.html?id=${data.id}'">
+            <div class="res-card glass" data-res-name="${data.name}" onclick="window.location.href='../_4/restaurant.html?id=${data.id}'">
                 <div class="res-image-wrapper">
                     <div class="res-image" style="background-image:url('${data.image}')"></div>
                     <div class="res-image-overlay"></div>
+                    <div class="stamp-badge hidden"><span class="stamp-count"></span> <span class="material-symbols-outlined" style="font-size: 14px;">card_giftcard</span></div>
                     <div class="res-rating">
                         <span class="material-symbols-outlined icon-filled">star</span>
                         <span class="res-rating-text">${data.rating || '4.5'}</span>
@@ -303,6 +349,7 @@ async function loadFeaturedRestaurants() {
         });
         
         container.innerHTML = html;
+        if (window.updateRestaurantLoyaltyUI) window.updateRestaurantLoyaltyUI();
     } catch (error) {
         console.error("Error loading restaurants:", error);
         container.innerHTML = '<p class="text-center w-100">فشل تحميل المطاعم</p>';

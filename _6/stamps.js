@@ -189,25 +189,52 @@ const initStampCard = async () => {
                         renderStampCard("لا توجد أختام بعد", 0);
                     } else if (brands.length === 1) {
                         // One brand
-                        renderStampCard(brands[0], stampsMap[brands[0]]);
+                        const count = stampsMap[brands[0]] || 0;
+                        const activeCount = (count > 0 && count % 10 === 0) ? 10 : (count % 10);
+                        renderStampCard(brands[0], activeCount);
                     } else {
-                        // Multiple brands: show dropdown
-                        customerSelect.classList.remove('hidden');
-                        brandNameEl.classList.add('hidden'); // Hide the title since dropdown is replacing it
-
-                        let optionsHtml = '';
-                        brands.forEach(b => {
-                            optionsHtml += `<option value="${b}">${b}</option>`;
-                        });
-                        customerSelect.innerHTML = optionsHtml;
-                        
-                        // Default to first brand
-                        renderStampCard(brands[0], stampsMap[brands[0]]);
-                        
-                        customerSelect.addEventListener('change', (e) => {
-                            const selected = e.target.value;
-                            renderStampCard(selected, stampsMap[selected]);
-                        });
+                        // Multiple brands: show wallet
+                        const walletContainer = document.getElementById('wallet-cards-container');
+                        if (walletContainer) {
+                            walletContainer.classList.remove('hidden');
+                            brandNameEl.classList.add('hidden'); // Hide the single title
+                            
+                            const renderWallet = (activeBrand) => {
+                                let cardsHtml = '';
+                                brands.forEach(b => {
+                                    const count = stampsMap[b] || 0;
+                                    const activeCount = (count > 0 && count % 10 === 0) ? 10 : (count % 10);
+                                    const isActive = b === activeBrand;
+                                    const isGold = activeCount === 10;
+                                    const activeClass = isActive ? 'active' : '';
+                                    const goldClass = isGold ? 'gold-tier' : '';
+                                    
+                                    cardsHtml += `
+                                        <div class="mini-card ${activeClass} ${goldClass}" data-brand="${b}">
+                                            <span class="mini-card-title">${b}</span>
+                                            <span class="mini-card-count">${activeCount}/10</span>
+                                        </div>
+                                    `;
+                                });
+                                walletContainer.innerHTML = cardsHtml;
+                                
+                                // Bind click events
+                                const cards = walletContainer.querySelectorAll('.mini-card');
+                                cards.forEach(card => {
+                                    card.addEventListener('click', () => {
+                                        const clickedBrand = card.getAttribute('data-brand');
+                                        renderWallet(clickedBrand);
+                                        const count = stampsMap[clickedBrand] || 0;
+                                        renderStampCard(clickedBrand, (count > 0 && count % 10 === 0) ? 10 : (count % 10));
+                                    });
+                                });
+                            };
+                            
+                            // Initialize with the first brand
+                            renderWallet(brands[0]);
+                            const initCount = stampsMap[brands[0]] || 0;
+                            renderStampCard(brands[0], (initCount > 0 && initCount % 10 === 0) ? 10 : (initCount % 10));
+                        }
                     }
                 } else {
                     renderStampCard("لم يتم العثور على أختام", 0);

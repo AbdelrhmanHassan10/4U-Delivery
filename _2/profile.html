@@ -31,7 +31,6 @@
                 <a href="../_3/home.html" class="nav-link">الرئيسية</a>
                 <a href="../_4/res.html" class="nav-link">المطاعم</a>
                 <a href="../_5/About.html" class="nav-link">عننا</a>
-                <a href="../_2/profile.html" class="nav-link active">بروفايلي</a>
                 
                 <!-- Menu Dropdown -->
                 <div class="nav-dropdown">
@@ -52,10 +51,36 @@
             <div class="nav-actions">
                 <a href="../_1/login.html" class="btn-login" onclick="localStorage.setItem('authTab','login'); navigateWithCurtain(this.href); return false;">دخول</a>
                 <a href="../_1/login.html" class="btn-primary ripple-btn" onclick="localStorage.setItem('authTab','register'); navigateWithCurtain(this.href); return false;">اعمل حساب</a>
-                <button class="btn-menu ripple-btn"><span class="material-symbols-outlined">menu</span></button>
+                <button id="mobile-menu-btn" class="btn-menu ripple-btn"><span class="material-symbols-outlined">menu</span></button>
             </div>
         </div>
     </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="mobile-menu-overlay">
+        <div class="mobile-header">
+            <div class="nav-brand">
+                <div class="nav-brand-icon">4U</div>
+                <span>Delivery</span>
+            </div>
+            <button id="close-menu-btn" class="btn-close-menu ripple-btn">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="mobile-nav">
+            <a href="../_3/home.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">home</span> الرئيسية</a>
+            <a href="../_4/res.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">restaurant</span> المطاعم</a>
+            <a href="../_6/stamp_card.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">card_membership</span> المكافآت</a>
+            <a href="../_5/About.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">info</span> عننا</a>
+            <div class="mobile-divider"></div>
+            <a href="../_7/contact.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">support_agent</span> المساعدة</a>
+            <a href="../_7/terms.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">rule</span> الشروط والأحكام</a>
+            <a href="../_6/admin_stamps.html" class="mobile-admin-link" style="color:var(--gold); display:flex; align-items:center; gap:0.5rem; margin-top: 1rem;"><span class="material-symbols-outlined">admin_panel_settings</span> لوحة الإدارة</a>
+        </div>
+        <div class="mobile-bottom">
+            <a href="../_1/login.html" class="btn-mobile-auth ripple-btn" id="mobile-auth-btn">دخول / تسجيل حساب</a>
+        </div>
+    </div>
 
     <!-- ═══ PROFILE HERO ═══ -->
     <section class="profile-hero container">

@@ -307,3 +307,20 @@ ul { list-style: none; }
 /* Float Btn */
 .btn-float { position: fixed; bottom: 1.5rem; left: 1.5rem; z-index: 50; width: 3rem; height: 3rem; border-radius: 0.75rem; background: rgba(48,48,48,0.8); backdrop-filter: blur(10px); color: var(--dark-300); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 15px rgba(0,0,0,0.1); transition: all 0.3s; }
 .btn-float:hover { background: var(--brand); color: white; transform: scale(1.1); }
+
+/* Mobile Menu */
+.mobile-menu-overlay { position: fixed; inset: 0; background: var(--dark-950); z-index: 1000000; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); padding: 1.5rem; display: flex; flex-direction: column; }
+.mobile-menu-overlay.open { transform: translateX(0); }
+.mobile-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; }
+.btn-close-menu { color: white; padding: 0.5rem; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+.btn-close-menu:hover { background: rgba(255,255,255,0.1); }
+.mobile-nav { display: flex; flex-direction: column; gap: 1.5rem; text-align: right; }
+.mobile-link { font-size: 1.5rem; font-weight: 900; color: white; transition: color 0.3s; }
+.mobile-link:hover { color: var(--brand); }
+.mobile-divider { border-bottom: 1px solid rgba(255,255,255,0.1); margin: 1rem 0; }
+.mobile-sublink { font-size: 1.25rem; font-weight: 700; color: var(--dark-200); display: flex; align-items: center; gap: 0.5rem; transition: color 0.3s; }
+.mobile-sublink:hover { color: white; }
+.mobile-admin-link { color: var(--gold); font-size: 1.25rem; font-weight: 900; display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem; }
+.mobile-bottom { margin-top: auto; padding-top: 2.5rem; }
+.btn-mobile-auth { display: block; width: 100%; text-align: center; background: var(--brand); color: white; font-weight: 700; padding: 1rem; border-radius: 0.75rem; transition: background 0.3s; }
+.btn-mobile-auth:hover { background: var(--brand-light); }

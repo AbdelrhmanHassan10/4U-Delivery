@@ -14,6 +14,15 @@ if (navbar) {
     });
 }
 
+// Mobile Menu
+const mBtn = document.getElementById('mobile-menu-btn');
+const cBtn = document.getElementById('close-menu-btn');
+const mMenu = document.getElementById('mobile-menu');
+if (mBtn && cBtn && mMenu) {
+    mBtn.addEventListener('click', () => mMenu.classList.add('open'));
+    cBtn.addEventListener('click', () => mMenu.classList.remove('open'));
+}
+
 // Intersection Observer for Reveal
 const observer = new IntersectionObserver((entries) => { 
     entries.forEach(e => { 
@@ -124,7 +133,7 @@ onAuthStateChanged(auth, async (user) => {
                 <a href="../_2/profile.html" class="btn-primary ripple-btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
                     <span class="material-symbols-outlined">person</span> <span id="nav-user-name">حسابي</span>
                 </a>
-                <button class="btn-menu ripple-btn"><span class="material-symbols-outlined">menu</span></button>
+                <button id="mobile-menu-btn" class="btn-menu ripple-btn" onclick="document.getElementById('mobile-menu')?.classList.add('open')"><span class="material-symbols-outlined">menu</span></button>
             `;
         }
 
