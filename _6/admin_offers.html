@@ -3,6 +3,9 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <title>4U Delivery | إدارة العروض</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
@@ -48,6 +51,36 @@
         }
         .offer-title { font-weight: bold; font-size: 1.25rem; margin-top: 0.5rem; }
         .offer-desc { font-size: 0.9rem; opacity: 0.9; }
+
+        /* Add Offer Button Styles */
+        .btn-add-offer-styled {
+            background: var(--brand);
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            font-family: inherit;
+        }
+        .btn-add-offer-styled:hover {
+            filter: brightness(1.15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(200, 16, 46, 0.4);
+        }
+        .btn-add-offer-styled:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
         .offer-icon-bg {
             position: absolute;
             bottom: -20px;
@@ -56,10 +89,14 @@
             opacity: 0.1;
             transform: rotate(-15deg);
         }
-        .btn-delete {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
+        .offer-actions-top {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            z-index: 10;
+        }
+        .btn-action {
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255,255,255,0.2);
             color: #fff;
@@ -71,9 +108,11 @@
             justify-content: center;
             cursor: pointer;
             backdrop-filter: blur(5px);
-            z-index: 10;
+            transition: 0.3s;
         }
-        .btn-delete:hover { background: var(--brand); transform: scale(1.1); transition: 0.3s; }
+        .btn-action:hover { transform: scale(1.1); }
+        .btn-action.delete:hover { background: var(--brand); }
+        .btn-action.edit:hover { background: #3498db; }
         .toggle-switch {
             position: relative;
             display: inline-block;
@@ -98,22 +137,43 @@
             transition: .4s;
             border-radius: 50%;
         }
-        input:checked + .slider { background-color: var(--success); }
+        input:checked + .slider { background-color: #00e676; }
         input:checked + .slider:before { transform: translateX(26px); }
     </style>
 </head>
 <body class="admin-layout">
 
+    <!-- Page Transition Curtain -->
     <div class="page-transition-curtain"></div>
+
+    <!-- ═══ MOBILE HEADER & OVERLAY ═══ -->
+    <div class="mobile-admin-header">
+        <button class="btn-mobile-menu ripple-btn" id="admin-menu-toggle">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="brand-logo-wrapper" style="display: flex; align-items: center; gap: 0.5rem; margin: 0 auto;">
+            <div class="sidebar-logo" style="margin: 0;">4U</div>
+            <span style="font-size: 1.5rem; font-weight: 900; color: white; letter-spacing: -0.5px; margin-top: 4px;">Delivery</span>
+        </div>
+        <div style="flex:1"></div> <!-- spacer -->
+    </div>
+    <div class="admin-sidebar-overlay" id="admin-sidebar-overlay"></div>
 
     <!-- ═══ SIDEBAR ═══ -->
     <aside class="admin-sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-logo">4U</div>
-            <div>
-                <div class="sidebar-title">4U Delivery</div>
-                <div class="sidebar-subtitle">Admin Panel</div>
-            </div>
+        <div class="sidebar-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <a href="../_3/home.html" style="text-decoration: none; color: inherit;">
+                <div class="brand-logo-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div class="sidebar-logo" style="margin: 0;">4U</div>
+                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                        <span style="font-size: 1.25rem; font-weight: 900; color: white; letter-spacing: -0.5px; line-height: 1;">Delivery</span>
+                        <span style="color: var(--brand-light); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-top: 2px;">Admin Panel</span>
+                    </div>
+                </div>
+            </a>
+            <button class="btn-close-sidebar ripple-btn" id="admin-close-sidebar-btn" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; color: white; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                <span class="material-symbols-outlined" style="font-size: 1.25rem;">close</span>
+            </button>
         </div>
         
         <nav class="sidebar-nav">
@@ -137,6 +197,10 @@
                 <span class="material-symbols-outlined">local_offer</span>
                 إدارة العروض
             </a>
+            <a href="admin_messages.html" class="sidebar-link inactive ripple-btn">
+                <span class="material-symbols-outlined">support_agent</span>
+                رسائل التواصل
+            </a>
         </nav>
         
         <div class="sidebar-footer">
@@ -156,9 +220,10 @@
                 <p class="admin-page-desc">قم بإضافة وتعديل العروض التي تظهر في الصفحة الرئيسية للعملاء.</p>
             </header>
 
-            <!-- 1. Add Offer Form -->
+            <!-- 1. Add/Edit Offer Form -->
             <div class="admin-card glass" style="border-color: rgba(200,16,46,0.2);">
                 <form id="add-offer-form" class="admin-grid" style="grid-template-columns: 1fr 1fr;">
+                    <input type="hidden" id="edit-offer-id" value="" />
                     
                     <div class="form-group">
                         <label class="label-text">عنوان العرض</label>
@@ -184,17 +249,31 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="label-text">أيقونة الخلفية (اسم من Google Fonts)</label>
-                        <input type="text" id="offer-icon" class="input-control" placeholder="مثال: fastfood, local_shipping, star" value="fastfood" required />
+                        <label class="label-text">أيقونة العرض المميزة</label>
+                        <select id="offer-icon" class="input-control">
+                            <option value="star">⭐ نجمة (عرض مميز)</option>
+                            <option value="percent">٪ خصم</option>
+                            <option value="local_pizza">🍕 بيتزا</option>
+                            <option value="lunch_dining">🍔 برجر</option>
+                            <option value="fastfood" selected>🍟 وجبات سريعة</option>
+                            <option value="restaurant">🍽️ مطعم</option>
+                            <option value="local_cafe">☕ كافيه</option>
+                            <option value="icecream">🍦 آيس كريم</option>
+                            <option value="local_shipping">🚚 توصيل</option>
+                            <option value="card_giftcard">🎁 هدية</option>
+                        </select>
                     </div>
 
                     <div class="form-group" style="grid-column: span 2;">
-                        <label class="label-text">رابط العرض (عند الضغط)</label>
-                        <input type="text" id="offer-link" class="input-control" placeholder="مثال: ./_4/restaurant.html?id=123 أو ./_4/res.html" value="./_4/res.html" required />
+                        <label class="label-text">المطعم المرتبط بالعرض</label>
+                        <select id="offer-link" class="input-control">
+                            <option value="../_4/res.html">عرض عام (كل المطاعم)</option>
+                            <!-- المطاعم هتظهر هنا من قاعدة البيانات -->
+                        </select>
                     </div>
 
                     <div style="grid-column: span 2; margin-top: 1rem;">
-                        <button type="submit" class="btn btn-primary w-100 ripple-btn" id="btn-add-offer">
+                        <button type="submit" class="btn-add-offer-styled ripple-btn" id="btn-add-offer">
                             <span class="material-symbols-outlined">add_circle</span>
                             إضافة العرض
                         </button>
@@ -211,25 +290,80 @@
         </div>
     </main>
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="../firebase-config.js"></script>
+    <div id="toast-container" class="toast-container"></div>
 
-    <script>
-        const db = firebase.firestore();
+    <script type="module">
+        import { auth, db } from "../firebase-config.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { collection, addDoc, getDocs, getDoc, doc, deleteDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Toast Notification
+        window.showToast = function(msg, type='success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span class="material-symbols-outlined">${type === 'success' ? 'check_circle' : 'error'}</span>
+                ${msg}
+            `;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.3s forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        };
+
+        // Auth Check
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = '../_1/login.html';
+                return;
+            }
+            
+            try {
+                const docRef = doc(db, "users", user.uid);
+                const docSnap = await getDoc(docRef);
+                if (!docSnap.exists() || docSnap.data().isAdmin !== true) {
+                    showToast("غير مصرح لك بدخول هذه الصفحة!", "error");
+                    setTimeout(() => window.location.href = '../_3/home.html', 1500);
+                    return;
+                }
+            } catch (e) {
+                window.location.href = '../_3/home.html';
+                return;
+            }
+        });
 
         // Reveal effect
         window.addEventListener('load', () => {
             setTimeout(() => { document.querySelector('.page-transition-curtain').style.transform = 'translateY(100%)'; }, 100);
             loadOffers();
+            loadRestaurantsForSelect();
         });
 
-        // Add Offer
+        async function loadRestaurantsForSelect() {
+            try {
+                const resSnap = await getDocs(collection(db, "restaurants"));
+                const linkSelect = document.getElementById('offer-link');
+                resSnap.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const option = document.createElement('option');
+                    option.value = `../_4/restaurant.html?id=${docSnap.id}`;
+                    option.textContent = `مطعم: ${data.name || 'بدون اسم'}`;
+                    linkSelect.appendChild(option);
+                });
+            } catch (error) {
+                console.error("Error loading restaurants:", error);
+            }
+        }
+
+        // Add/Edit Offer
         document.getElementById('add-offer-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-add-offer');
             
+            const editId = document.getElementById('edit-offer-id').value;
             const title = document.getElementById('offer-title').value.trim();
             const desc = document.getElementById('offer-desc').value.trim();
             const badge = document.getElementById('offer-badge').value.trim();
@@ -237,32 +371,36 @@
             const icon = document.getElementById('offer-icon').value.trim();
             const link = document.getElementById('offer-link').value.trim();
 
-            if (!title || !desc || !badge) return alert("يرجى ملء كافة الحقول");
+            if (!title || !desc || !badge) return showToast("يرجى ملء كافة الحقول", "error");
 
             btn.disabled = true;
             btn.innerHTML = '<div class="loader" style="width:20px;height:20px;border-width:2px;margin:auto;"></div>';
 
             try {
-                await db.collection("offers").add({
-                    title,
-                    desc,
-                    badge,
-                    type,
-                    icon,
-                    link,
-                    isActive: true,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                alert("تم إضافة العرض بنجاح!");
+                if (editId) {
+                    await updateDoc(doc(db, "offers", editId), {
+                        title, desc, badge, type, icon, link
+                    });
+                    showToast("تم تعديل العرض بنجاح!");
+                } else {
+                    await addDoc(collection(db, "offers"), {
+                        title, desc, badge, type, icon, link,
+                        isActive: true,
+                        createdAt: serverTimestamp()
+                    });
+                    showToast("تم إضافة العرض بنجاح!");
+                }
+                
                 document.getElementById('add-offer-form').reset();
+                document.getElementById('edit-offer-id').value = '';
+                btn.innerHTML = '<span class="material-symbols-outlined">add_circle</span> إضافة العرض';
+                btn.style.background = 'var(--brand)';
                 loadOffers();
             } catch(err) {
                 console.error(err);
-                alert("حدث خطأ أثناء الإضافة.");
+                showToast("حدث خطأ أثناء الحفظ: " + err.message, "error");
             }
-
             btn.disabled = false;
-            btn.innerHTML = '<span class="material-symbols-outlined">add_circle</span> إضافة العرض';
         });
 
         // Load Offers
@@ -271,7 +409,7 @@
             list.innerHTML = '<div class="loader" style="margin: 2rem auto;"></div>';
 
             try {
-                const snapshot = await db.collection("offers").get();
+                const snapshot = await getDocs(collection(db, "offers"));
                 let html = '';
                 if (snapshot.empty) {
                     list.innerHTML = `
@@ -284,22 +422,29 @@
                     return;
                 }
 
-                snapshot.forEach(doc => {
-                    const data = doc.data();
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
                     const cardClass = data.type === 'gold' ? 'offer-gold' : 'offer-brand';
                     
                     html += `
                     <div class="offer-card ${cardClass}">
-                        <button class="btn-delete" onclick="deleteOffer('${doc.id}')" title="حذف العرض">
-                            <span class="material-symbols-outlined">delete</span>
-                        </button>
-                        
-                        <div style="display:flex; justify-content:space-between; align-items:center; z-index:1;">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; z-index:1; margin-bottom: 1rem;">
                             <span class="offer-badge">${data.badge}</span>
-                            <label class="toggle-switch">
-                                <input type="checkbox" ${data.isActive ? 'checked' : ''} onchange="toggleActive('${doc.id}', this.checked)">
-                                <span class="slider"></span>
-                            </label>
+                            
+                            <div class="offer-actions-top">
+                                <label class="toggle-switch" title="تفعيل/إيقاف العرض">
+                                    <input type="checkbox" ${data.isActive ? 'checked' : ''} onchange="toggleActive('${docSnap.id}', this.checked)">
+                                    <span class="slider"></span>
+                                </label>
+                                
+                                <button class="btn-action edit" onclick="editOffer('${docSnap.id}')" title="تعديل العرض">
+                                    <span class="material-symbols-outlined" style="font-size:1.1rem;">edit</span>
+                                </button>
+
+                                <button class="btn-action delete" onclick="deleteOffer('${docSnap.id}')" title="حذف العرض">
+                                    <span class="material-symbols-outlined" style="font-size:1.1rem;">delete</span>
+                                </button>
+                            </div>
                         </div>
                         
                         <h3 class="offer-title" style="z-index:1;">${data.title}</h3>
@@ -319,23 +464,57 @@
             }
         }
 
+        // Edit Offer
+        window.editOffer = async (id) => {
+            try {
+                const docSnap = await getDoc(doc(db, "offers", id));
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    document.getElementById('edit-offer-id').value = id;
+                    document.getElementById('offer-title').value = data.title;
+                    document.getElementById('offer-desc').value = data.desc;
+                    document.getElementById('offer-badge').value = data.badge;
+                    document.getElementById('offer-type').value = data.type;
+                    document.getElementById('offer-icon').value = data.icon;
+                    document.getElementById('offer-link').value = data.link;
+                    
+                    const btn = document.getElementById('btn-add-offer');
+                    btn.innerHTML = '<span class="material-symbols-outlined">save</span> حفظ التعديلات';
+                    btn.style.background = '#3498db';
+                    
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            } catch(err) {
+                console.error(err);
+                showToast("خطأ في جلب بيانات العرض", "error");
+            }
+        }
+
         // Delete Offer
         window.deleteOffer = async (id) => {
             if(!confirm("هل أنت متأكد من حذف هذا العرض نهائياً؟")) return;
             try {
-                await db.collection("offers").doc(id).delete();
+                await deleteDoc(doc(db, "offers", id));
+                if (document.getElementById('edit-offer-id').value === id) {
+                    document.getElementById('add-offer-form').reset();
+                    document.getElementById('edit-offer-id').value = '';
+                    const btn = document.getElementById('btn-add-offer');
+                    btn.innerHTML = '<span class="material-symbols-outlined">add_circle</span> إضافة العرض';
+                    btn.style.background = 'var(--brand)';
+                }
                 loadOffers();
             } catch(err) {
-                alert("خطأ أثناء الحذف");
+                showToast("خطأ أثناء الحذف: " + err.message, "error");
             }
         }
 
         // Toggle Active
         window.toggleActive = async (id, isActive) => {
             try {
-                await db.collection("offers").doc(id).update({ isActive });
+                await updateDoc(doc(db, "offers", id), { isActive });
+                showToast(isActive ? "تم تفعيل العرض" : "تم إيقاف العرض");
             } catch(err) {
-                alert("خطأ أثناء التحديث");
+                showToast("خطأ أثناء التحديث: " + err.message, "error");
                 loadOffers(); // revert UI
             }
         }
@@ -345,7 +524,7 @@
             const list = document.getElementById('offers-list');
             list.innerHTML = '<div class="loader" style="margin: 2rem auto;"></div>';
             try {
-                await db.collection("offers").add({
+                await addDoc(collection(db, "offers"), {
                     title: "توفير البطوط",
                     desc: "شاورما وكريب من البطوط بأفضل الأسعار",
                     badge: "عرض الصحاب",
@@ -353,9 +532,9 @@
                     icon: "fastfood",
                     link: "./_4/res.html",
                     isActive: true,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    createdAt: serverTimestamp()
                 });
-                await db.collection("offers").add({
+                await addDoc(collection(db, "offers"), {
                     title: "عروض القرموطي",
                     desc: "اطلب مشاوي القرموطي واستمتع بتوصيل سريع",
                     badge: "توصيل مجاني",
@@ -363,13 +542,35 @@
                     icon: "local_shipping",
                     link: "./_4/res.html",
                     isActive: true,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    createdAt: serverTimestamp()
                 });
+                showToast("تم إضافة العروض التجريبية بنجاح!");
                 loadOffers();
             } catch(err) {
                 console.error(err);
-                alert("خطأ أثناء الإضافة التجريبية");
+                showToast("خطأ أثناء إضافة العروض التجريبية", "error");
             }
+        }
+        
+        // Mobile Sidebar Toggle
+        const menuToggle = document.getElementById('admin-menu-toggle');
+        const closeBtn = document.getElementById('admin-close-sidebar-btn');
+        const sidebar = document.querySelector('.admin-sidebar');
+        const overlay = document.getElementById('admin-sidebar-overlay');
+        
+        if(sidebar && overlay) {
+            if(menuToggle) {
+                menuToggle.addEventListener('click', () => {
+                    sidebar.classList.add('open');
+                    overlay.classList.add('show');
+                });
+            }
+            const closeSidebar = () => {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+            };
+            if(closeBtn) closeBtn.addEventListener('click', closeSidebar);
+            if(overlay) overlay.addEventListener('click', closeSidebar);
         }
     </script>
 </body>

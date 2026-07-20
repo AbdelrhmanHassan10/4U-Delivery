@@ -190,25 +190,10 @@
     <div class="bg-dark-overlay">
         <section class="section container reveal">
             <h2 class="section-title" style="margin-bottom: 2.5rem;">عروض النهاردة</h2>
-            <div class="offers-grid">
-                <div class="offer-card offer-brand glow-red">
-                    <div class="offer-card-bg-icon"><span class="material-symbols-outlined icon-filled">fastfood</span></div>
-                    <div class="offer-content">
-                        <div class="offer-badge">خصم 50%</div>
-                        <h4 class="offer-title">وجبة التوفير من برجر كينج</h4>
-                        <p class="offer-desc">ساندوتش دبل شيز + بطاطس + كولا</p>
-                        <a href="../_4/res.html" class="btn-offer ripple-btn" style="text-decoration:none;display:inline-block;">اطلب دلوقتي</a>
-                    </div>
-                </div>
-                <div class="offer-card offer-gold glass glow-gold">
-                    <div class="offer-card-bg-icon"><span class="material-symbols-outlined icon-filled">local_shipping</span></div>
-                    <div class="offer-content">
-                        <div class="offer-badge">عرض خاص</div>
-                        <h4 class="offer-title">توصيل مجاني لطلبات العيلة</h4>
-                        <p class="offer-desc">لأي طلب فوق الـ 300 جنيه النهاردة بس</p>
-                        <a href="../_4/res.html" class="btn-offer ripple-btn" style="text-decoration:none;display:inline-block;">اطلب واستمتع</a>
-                    </div>
-                </div>
+            <div class="offers-grid" id="offers-container">
+                <!-- Skeleton Loaders -->
+                <div class="offer-card glass" style="height: 180px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
+                <div class="offer-card glass" style="height: 180px; animation: pulse 1.5s infinite; background: rgba(255,255,255,0.05);"></div>
             </div>
         </section>
     </div>
@@ -346,6 +331,6 @@
         <a href="https://wa.me/201111139271" target="_blank" class="btn-float-chat ripple-btn" style="text-decoration:none;"><span class="material-symbols-outlined icon-filled">chat</span></a>
     </div>
 
-    <script type="module" src="home.js"></script>
+    <script type="module" src="home.js?v=3"></script>
 </body>
 </html>

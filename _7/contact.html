@@ -115,32 +115,32 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">الاسم</label>
-                            <input type="text" class="form-input" placeholder="اسمك إيه؟" required>
+                            <input type="text" id="contact-name" class="form-input" placeholder="اسمك إيه؟" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">رقم الموبايل</label>
-                            <input type="tel" class="form-input" placeholder="01xxxxxxxxx" required>
+                            <input type="tel" id="contact-phone" class="form-input" placeholder="01xxxxxxxxx" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label">الإيميل (اختياري)</label>
-                        <input type="email" class="form-input" placeholder="example@mail.com">
+                        <input type="email" id="contact-email" class="form-input" placeholder="example@mail.com">
                     </div>
                     <div class="form-group">
                         <label class="form-label">موضوع الرسالة</label>
-                        <select class="form-input" required style="cursor:pointer;">
+                        <select id="contact-subject" class="form-input" required style="cursor:pointer;">
                             <option value="">اختار الموضوع...</option>
-                            <option value="order">مشكلة في طلب</option>
-                            <option value="delivery">مشكلة في التوصيل</option>
-                            <option value="account">مشكلة في الحساب</option>
-                            <option value="points">استفسار عن النقاط</option>
-                            <option value="suggestion">اقتراح أو ملاحظة</option>
-                            <option value="other">موضوع تاني</option>
+                            <option value="مشكلة في طلب">مشكلة في طلب</option>
+                            <option value="مشكلة في التوصيل">مشكلة في التوصيل</option>
+                            <option value="مشكلة في الحساب">مشكلة في الحساب</option>
+                            <option value="استفسار عن النقاط">استفسار عن النقاط</option>
+                            <option value="اقتراح أو ملاحظة">اقتراح أو ملاحظة</option>
+                            <option value="موضوع تاني">موضوع تاني</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label class="form-label">الرسالة</label>
-                        <textarea class="form-input" placeholder="اكتب رسالتك هنا..." required></textarea>
+                        <textarea id="contact-message" class="form-input" placeholder="اكتب رسالتك هنا..." required></textarea>
                     </div>
                     <button type="submit" class="btn-submit ripple-btn">
                         <span class="material-symbols-outlined">send</span> إرسال الرسالة

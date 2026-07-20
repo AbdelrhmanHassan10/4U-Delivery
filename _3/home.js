@@ -145,7 +145,7 @@ onAuthStateChanged(auth, async (user) => {
         navAuthButtons.classList.add('hidden');
         navProfileButton.classList.remove('hidden');
         mobileAuthBtn.textContent = 'حسابي';
-        mobileAuthBtn.href = './_2/profile.html';
+        mobileAuthBtn.href = '../_2/profile.html';
 
         try {
             const docRef = doc(db, "users", user.uid);
@@ -165,7 +165,7 @@ onAuthStateChanged(auth, async (user) => {
         navAuthButtons.classList.remove('hidden');
         navProfileButton.classList.add('hidden');
         mobileAuthBtn.textContent = 'دخول / تسجيل حساب';
-        mobileAuthBtn.href = './_1/login.html';
+        mobileAuthBtn.href = '../_1/login.html';
     }
 });
 
@@ -225,7 +225,7 @@ async function loadCategories() {
         
         CATEGORIES.forEach((data) => {
             html += `
-                <a href="./_4/res.html?category=${encodeURIComponent(data.name)}" class="category-card" style="text-decoration:none;">
+                <a href="../_4/res.html?category=${encodeURIComponent(data.name)}" class="category-card" style="text-decoration:none;">
                     <div class="category-img-bg" style="background-image:url('${data.image}')"></div>
                     <div class="category-overlay"></div>
                     <span class="category-name">${data.name}</span>
@@ -281,7 +281,7 @@ async function loadFeaturedRestaurants() {
             }
 
             html += `
-            <div class="res-card glass" onclick="window.location.href='./_4/restaurant.html?id=${data.id}'">
+            <div class="res-card glass" onclick="window.location.href='../_4/restaurant.html?id=${data.id}'">
                 <div class="res-image-wrapper">
                     <div class="res-image" style="background-image:url('${data.image}')"></div>
                     <div class="res-image-overlay"></div>
@@ -314,15 +314,22 @@ async function loadOffers() {
     if (!container) return;
     
     try {
-        const snapshot = await getDocs(query(collection(db, "offers"), where("isActive", "==", true)));
-        if (snapshot.empty) {
-            // Keep default static HTML if no dynamic offers exist
+        const snapshot = await getDocs(collection(db, "offers"));
+        let activeOffers = [];
+        snapshot.forEach(doc => {
+            const d = doc.data();
+            if (d.isActive === true || d.isActive === "true") {
+                activeOffers.push(d);
+            }
+        });
+
+        if (activeOffers.length === 0) {
+            container.innerHTML = '<p class="text-center w-100" style="color:var(--dark-400); grid-column: 1/-1;">لا توجد عروض مضافة حالياً.</p>';
             return;
         }
 
         let html = '';
-        snapshot.forEach(doc => {
-            const data = doc.data();
+        activeOffers.forEach(data => {
             const cardClass = data.type === 'gold' ? 'offer-gold glass glow-gold' : 'offer-brand glow-red';
             
             html += `
@@ -332,7 +339,7 @@ async function loadOffers() {
                     <div class="offer-badge">${data.badge}</div>
                     <h4 class="offer-title">${data.title}</h4>
                     <p class="offer-desc">${data.desc}</p>
-                    <a href="${data.link || './_4/res.html'}" class="btn-offer ripple-btn" style="text-decoration:none;display:inline-block;">اطلب دلوقتي</a>
+                    <a href="${data.link || '../_4/res.html'}" class="btn-offer ripple-btn" style="text-decoration:none;display:inline-block;">اطلب دلوقتي</a>
                 </div>
             </div>
             `;

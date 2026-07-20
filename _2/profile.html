@@ -77,7 +77,12 @@
             <div class="profile-info">
                 <h1 class="profile-name stagger-2" id="profile-name">...</h1>
                 <p class="profile-email stagger-3" id="profile-email">...</p>
-                <div class="profile-stats stagger-4">
+                
+                <div id="profile-brand-selector-container" class="stagger-4 hidden" style="margin: 1.5rem 0 0.5rem; display: flex; justify-content: center;">
+                    <select id="profile-brand-select" class="input-control" style="background: rgba(255,255,255,0.05); color: white; border-radius: 2rem; font-size: 0.95rem; font-weight: 700; cursor: pointer; text-align: center; border: 1px solid rgba(255,255,255,0.1); width: auto; min-width: 150px; padding: 0.5rem 2rem; appearance: auto;"></select>
+                </div>
+
+                <div class="profile-stats stagger-4" style="margin-top: 1.5rem;">
                     <div class="stat-box">
                         <p class="stat-value text-gradient-gold" id="stat-points">0</p>
                         <p class="stat-label">نقطة</p>
@@ -95,7 +100,6 @@
             
             <!-- Actions -->
             <div class="profile-actions stagger-5">
-                <button class="btn-secondary ripple-btn"><span class="material-symbols-outlined icon-filled">settings</span> إعدادات</button>
                 <button class="btn-outline ripple-btn" id="btn-logout"><span class="material-symbols-outlined icon-filled">logout</span> خروج</button>
             </div>
         </div>
@@ -151,12 +155,12 @@
                 <p class="dash-desc">بيتك، مكتبك، أي مكان</p>
                 <span class="dash-link">تعديل <span class="material-symbols-outlined" style="font-size:16px;">arrow_back_ios</span></span>
             </div>
-            <!-- Points -->
-            <div class="dash-card glass card-brand ripple-btn" onclick="navigateWithCurtain('points.html')">
-                <div class="dash-icon-bg"><span class="material-symbols-outlined icon-filled">stars</span></div>
-                <div class="dash-icon-wrapper"><span class="material-symbols-outlined icon-filled">stars</span></div>
-                <h3 class="dash-title">النقاط</h3>
-                <p class="dash-desc">بدل نقطك بمكافآت</p>
+            <!-- Loyalty -->
+            <div class="dash-card glass card-brand ripple-btn" onclick="navigateWithCurtain('loyalty.html')">
+                <div class="dash-icon-bg"><span class="material-symbols-outlined icon-filled">workspace_premium</span></div>
+                <div class="dash-icon-wrapper"><span class="material-symbols-outlined icon-filled">workspace_premium</span></div>
+                <h3 class="dash-title">المكافآت والأختام</h3>
+                <p class="dash-desc">جمع نقط وأختام وبدلها بعروض</p>
                 <span class="dash-link">استبدال <span class="material-symbols-outlined" style="font-size:16px;">arrow_back_ios</span></span>
             </div>
             <!-- Settings -->

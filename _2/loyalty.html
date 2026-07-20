@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html class="dark" dir="rtl" lang="ar">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>4U Delivery | المكافآت والأختام</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="profile-pages.css">
+    <link rel="stylesheet" href="../_6/stamps.css">
+    <style>
+        .loyalty-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .loyalty-header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--gold), #ffecb3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .loyalty-header p {
+            color: var(--dark-400);
+        }
+        
+        /* Unified container for both cards */
+        .loyalty-cards-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (min-width: 992px) {
+            .loyalty-cards-container {
+                grid-template-columns: 1fr 1fr;
+                align-items: start;
+            }
+        }
+        
+        .loyalty-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .loyalty-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--brand);
+        }
+        
+        .loyalty-box.gold-box::before {
+            background: var(--gold);
+        }
+        
+        .points-display {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        .points-display h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--gold);
+            line-height: 1;
+            text-shadow: 0 0 20px rgba(240, 192, 64, 0.2);
+        }
+        .points-display p {
+            font-size: 1.1rem;
+            color: var(--dark-400);
+            margin-top: 0.5rem;
+        }
+        
+        /* Stamp Box overrides to fit inside */
+        .stamp-box {
+            max-width: 100%;
+            margin: 0;
+            padding: 1.5rem;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+        
+        .section-title {
+            color: #fff;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-transition-curtain"></div>
+    <div class="bg-effects pointer-events-none"><div class="particles"></div><div class="glow-brand animate-float"></div><div class="glow-gold animate-float" style="animation-delay:-3s;"></div></div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar glass-strong" id="navbar">
+        <div class="container navbar-inner">
+            <a href="../_3/home.html" class="nav-brand ripple-btn"><div class="nav-brand-icon">4U</div><span>Delivery</span></a>
+            <div class="nav-links">
+                <a href="../_3/home.html" class="nav-link">الرئيسية</a>
+                <a href="../_4/res.html" class="nav-link">المطاعم</a>
+                <a href="../_5/About.html" class="nav-link">عننا</a>
+                <a href="../_2/profile.html" class="nav-link active">بروفايلي</a>
+            </div>
+            <div class="nav-actions">
+                <a href="profile.html" class="btn-primary ripple-btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+                    <span class="material-symbols-outlined">person</span> <span id="nav-user-name">حسابي</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENT -->
+    <section class="page-content container" style="margin-top: 100px;">
+        <a href="profile.html" class="btn-back" onclick="navigateWithCurtain(this.href); return false;" style="margin-bottom: 1rem; display: inline-flex;"><span class="material-symbols-outlined">arrow_forward</span> العودة للبروفايل</a>
+
+        <div class="loyalty-header stagger-1">
+            <div class="page-icon-wrapper icon-gold" style="margin: 0 auto 1rem;"><span class="material-symbols-outlined icon-filled">workspace_premium</span></div>
+            <h1>المكافآت والأختام</h1>
+            <p>مكان واحد لجمع نقاطك وأختامك واستبدالها بعروض مميزة</p>
+            
+            <div id="brand-selector-container" class="hidden" style="margin-top: 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                <label style="color: var(--dark-400); font-size: 0.9rem;">اختر المطعم لعرض رصيدك:</label>
+                <select id="customer-brand-select" class="input-control" style="max-width: 300px; background: var(--dark-900); border-radius: 0.5rem; font-size: 1rem; font-weight: 700; cursor: pointer; text-align: center; border: 1px solid rgba(255,255,255,0.2);"></select>
+            </div>
+            <h2 id="brand-name" style="margin-top: 1.5rem; color: white; font-size: 1.5rem; font-weight: 800;">جاري التحميل...</h2>
+        </div>
+
+        <div class="loyalty-cards-container stagger-2">
+            
+            <!-- Points Box -->
+            <div class="loyalty-box gold-box glass">
+                <h2 class="section-title text-gold"><span class="material-symbols-outlined icon-filled">stars</span> رصيد النقاط</h2>
+                <div class="points-display">
+                    <h2 id="loyalty-points-val">...</h2>
+                    <p>نقطة متاحة للاستبدال</p>
+                </div>
+                
+                <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 1rem; margin-top: 2rem;">
+                    <p style="font-size: 0.95rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between;">
+                        <span>المستوى الحالي: <span style="color: var(--gold); font-weight: 700;" id="loyalty-tier-val">...</span></span>
+                        <span id="loyalty-next-tier-text" style="color: var(--dark-400); font-size: 0.85rem;">...</span>
+                    </p>
+                    <div class="progress-bar-bg" style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
+                        <div class="progress-bar-fill" id="loyalty-tier-progress" style="height: 100%; width: 0%; background: var(--gold); transition: width 1s ease;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stamps Box -->
+            <div class="loyalty-box glass">
+                <h2 class="section-title text-brand-light"><span class="material-symbols-outlined icon-filled">card_membership</span> كارت الأختام</h2>
+                
+                <div class="stamp-box">
+                    <div class="stamp-header" style="justify-content: center; margin-bottom: 1rem;">
+                        <div class="stamp-title-container" style="text-align: center;">
+                            <p id="completed-cards-text" style="color: var(--gold); margin: 0; font-size: 1rem; font-weight: bold; background: rgba(240,192,64,0.1); padding: 0.25rem 1rem; border-radius: 1rem; border: 1px solid rgba(240,192,64,0.2);"></p>
+                        </div>
+                    </div>
+
+                    <!-- Pyramid Stamps Container -->
+                    <div class="pyramid-container" style="transform: scale(0.9); transform-origin: top center;">
+                        <!-- Row 1 -->
+                        <div class="pyramid-row">
+                            <div class="stamp-circle" data-index="1"></div>
+                            <div class="stamp-circle" data-index="2"></div>
+                            <div class="stamp-circle" data-index="3"></div>
+                            <div class="stamp-circle" data-index="4"></div>
+                        </div>
+                        <!-- Row 2 -->
+                        <div class="pyramid-row">
+                            <div class="stamp-circle" data-index="5"></div>
+                            <div class="stamp-circle" data-index="6"></div>
+                            <div class="stamp-circle" data-index="7"></div>
+                        </div>
+                        <!-- Row 3 -->
+                        <div class="pyramid-row">
+                            <div class="stamp-circle" data-index="8"></div>
+                            <div class="stamp-circle" data-index="9"></div>
+                        </div>
+                        <!-- Row 4 -->
+                        <div class="pyramid-row" style="margin-top: 0.5rem;">
+                            <div class="stamp-circle golden animate-float" data-index="10"></div>
+                        </div>
+                    </div>
+                    
+                    <p class="stamp-footer-text" style="margin-top: 1.5rem;">يتم إضافة الختم بواسطة إدارة المطعم فقط.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Rewards List -->
+        <h3 class="section-title stagger-3"><span class="material-symbols-outlined">redeem</span> استبدل مكافآتك</h3>
+        <div class="items-grid stagger-3">
+            <div class="item-card">
+                <div class="item-info">
+                    <div class="item-icon" style="background:rgba(240,192,64,0.1); color:var(--gold);"><span class="material-symbols-outlined icon-filled">local_offer</span></div>
+                    <div class="item-details">
+                        <h3>قسيمة خصم 50 ج.م</h3>
+                        <p>صالحة لمدة 30 يوم من الاستبدال</p>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="btn-action btn-primary-action" onclick="window.requestReward('قسيمة خصم 50 ج.م', 'points', 500, event)">
+                        استبدال بـ 500 نقطة
+                    </button>
+                </div>
+            </div>
+
+            <div class="item-card">
+                <div class="item-info">
+                    <div class="item-icon" style="background:rgba(255,255,255,0.05); color:#fff;"><span class="material-symbols-outlined icon-filled">two_wheeler</span></div>
+                    <div class="item-details">
+                        <h3>توصيل مجاني</h3>
+                        <p>لأي طلب من أي مطعم لمرة واحدة</p>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button class="btn-action btn-primary-action" onclick="window.requestReward('توصيل مجاني', 'points', 300, event)">
+                        استبدال بـ 300 نقطة
+                    </button>
+                </div>
+            </div>
+            
+            <div class="item-card" id="reward-stamps-card">
+                <div class="item-info">
+                    <div class="item-icon" style="background:rgba(200,16,46,0.1); color:var(--brand-light);"><span class="material-symbols-outlined icon-filled">inventory_2</span></div>
+                    <div class="item-details">
+                        <h3>بوكس 12 قطعة مجاني</h3>
+                        <p>بإكمال كارت الأختام (10/10)</p>
+                    </div>
+                </div>
+                <div class="item-actions">
+                    <button id="btn-redeem-stamps" class="btn-action btn-secondary-action" onclick="window.requestReward('بوكس 12 قطعة مجاني (أختام)', 'stamps', 10, event)">
+                        استبدال كارت الأختام
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer stagger-4">
+        <div class="container footer-inner">
+            <div class="footer-brand"><div class="footer-icon">4U</div><span class="footer-text">Delivery</span></div>
+            <p class="footer-copy">© 2026 4U Delivery</p>
+        </div>
+    </footer>
+
+    <!-- Use loyalty.js instead of profile.js and stamps.js -->
+    <script type="module" src="loyalty.js"></script>
+</body>
+</html>

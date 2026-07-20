@@ -13,15 +13,35 @@
     <!-- Page Transition Curtain -->
     <div class="page-transition-curtain"></div>
 
+    <!-- ═══ MOBILE HEADER & OVERLAY ═══ -->
+    <div class="mobile-admin-header">
+        <button class="btn-mobile-menu ripple-btn" id="admin-menu-toggle">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="brand-logo-wrapper" style="display: flex; align-items: center; gap: 0.5rem; margin: 0 auto;">
+            <div class="sidebar-logo" style="margin: 0;">4U</div>
+            <span style="font-size: 1.5rem; font-weight: 900; color: white; letter-spacing: -0.5px; margin-top: 4px;">Delivery</span>
+        </div>
+        <div style="flex:1"></div> <!-- spacer -->
+    </div>
+    <div class="admin-sidebar-overlay" id="admin-sidebar-overlay"></div>
+
     <!-- ═══ SIDEBAR ADMIN ═══ -->
     <aside class="admin-sidebar glass">
-        <a href="../_3/home.html" style="text-decoration: none; color: inherit;"><div class="sidebar-header">
-            <div class="sidebar-logo">4U</div>
-            <div>
-                <h2 class="sidebar-title">Admin</h2>
-                <p class="sidebar-subtitle">نظام الأختام</p>
-            </div>
-        </div></a>
+        <div class="sidebar-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <a href="../_3/home.html" style="text-decoration: none; color: inherit;">
+                <div class="brand-logo-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div class="sidebar-logo" style="margin: 0;">4U</div>
+                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                        <span style="font-size: 1.25rem; font-weight: 900; color: white; letter-spacing: -0.5px; line-height: 1;">Delivery</span>
+                        <span style="color: var(--brand-light); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-top: 2px;">Admin Panel</span>
+                    </div>
+                </div>
+            </a>
+            <button class="btn-close-sidebar ripple-btn" id="admin-close-sidebar-btn" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; color: white; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                <span class="material-symbols-outlined" style="font-size: 1.25rem;">close</span>
+            </button>
+        </div>
         
         <nav class="sidebar-nav">
             <a href="javascript:void(0)" class="sidebar-link active ripple-btn">
@@ -43,6 +63,10 @@
             <a href="admin_offers.html" class="sidebar-link inactive ripple-btn">
                 <span class="material-symbols-outlined">local_offer</span>
                 إدارة العروض
+            </a>
+            <a href="admin_messages.html" class="sidebar-link inactive ripple-btn">
+                <span class="material-symbols-outlined">support_agent</span>
+                رسائل التواصل
             </a>
         </nav>
         
@@ -70,12 +94,18 @@
                     ابحث عن العميل
                 </h2>
                 
-                <div class="form-group">
+                <div class="search-group-unified">
                     <div class="input-wrapper">
-                        <input type="text" id="admin-search-phone" placeholder="رقم الموبايل (مثال: 010xxxxxxxx)" class="input-control" dir="rtl"/>
-                        <span class="material-symbols-outlined">search</span>
+                        <span class="material-symbols-outlined search-icon-unified">search</span>
+                        <input type="text" id="admin-search-phone" placeholder="رقم الموبايل (مثال: 010xxxxxxxx)" class="input-control search-input-unified" dir="rtl"/>
                     </div>
-                    <button class="btn-search ripple-btn" id="admin-search-btn">بحث</button>
+                    <button class="btn-search btn-search-unified ripple-btn" id="admin-search-btn">بحث</button>
+                </div>
+
+                <!-- Loading State -->
+                <div class="search-result hidden" id="admin-search-loading" style="text-align: center; padding: 2.5rem 1rem;">
+                    <span class="material-symbols-outlined animate-spin" style="font-size: 2.5rem; color: var(--brand);">progress_activity</span>
+                    <p style="color: var(--dark-400); margin-top: 1rem; font-weight: 600;">جاري جلب بيانات العميل...</p>
                 </div>
 
                 <!-- Search Result (Simulated) -->
@@ -87,6 +117,10 @@
                         <div>
                             <p class="user-name" id="admin-user-name">أحمد المحلاوي</p>
                             <p class="user-phone" id="admin-user-phone">01012345678</p>
+                            <div style="margin-top: 0.5rem; display: flex; gap: 1rem; font-size: 0.85rem;">
+                                <span><span class="material-symbols-outlined" style="font-size: 1.1rem; vertical-align: middle; color: var(--gold);">stars</span> <strong id="admin-user-points" style="color: var(--gold);">0</strong> نقطة</span>
+                                <span><span class="material-symbols-outlined" style="font-size: 1.1rem; vertical-align: middle; color: var(--brand-light);">military_tech</span> <strong id="admin-user-tier">Silver</strong></span>
+                            </div>
                         </div>
                     </div>
                     <span class="status-badge">عميل مسجل</span>
@@ -96,32 +130,21 @@
             <!-- 2. Manage Points and Wallet -->
             <div class="admin-card glass hidden" id="admin-points-wallet-card" style="margin-bottom: 2rem;">
                 <h2 class="admin-card-title text-gold" style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                    <span class="step-badge" style="background: var(--gold); color: #000;"><span class="material-symbols-outlined" style="font-size: 1rem;">star</span></span>
                     <span class="material-symbols-outlined" style="vertical-align: middle;">account_balance_wallet</span>
-                    إدارة النقاط والرصيد
+                    إدارة النقاط
                 </h2>
                 
-                <div class="admin-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="admin-grid" style="grid-template-columns: 1fr;">
                     <!-- Points -->
                     <div>
                         <label class="label-text">إضافة نقاط (Points)</label>
                         <div class="form-group" style="margin-bottom: 0;">
                             <div class="input-wrapper">
-                                <input type="number" id="admin-add-points-input" placeholder="العدد..." class="input-control" dir="rtl" />
-                                <span class="material-symbols-outlined">stars</span>
+                                <input type="number" id="admin-add-points-input" placeholder="العدد..." class="input-control" dir="rtl" style="padding-right: 3rem;" />
+                                <span class="material-symbols-outlined" style="left: auto; right: 1rem; color: var(--gold);">stars</span>
                             </div>
                             <button class="btn-search ripple-btn" id="admin-add-points-btn" style="background: var(--gold); color: #000; margin-top: 10px;">إضافة نقاط</button>
-                        </div>
-                    </div>
-                    
-                    <!-- Wallet -->
-                    <div>
-                        <label class="label-text">إضافة رصيد (Wallet)</label>
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <div class="input-wrapper">
-                                <input type="number" id="admin-add-wallet-input" placeholder="المبلغ (ج.م)..." class="input-control" dir="rtl" />
-                                <span class="material-symbols-outlined">payments</span>
-                            </div>
-                            <button class="btn-search ripple-btn" id="admin-add-wallet-btn" style="background: var(--brand); color: #fff; margin-top: 10px;">إضافة رصيد</button>
                         </div>
                     </div>
                 </div>
@@ -130,7 +153,7 @@
             <!-- 3. Select Restaurant & Add Stamp -->
             <div class="admin-card glass">
                 <h2 class="admin-card-title">
-                    <span class="step-badge">٣</span>
+                    <span class="step-badge">٢</span>
                     اختيار المطعم وإضافة الختم
                 </h2>
                 
@@ -149,17 +172,24 @@
                             </div>
                             <p class="stamp-warning">باقي <span id="admin-remaining-stamps">١٠</span> أختام لدخول السحب!</p>
                             
-                            <button class="btn-add-stamp ripple-btn" id="btn-add-stamp-action">
-                                <span class="material-symbols-outlined text-brand">verified</span>
-                                إضافة ختم جديد الآن
-                            </button>
+                            <div style="display: flex; gap: 0.5rem; flex-direction: column;">
+                                <button class="btn-add-stamp ripple-btn" id="btn-add-stamp-action">
+                                    <span class="material-symbols-outlined text-brand">verified</span>
+                                    إضافة ختم جديد الآن (+50 نقطة)
+                                </button>
+                                <button class="btn-search ripple-btn" id="btn-remove-stamp-action" style="background: var(--dark-800); color: white; border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem; border-radius: 1rem;">
+                                    <span class="material-symbols-outlined text-dark-300">do_not_disturb_on</span>
+                                    إزالة ختم (-50 نقطة)
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Live Preview -->
-                    <div>
-                        <label class="label-text">رؤية كارت العميل (Live Preview)</label>
-                        <div class="live-preview-container">
+                    <div class="preview-wrapper">
+                        <label class="label-text text-center" style="margin-bottom: 1rem;">رؤية كارت العميل (Live Preview)</label>
+                        <div class="live-preview-container mobile-mockup">
+                            <div class="mockup-notch"></div>
                             <!-- iFrame to show the smart template -->
                             <iframe src="../_6/stamp_card.html?brand=&stamps=0" id="admin-live-preview-iframe" class="live-preview-iframe"></iframe>
                             
@@ -173,9 +203,63 @@
 
             </div>
 
+            <!-- 4. Danger Zone (Reset User) -->
+            <div class="admin-card glass hidden" id="admin-danger-zone-card" style="margin-top: 2rem; border-color: rgba(244, 67, 54, 0.3); background: rgba(244, 67, 54, 0.02);">
+                <h2 class="admin-card-title" style="color: #f44336; border-bottom: 1px solid rgba(244, 67, 54, 0.1); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                    <span class="material-symbols-outlined" style="vertical-align: middle;">warning</span>
+                    منطقة الخطر (Danger Zone)
+                </h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <h3 style="color: white; font-size: 1.1rem; margin-bottom: 0.25rem;">تصفير حساب العميل</h3>
+                        <p style="color: var(--dark-400); font-size: 0.85rem; margin: 0;">سيتم مسح جميع النقاط والأختام وإرجاع العميل للمستوى الفضي. لا يمكن التراجع.</p>
+                    </div>
+                    <button class="btn-search ripple-btn" id="btn-reset-user" style="background: rgba(244, 67, 54, 0.1); color: #f44336; border: 1px solid rgba(244, 67, 54, 0.3); padding: 0.75rem 1.5rem; font-weight: bold;">
+                        تصفير الحساب
+                    </button>
+                </div>
+            </div>
+
+        </div>
+        
+        <!-- Custom Confirm Modal -->
+        <div class="custom-modal-overlay" id="custom-confirm-modal">
+            <div class="custom-modal-box glass">
+                <div class="modal-icon">
+                    <span class="material-symbols-outlined" style="font-size: 3.5rem; color: #f44336; margin-bottom: 0.5rem;">warning</span>
+                </div>
+                <h3 class="modal-title" style="margin-bottom: 0.5rem; font-size: 1.25rem; color: white;">تأكيد التصفير</h3>
+                <p class="modal-desc" style="color: var(--dark-400); margin-bottom: 2rem; font-size: 0.95rem; line-height: 1.5;">هل أنت متأكد من تصفير حساب هذا العميل؟ سيتم مسح كافة الأختام والنقاط ولا يمكن التراجع.</p>
+                <div class="modal-actions" style="display: flex; gap: 1rem;">
+                    <button class="btn-cancel ripple-btn" id="modal-cancel-btn" style="flex: 1; padding: 0.75rem; border-radius: 0.75rem; background: var(--dark-700); color: white; border: 1px solid var(--dark-600); font-family: inherit; font-size: 1rem; cursor: pointer;">إلغاء</button>
+                    <button class="btn-confirm ripple-btn" id="modal-confirm-btn" style="flex: 1; padding: 0.75rem; border-radius: 0.75rem; background: rgba(244, 67, 54, 0.1); color: #f44336; border: 1px solid rgba(244, 67, 54, 0.3); font-weight: bold; font-family: inherit; font-size: 1rem; cursor: pointer;">نعم، صفّر</button>
+                </div>
+            </div>
         </div>
     </main>
 
     <script type="module" src="stamps.js"></script>
+    <script>
+        // Mobile Sidebar Toggle
+        const menuToggle = document.getElementById('admin-menu-toggle');
+        const closeBtn = document.getElementById('admin-close-sidebar-btn');
+        const sidebar = document.querySelector('.admin-sidebar');
+        const overlay = document.getElementById('admin-sidebar-overlay');
+        
+        if(sidebar && overlay) {
+            if(menuToggle) {
+                menuToggle.addEventListener('click', () => {
+                    sidebar.classList.add('open');
+                    overlay.classList.add('show');
+                });
+            }
+            const closeSidebar = () => {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+            };
+            if(closeBtn) closeBtn.addEventListener('click', closeSidebar);
+            if(overlay) overlay.addEventListener('click', closeSidebar);
+        }
+    </script>
 </body>
 </html>

@@ -72,68 +72,10 @@
             <span class="material-symbols-outlined">arrow_forward</span> العودة للبروفايل
         </a>
 
-        <div class="items-grid">
-            <!-- Active Order -->
-            <div class="item-card">
-                <div class="item-info">
-                    <div class="item-icon"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=150&h=150" alt="Burger"></div>
-                    <div class="item-details">
-                        <h3>بافلو برجر</h3>
-                        <p>رقم الطلب: #10245 • منذ 15 دقيقة</p>
-                        <p>2 ساندوتش دبل, 1 بطاطس كبير, 2 بيبسي</p>
-                    </div>
-                </div>
-                <div class="item-meta">
-                    <div class="status pending">يتم التحضير ⏳</div>
-                    <div class="price">450 ج.م</div>
-                </div>
-                <div class="item-actions">
-                    <a href="javascript:void(0)" class="btn-action btn-primary-action" onclick="window.showToast('تتبع الطلب سيتوفر قريباً!', 'success')">
-                        <span class="material-symbols-outlined">map</span> تتبع
-                    </a>
-                </div>
-            </div>
-
-            <!-- Past Order 1 -->
-            <div class="item-card">
-                <div class="item-info">
-                    <div class="item-icon"><img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=150&h=150" alt="Pizza"></div>
-                    <div class="item-details">
-                        <h3>بيتزا هت</h3>
-                        <p>رقم الطلب: #09832 • أمس، 9:30 مساءً</p>
-                        <p>1 بيتزا سوبر سوبريم وسط, 1 بافلو وينجز</p>
-                    </div>
-                </div>
-                <div class="item-meta">
-                    <div class="status success">تم التوصيل ✅</div>
-                    <div class="price">320 ج.م</div>
-                </div>
-                <div class="item-actions">
-                    <a href="../_4/res.html" class="btn-action btn-secondary-action">
-                        <span class="material-symbols-outlined">replay</span> إعادة طلب
-                    </a>
-                </div>
-            </div>
-
-            <!-- Past Order 2 -->
-            <div class="item-card">
-                <div class="item-info">
-                    <div class="item-icon"><img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&q=80&w=150&h=150" alt="Chicken"></div>
-                    <div class="item-details">
-                        <h3>كنتاكي</h3>
-                        <p>رقم الطلب: #08211 • 5 يوليو 2026</p>
-                        <p>وجبة دينر ميل, كول سلو, بيبسي</p>
-                    </div>
-                </div>
-                <div class="item-meta">
-                    <div class="status success">تم التوصيل ✅</div>
-                    <div class="price">210 ج.م</div>
-                </div>
-                <div class="item-actions">
-                    <a href="../_4/res.html" class="btn-action btn-secondary-action">
-                        <span class="material-symbols-outlined">replay</span> إعادة طلب
-                    </a>
-                </div>
+        <div class="items-grid" id="orders-container">
+            <div style="text-align:center; padding:3rem; grid-column: 1/-1;">
+                <span class="material-symbols-outlined icon-spin" style="font-size:3rem; color:var(--brand);">sync</span>
+                <p style="margin-top:1rem; color:var(--dark-100);">جاري تحميل طلباتك...</p>
             </div>
         </div>
     </section>
@@ -159,6 +101,6 @@
         <span class="material-symbols-outlined">arrow_upward</span>
     </button>
 
-    <script type="module" src="profile.js"></script>
+    <script type="module" src="orders.js"></script>
 </body>
 </html>

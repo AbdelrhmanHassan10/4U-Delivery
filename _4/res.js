@@ -1,6 +1,6 @@
 import { auth, db } from "../firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { doc, getDoc, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { doc, getDoc, collection, getDocs, query, where, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // Navbar scroll effect
 const navbar = document.getElementById('navbar');
@@ -128,6 +128,7 @@ onAuthStateChanged(auth, async (user) => {
 
     if (user) {
         // User is logged in
+        currentUserUid = user.uid;
         navAuthButtons.classList.add('hidden');
         navProfileButton.classList.remove('hidden');
         mobileAuthBtn.textContent = 'حسابي';
@@ -141,6 +142,8 @@ onAuthStateChanged(auth, async (user) => {
                 // Get first name only for navbar
                 const firstName = userData.name ? userData.name.split(' ')[0] : 'حسابي';
                 navUserName.textContent = firstName;
+                userFavorites = userData.favorites || [];
+                renderRestaurants(); // Update UI if favorites loaded after restaurants
             }
         } catch (error) {
             console.error("Error fetching user data for navbar:", error);
@@ -148,6 +151,8 @@ onAuthStateChanged(auth, async (user) => {
 
     } else {
         // User is logged out
+        currentUserUid = null;
+        userFavorites = [];
         navAuthButtons.classList.remove('hidden');
         navProfileButton.classList.add('hidden');
         mobileAuthBtn.textContent = 'دخول / تسجيل حساب';
@@ -158,6 +163,45 @@ onAuthStateChanged(auth, async (user) => {
 // --- DYNAMIC DATA FETCHING & FILTERING ---
 let allRestaurants = [];
 let currentCategory = 'all';
+let currentUserUid = null;
+let userFavorites = [];
+
+// Setup Favorite Toggle globally
+window.toggleFavorite = async function(resId, btnElement) {
+    if (!currentUserUid) {
+        window.showToast('يرجى تسجيل الدخول أولاً', 'error');
+        return;
+    }
+    
+    // Prevent event bubbling if it's inside a clickable card
+    if (window.event) window.event.stopPropagation();
+    
+    const icon = btnElement.querySelector('span');
+    const isCurrentlyFav = icon.classList.contains('icon-filled');
+    
+    try {
+        const userRef = doc(db, "users", currentUserUid);
+        if (isCurrentlyFav) {
+            // Remove
+            icon.classList.remove('icon-filled', 'text-gradient-red');
+            await updateDoc(userRef, { favorites: arrayRemove(resId) });
+            userFavorites = userFavorites.filter(id => id !== resId);
+            window.showToast('تم إزالة المطعم من المفضلة');
+        } else {
+            // Add
+            icon.classList.add('icon-filled', 'text-gradient-red');
+            await updateDoc(userRef, { favorites: arrayUnion(resId) });
+            userFavorites.push(resId);
+            window.showToast('تمت الإضافة للمفضلة');
+        }
+    } catch(e) {
+        console.error("Error toggling favorite", e);
+        window.showToast('حدث خطأ', 'error');
+        // revert UI
+        if(isCurrentlyFav) icon.classList.add('icon-filled', 'text-gradient-red');
+        else icon.classList.remove('icon-filled', 'text-gradient-red');
+    }
+};
 
 const CATEGORIES = [
   "بيتزا",
@@ -292,8 +336,8 @@ function renderRestaurants() {
                         <span>${data.rating}</span>
                     </div>
                     ${data.isFeatured ? '<div class="res-offer-badge">مميز</div>' : ''}
-                    <button class="res-fav-btn ripple-btn">
-                        <span class="material-symbols-outlined">favorite</span>
+                    <button class="res-fav-btn ripple-btn" onclick="window.toggleFavorite('${data.id}', this)">
+                        <span class="material-symbols-outlined ${userFavorites.includes(data.id) ? 'icon-filled text-gradient-red' : ''}">favorite</span>
                     </button>
                 </div>
                 <div class="res-info">

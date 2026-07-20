@@ -1,6 +1,6 @@
 // stamps.js
 import { db, auth } from "../firebase-config.js";
-import { collection, getDocs, query, where, doc, updateDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { collection, getDocs, query, where, doc, updateDoc, getDoc, setDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 // ═════ PAGE TRANSITION CURTAIN ═════
@@ -103,6 +103,7 @@ const initStampCard = async () => {
 
     // Helper to render the stamps
     const renderStampCard = (brandName, stampsCount) => {
+        if (!brandName) brandName = "اختر مطعماً";
         brandNameEl.textContent = brandName;
         const watermark = document.getElementById('brand-watermark');
         if(watermark) watermark.textContent = brandName;
@@ -128,6 +129,43 @@ const initStampCard = async () => {
                 }
             }
         });
+
+        // Fetch and set dynamic background
+        (async () => {
+            try {
+                const q = query(collection(db, "restaurants"), where("name", "==", brandName));
+                const snap = await getDocs(q);
+                if (!snap.empty) {
+                    const brandData = snap.docs[0].data();
+                    const imgUrl = brandData.image || brandData.logo;
+                    if (imgUrl) {
+                        const logoEl = document.getElementById('brand-logo-img');
+                        if (logoEl) {
+                            logoEl.src = imgUrl;
+                            logoEl.classList.remove('hidden');
+                        }
+
+                        let bgDiv = document.getElementById('dynamic-bg-image');
+                        if (!bgDiv) {
+                            bgDiv = document.createElement('div');
+                            bgDiv.id = 'dynamic-bg-image';
+                            bgDiv.style.position = 'fixed';
+                            bgDiv.style.inset = '0';
+                            bgDiv.style.backgroundSize = 'cover';
+                            bgDiv.style.backgroundPosition = 'center';
+                            bgDiv.style.opacity = '0.15';
+                            bgDiv.style.zIndex = '0';
+                            bgDiv.style.pointerEvents = 'none';
+                            bgDiv.style.transition = 'background-image 0.5s ease-in-out';
+                            document.body.insertBefore(bgDiv, document.body.firstChild);
+                        }
+                        bgDiv.style.backgroundImage = `url('${imgUrl}')`;
+                    }
+                }
+            } catch(e) {
+                console.error("Failed to load background image", e);
+            }
+        })();
     };
 
     // 1. If parameters exist (Admin preview), use them directly
@@ -228,16 +266,53 @@ const initAdminPanel = async () => {
     const fullScreenLink = document.getElementById('admin-full-screen-link');
     const btnAddStamp = document.getElementById('btn-add-stamp-action');
 
-    // Points and Wallet
+    // Points
     const pointsWalletCard = document.getElementById('admin-points-wallet-card');
     const addPointsInput = document.getElementById('admin-add-points-input');
     const addPointsBtn = document.getElementById('admin-add-points-btn');
-    const addWalletInput = document.getElementById('admin-add-wallet-input');
-    const addWalletBtn = document.getElementById('admin-add-wallet-btn');
 
     let currentUserDoc = null;
     let currentUserData = null;
     let selectedBrand = '';
+
+    const ArabicNumbers = (num) => {
+        const arabicMap = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+        return String(num).split('').map(digit => arabicMap[digit] || digit).join('');
+    };
+
+    const updateAdminUI = () => {
+        let currentStamps = 0;
+        let currentPoints = 0;
+        let currentTier = 'Bronze';
+        
+        if (currentUserData) {
+            const stampsMap = currentUserData.stamps || {};
+            currentStamps = stampsMap[selectedBrand] || 0;
+            
+            const pointsMap = currentUserData.pointsMap || {};
+            currentPoints = pointsMap[selectedBrand] || 0;
+            
+            const tierMap = currentUserData.tierMap || {};
+            currentTier = tierMap[selectedBrand] || "Bronze";
+        }
+
+        const activeStamps = (currentStamps > 0 && currentStamps % 10 === 0) ? 10 : (currentStamps % 10);
+        const completedCards = Math.floor(currentStamps / 10);
+
+        if (currentStampsEl && remainingStampsEl) {
+            currentStampsEl.textContent = ArabicNumbers(activeStamps) + (completedCards > 0 ? ` (+${ArabicNumbers(completedCards)} كروت مكتملة)` : '');
+            remainingStampsEl.textContent = ArabicNumbers(10 - activeStamps);
+        }
+        
+        const pointsEl = document.getElementById('admin-user-points');
+        if (pointsEl) pointsEl.textContent = currentPoints.toLocaleString('ar-EG');
+        const tierEl = document.getElementById('admin-user-tier');
+        if (tierEl) tierEl.textContent = currentTier;
+        
+        const url = `../_6/stamp_card.html?brand=${encodeURIComponent(selectedBrand)}&stamps=${activeStamps}`;
+        if (iframeEl) iframeEl.src = url;
+        if (fullScreenLink) fullScreenLink.href = url;
+    };
 
     // Load Restaurants
     try {
@@ -254,30 +329,34 @@ const initAdminPanel = async () => {
         adminSelect.innerHTML = optionsHtml;
         adminSelect.disabled = false;
         selectedBrand = adminSelect.value;
+        updateAdminUI(); // Update iframe immediately with the first restaurant
     } catch (e) {
         console.error("Error loading restaurants:", e);
         adminSelect.innerHTML = '<option value="">خطأ في التحميل</option>';
     }
 
-    const ArabicNumbers = (num) => {
-        const arabicMap = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
-        return String(num).split('').map(digit => arabicMap[digit] || digit).join('');
-    };
 
-    const updateAdminUI = () => {
-        if (!currentUserData) return;
 
-        // Get stamps for selected brand
-        const stampsMap = currentUserData.stamps || {};
-        let currentStamps = stampsMap[selectedBrand] || 0;
-        if (currentStamps > 10) currentStamps = 10;
-
-        currentStampsEl.textContent = ArabicNumbers(currentStamps);
-        remainingStampsEl.textContent = ArabicNumbers(10 - currentStamps);
-        
-        const url = `../_6/stamp_card.html?brand=${encodeURIComponent(selectedBrand)}&stamps=${currentStamps}`;
-        iframeEl.src = url;
-        fullScreenLink.href = url;
+    // ═════ TOAST NOTIFICATION ═════
+    const showToast = (msg, type = 'success') => {
+        let container = document.getElementById('toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toast-container';
+            container.className = 'toast-container';
+            document.body.appendChild(container);
+        }
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `
+            <span class="material-symbols-outlined">${type === 'success' ? 'check_circle' : 'error'}</span>
+            ${msg}
+        `;
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.style.animation = 'fadeOut 0.3s forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
     };
 
     // Search User
@@ -289,19 +368,30 @@ const initAdminPanel = async () => {
         phone = String(phone).replace(/[٠-٩]/g, d => arabicToEnglish[d]);
 
         if (!phone) {
-            alert('يرجى إدخال رقم الموبايل');
+            showToast('يرجى إدخال رقم الموبايل', 'error');
             return;
         }
 
         searchBtn.innerHTML = '<span class="material-symbols-outlined animate-spin" style="font-size:1rem; animation: spin 1s linear infinite;">progress_activity</span> جاري البحث...';
         searchBtn.disabled = true;
+        
+        searchResult.classList.add('hidden');
+        stampActionArea.classList.add('hidden');
+        if (pointsWalletCard) pointsWalletCard.classList.add('hidden');
+        const dangerZone = document.getElementById('admin-danger-zone-card');
+        if (dangerZone) dangerZone.classList.add('hidden');
+        
+        const loadingEl = document.getElementById('admin-search-loading');
+        if (loadingEl) loadingEl.classList.remove('hidden');
 
         try {
             const q = query(collection(db, "users"), where("phone", "==", phone));
             const querySnapshot = await getDocs(q);
+            
+            if (loadingEl) loadingEl.classList.add('hidden');
 
             if (querySnapshot.empty) {
-                alert('العميل غير مسجل بالنظام!');
+                showToast('العميل غير مسجل بالنظام!', 'error');
                 searchResult.classList.add('hidden');
                 stampActionArea.classList.add('hidden');
                 pointsWalletCard?.classList.add('hidden');
@@ -314,14 +404,17 @@ const initAdminPanel = async () => {
                 userNameEl.textContent = currentUserData.name || 'عميل';
                 userPhoneEl.textContent = currentUserData.phone;
                 
+                // Tier/Points will be updated in updateAdminUI
                 searchResult.classList.remove('hidden');
                 stampActionArea.classList.remove('hidden');
-                pointsWalletCard?.classList.remove('hidden');
+                if (pointsWalletCard) pointsWalletCard.classList.remove('hidden');
+                if (dangerZone) dangerZone.classList.remove('hidden');
                 updateAdminUI();
+                showToast('تم العثور على العميل بنجاح');
             }
         } catch (error) {
             console.error("Search Error:", error);
-            alert('حدث خطأ أثناء البحث.');
+            showToast('حدث خطأ أثناء البحث.', 'error');
         }
 
         searchBtn.innerHTML = 'بحث';
@@ -340,44 +433,197 @@ const initAdminPanel = async () => {
         updateAdminUI();
     });
 
+    // Reset User Handler
+    const btnResetUser = document.getElementById('btn-reset-user');
+    if (btnResetUser) {
+        btnResetUser.addEventListener('click', () => {
+            if (!currentUserDoc || !currentUserData) return;
+            
+            const modal = document.getElementById('custom-confirm-modal');
+            const confirmBtn = document.getElementById('modal-confirm-btn');
+            const cancelBtn = document.getElementById('modal-cancel-btn');
+            
+            if(!modal) return;
+            
+            modal.classList.add('show');
+            const closeModal = () => modal.classList.remove('show');
+            cancelBtn.onclick = closeModal;
+
+            confirmBtn.onclick = async () => {
+                closeModal();
+                btnResetUser.innerHTML = '<span class="material-symbols-outlined animate-spin" style="font-size:1rem; animation: spin 1s linear infinite;">progress_activity</span> جاري التصفير...';
+                btnResetUser.disabled = true;
+
+                try {
+                    const resetData = {
+                        pointsMap: {},
+                        tierMap: {},
+                        stamps: {},
+                        points: 0,
+                        tier: "Bronze"
+                    };
+
+                    await updateDoc(doc(db, "users", currentUserDoc.id), resetData);
+
+                    // Log activity
+                    await addDoc(collection(db, "activities"), {
+                        userId: currentUserDoc.id,
+                        title: 'تصفير الحساب (إدارة)',
+                        type: 'points',
+                        value: 'تم تصفير الأختام والنقاط',
+                        date: new Date().toLocaleDateString('ar-EG'),
+                        createdAt: new Date().toISOString()
+                    });
+
+                    // Update local data
+                    currentUserData.pointsMap = {};
+                    currentUserData.tierMap = {};
+                    currentUserData.stamps = {};
+                    currentUserData.points = 0;
+                    currentUserData.tier = "Bronze";
+
+                    // Update UI
+                    updateAdminUI();
+                    showToast('تم تصفير حساب العميل بنجاح!');
+                } catch (error) {
+                    console.error("Error resetting user:", error);
+                    showToast("حدث خطأ أثناء تصفير الحساب.", "error");
+                }
+
+                btnResetUser.innerHTML = 'تصفير الحساب';
+                btnResetUser.disabled = false;
+            };
+        });
+    }
+
+    const recalculateTier = (points) => {
+        if (points > 2000) return "Elite";
+        if (points > 1500) return "Platinum";
+        if (points > 1000) return "Gold";
+        if (points > 500) return "Silver";
+        return "Bronze";
+    };
+
+    const btnRemoveStamp = document.getElementById('btn-remove-stamp-action');
+
     btnAddStamp.addEventListener('click', async () => {
         if (!currentUserDoc || !currentUserData) return;
 
         const stampsMap = currentUserData.stamps || {};
         let currentStamps = stampsMap[selectedBrand] || 0;
 
-        if (currentStamps < 10) {
-            currentStamps++;
-            stampsMap[selectedBrand] = currentStamps;
-            
-            btnAddStamp.innerHTML = '<span class="material-symbols-outlined animate-spin" style="animation: spin 1s linear infinite;">progress_activity</span> جاري الإضافة...';
-            btnAddStamp.disabled = true;
+        currentStamps++;
+        stampsMap[selectedBrand] = currentStamps;
+        
+        const pointsMap = currentUserData.pointsMap || {};
+        const currentPoints = pointsMap[selectedBrand] || 0;
+        const newPoints = currentPoints + 50;
+        pointsMap[selectedBrand] = newPoints;
+        
+        const tierMap = currentUserData.tierMap || {};
+        const nextTier = recalculateTier(newPoints);
+        tierMap[selectedBrand] = nextTier;
+        
+        btnAddStamp.innerHTML = '<span class="material-symbols-outlined animate-spin" style="animation: spin 1s linear infinite;">progress_activity</span> جاري الإضافة...';
+        btnAddStamp.disabled = true;
 
-            try {
-                await updateDoc(doc(db, "users", currentUserDoc.id), {
-                    stamps: stampsMap
-                });
-                // Update local data
-                currentUserData.stamps = stampsMap;
-                updateAdminUI();
-                alert(`تم إضافة الختم بنجاح. رصيد العميل الحالي في مطعم ${selectedBrand} هو ${newStampsCount} ختم.`);
-            } catch (error) {
-                console.error("Error adding stamp:", error);
-                alert("حدث خطأ أثناء الإضافة.");
-            }
-            btnAddStamp.innerHTML = '<span class="material-symbols-outlined text-brand">verified</span> إضافة ختم جديد الآن';
-            btnAddStamp.disabled = false;
-        } else {
-            alert('العميل أكمل كارت الأختام بالفعل (10/10) لهذا المطعم!');
+        try {
+            await updateDoc(doc(db, "users", currentUserDoc.id), {
+                stamps: stampsMap,
+                pointsMap: pointsMap,
+                tierMap: tierMap
+            });
+            
+            // Log activity
+            await addDoc(collection(db, "activities"), {
+                userId: currentUserDoc.id,
+                title: `إضافة ختم - ${selectedBrand}`,
+                type: 'stamp',
+                value: '+1 ختم (+50 نقطة)',
+                date: new Date().toLocaleDateString('ar-EG'),
+                createdAt: new Date().toISOString()
+            });
+
+            // Update local data
+            currentUserData.stamps = stampsMap;
+            currentUserData.pointsMap = pointsMap;
+            currentUserData.tierMap = tierMap;
+
+            updateAdminUI();
+            showToast(`تم إضافة الختم و 50 نقطة بنجاح!`);
+        } catch (error) {
+            console.error("Error adding stamp:", error);
+            showToast("حدث خطأ أثناء الإضافة.", "error");
         }
+        btnAddStamp.innerHTML = '<span class="material-symbols-outlined text-brand">verified</span> إضافة ختم جديد الآن (+50 نقطة)';
+        btnAddStamp.disabled = false;
     });
+
+    if (btnRemoveStamp) {
+        btnRemoveStamp.addEventListener('click', async () => {
+            if (!currentUserDoc || !currentUserData) return;
+
+            const stampsMap = currentUserData.stamps || {};
+            let currentStamps = stampsMap[selectedBrand] || 0;
+
+            if (currentStamps > 0) {
+                currentStamps--;
+                stampsMap[selectedBrand] = currentStamps;
+                
+                const pointsMap = currentUserData.pointsMap || {};
+                const currentPoints = pointsMap[selectedBrand] || 0;
+                const newPoints = Math.max(0, currentPoints - 50);
+                pointsMap[selectedBrand] = newPoints;
+                
+                const tierMap = currentUserData.tierMap || {};
+                const nextTier = recalculateTier(newPoints);
+                tierMap[selectedBrand] = nextTier;
+                
+                btnRemoveStamp.innerHTML = '<span class="material-symbols-outlined animate-spin" style="animation: spin 1s linear infinite;">progress_activity</span> جاري الإزالة...';
+                btnRemoveStamp.disabled = true;
+
+                try {
+                    await updateDoc(doc(db, "users", currentUserDoc.id), {
+                        stamps: stampsMap,
+                        pointsMap: pointsMap,
+                        tierMap: tierMap
+                    });
+                    
+                    // Log activity
+                    await addDoc(collection(db, "activities"), {
+                        userId: currentUserDoc.id,
+                        title: `إزالة ختم - ${selectedBrand}`,
+                        type: 'stamp',
+                        value: '-1 ختم (-50 نقطة)',
+                        date: new Date().toLocaleDateString('ar-EG'),
+                        createdAt: new Date().toISOString()
+                    });
+
+                    // Update local data
+                    currentUserData.stamps = stampsMap;
+                    currentUserData.pointsMap = pointsMap;
+                    currentUserData.tierMap = tierMap;
+
+                    updateAdminUI();
+                    showToast(`تم إزالة الختم وخصم 50 نقطة بنجاح!`);
+                } catch (error) {
+                    console.error("Error removing stamp:", error);
+                    showToast("حدث خطأ أثناء الإزالة.", "error");
+                }
+                btnRemoveStamp.innerHTML = '<span class="material-symbols-outlined text-dark-300">do_not_disturb_on</span> إزالة ختم (-50 نقطة)';
+                btnRemoveStamp.disabled = false;
+            } else {
+                showToast('لا يوجد أختام لإزالتها من هذا المطعم!', 'error');
+            }
+        });
+    }
 
     // Add Points Handler
     addPointsBtn?.addEventListener('click', async () => {
         if (!currentUserDoc || !currentUserData) return;
         const pointsToAdd = parseInt(addPointsInput.value, 10);
-        if (!pointsToAdd || pointsToAdd <= 0) {
-            alert('يرجى إدخال عدد نقاط صحيح أكبر من صفر');
+        if (!pointsToAdd || pointsToAdd === 0) {
+            showToast('يرجى إدخال عدد نقاط صحيح', 'error');
             return;
         }
 
@@ -385,56 +631,53 @@ const initAdminPanel = async () => {
         addPointsBtn.disabled = true;
 
         try {
-            const currentPoints = currentUserData.points || 0;
-            const newPoints = currentPoints + pointsToAdd;
+            const pointsMap = currentUserData.pointsMap || {};
+            const currentPoints = pointsMap[selectedBrand] || 0;
+            const newPoints = Math.max(0, currentPoints + pointsToAdd);
+            pointsMap[selectedBrand] = newPoints;
+
+            const tierMap = currentUserData.tierMap || {};
+            const nextTier = recalculateTier(newPoints);
+            tierMap[selectedBrand] = nextTier;
 
             await updateDoc(doc(db, "users", currentUserDoc.id), {
-                points: newPoints
+                pointsMap: pointsMap,
+                tierMap: tierMap
+            });
+
+            // Log activity
+            await addDoc(collection(db, "activities"), {
+                userId: currentUserDoc.id,
+                title: pointsToAdd > 0 ? `إضافة نقاط - ${selectedBrand}` : `خصم نقاط - ${selectedBrand}`,
+                type: 'points',
+                value: pointsToAdd > 0 ? `+${pointsToAdd} نقطة` : `${pointsToAdd} نقطة`,
+                date: new Date().toLocaleDateString('ar-EG'),
+                createdAt: new Date().toISOString()
             });
 
             // Update local data
-            currentUserData.points = newPoints;
+            currentUserData.pointsMap = pointsMap;
+            currentUserData.tierMap = tierMap;
+
+            updateAdminUI();
+
             addPointsInput.value = '';
-            alert(`تم إضافة ${pointsToAdd} نقطة بنجاح! الرصيد الحالي: ${newPoints} نقطة.`);
+            showToast(`تم ${pointsToAdd > 0 ? 'إضافة' : 'خصم'} ${Math.abs(pointsToAdd)} نقطة بنجاح! الرصيد: ${newPoints}`);
         } catch (error) {
             console.error("Error adding points:", error);
-            alert("حدث خطأ أثناء إضافة النقاط.");
+            showToast("حدث خطأ أثناء إضافة النقاط.", "error");
         }
         addPointsBtn.innerHTML = 'إضافة نقاط';
         addPointsBtn.disabled = false;
     });
 
-    // Add Wallet Handler
-    addWalletBtn?.addEventListener('click', async () => {
-        if (!currentUserDoc || !currentUserData) return;
-        const walletToAdd = parseInt(addWalletInput.value, 10);
-        if (!walletToAdd || walletToAdd <= 0) {
-            alert('يرجى إدخال رصيد صحيح أكبر من صفر');
-            return;
-        }
-
-        addWalletBtn.innerHTML = 'جاري الإضافة...';
-        addWalletBtn.disabled = true;
-
-        try {
-            const currentWallet = currentUserData.wallet || 0;
-            const newWallet = currentWallet + walletToAdd;
-
-            await updateDoc(doc(db, "users", currentUserDoc.id), {
-                wallet: newWallet
-            });
-
-            // Update local data
-            currentUserData.wallet = newWallet;
-            addWalletInput.value = '';
-            alert(`تم إضافة ${walletToAdd} ج.م بنجاح! الرصيد الحالي: ${newWallet} ج.م.`);
-        } catch (error) {
-            console.error("Error adding wallet balance:", error);
-            alert("حدث خطأ أثناء إضافة الرصيد.");
-        }
-        addWalletBtn.innerHTML = 'إضافة رصيد';
-        addWalletBtn.disabled = false;
-    });
+    // Auto Search if URL has ?phone=...
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlPhone = urlParams.get('phone');
+    if (urlPhone) {
+        searchPhone.value = urlPhone;
+        searchBtn.click();
+    }
 
     // Initial load animation style for spin if not exists
     if (!document.getElementById('spin-style')) {

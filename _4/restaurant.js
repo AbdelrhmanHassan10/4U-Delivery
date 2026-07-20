@@ -49,10 +49,38 @@ let currentViewerIndex = 0;
 let currentUser = null;
 
 // Auth Check
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
     currentUser = user;
     if (user) {
-        // Pre-fill phone if available from previous sessions or user profile if we fetched it
+        try {
+            const userDoc = await getDoc(doc(db, "users", user.uid));
+            if (userDoc.exists()) {
+                const uData = userDoc.data();
+                const addresses = uData.addresses || [];
+                const addressSelect = document.getElementById('order-address-select');
+                const addressInput = document.getElementById('order-address');
+                
+                if (addresses.length > 0) {
+                    addressSelect.style.display = 'block';
+                    addresses.forEach((addr) => {
+                        const option = document.createElement('option');
+                        option.value = addr.details;
+                        option.textContent = addr.title;
+                        option.style.background = '#1a1a1a';
+                        option.style.color = 'white';
+                        addressSelect.appendChild(option);
+                    });
+                    
+                    addressSelect.addEventListener('change', (e) => {
+                        if (e.target.value) {
+                            addressInput.value = e.target.value;
+                        } else {
+                            addressInput.value = '';
+                        }
+                    });
+                }
+            }
+        } catch(e) { console.error("Error fetching addresses", e); }
     }
 });
 
@@ -172,12 +200,27 @@ function updateViewer() {
 // Order Form Logic
 const orderModal = document.getElementById('order-modal');
 
-document.getElementById('btn-open-order').addEventListener('click', () => {
+document.getElementById('btn-open-order').addEventListener('click', async () => {
     if (!currentUser) {
         showToast("يرجى تسجيل الدخول للطلب", "error");
         setTimeout(() => window.location.href = '../_1/login.html', 1500);
         return;
     }
+    
+    // Pre-fill user data
+    try {
+        const nameInput = document.getElementById('order-customer-name');
+        const phoneInput = document.getElementById('order-phone');
+        if (!nameInput.value && currentUser.displayName) nameInput.value = currentUser.displayName;
+        
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+            const uData = userDoc.data();
+            if (uData.name && !nameInput.value) nameInput.value = uData.name;
+            if (uData.phone && !phoneInput.value) phoneInput.value = uData.phone;
+        }
+    } catch(e) { console.error("Error fetching user data", e); }
+
     orderModal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
 });
@@ -194,12 +237,13 @@ orderForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!currentUser || !currentRestaurant) return;
 
+    const customerNameInput = document.getElementById('order-customer-name').value.trim();
     const details = document.getElementById('order-details').value.trim();
     const address = document.getElementById('order-address').value.trim();
     const phone = document.getElementById('order-phone').value.trim();
     const notes = document.getElementById('order-notes').value.trim();
 
-    if (!details || !address || !phone) {
+    if (!customerNameInput || !details || !address || !phone) {
         showToast("يرجى إكمال جميع الحقول المطلوبة", "error");
         return;
     }
@@ -208,8 +252,18 @@ orderForm.addEventListener('submit', async (e) => {
     btnSubmitOrder.disabled = true;
 
     try {
+        let customerEmail = currentUser.email || "";
+        
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        if (userDoc.exists()) {
+            const uData = userDoc.data();
+            if (uData.email) customerEmail = uData.email;
+        }
+
         await addDoc(collection(db, "orders"), {
             userId: currentUser.uid,
+            customerName: customerNameInput,
+            customerEmail: customerEmail,
             restaurantId: currentRestaurant.id,
             restaurantName: currentRestaurant.name,
             details: details,

@@ -140,7 +140,7 @@ const loadUsers = async () => {
         renderTable(allUsers);
     } catch (error) {
         console.error("Error fetching users: ", error);
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--brand);">حدث خطأ أثناء تحميل البيانات</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--brand);">حدث خطأ أثناء تحميل البيانات</td></tr>`;
     }
 };
 
@@ -149,7 +149,7 @@ const renderTable = (users) => {
     if (!tbody) return;
 
     if (users.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--dark-400);">لا يوجد عملاء حتى الآن</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--dark-400);">لا يوجد عملاء حتى الآن</td></tr>`;
         return;
     }
 
@@ -187,11 +187,21 @@ const renderTable = (users) => {
                         </div>
                     </div>
                 </td>
-                <td style="direction: ltr; text-align: right;">${phone}</td>
+                <td style="direction: ltr; text-align: right; color: var(--brand-light); font-weight: 600;">${phone}</td>
                 <td><span class="tier-badge ${tierClass}">${tier}</span></td>
-                <td><span style="color: var(--brand); font-weight: 700; font-size: 1.1rem;">${totalStamps}</span></td>
-                <td>${points}</td>
-                <td>${wallet} ج.م</td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="material-symbols-outlined" style="font-size:1.2rem; color:var(--brand);">verified</span> <span style="font-weight:700;">${totalStamps}</span>
+                        <span style="color:var(--dark-400);">|</span>
+                        <span class="material-symbols-outlined" style="font-size:1.2rem; color:var(--gold);">stars</span> <span style="font-weight:700; color:var(--gold);">${points}</span>
+                    </div>
+                </td>
+                <td>
+                    <button onclick="this.innerHTML = '<span class=\\'material-symbols-outlined animate-spin\\' style=\\'font-size:1.1rem;\\'>progress_activity</span> لحظات...'; this.style.opacity = '0.7'; this.disabled = true; window.navigateWithCurtain('admin_stamps.html?phone=${encodeURIComponent(phone)}');" class="btn-action edit ripple-btn" style="border:none; cursor:pointer; display:inline-flex; align-items:center; gap:0.5rem; background:rgba(200,16,46,0.1); color:var(--brand-light); border:1px solid rgba(200,16,46,0.3); padding:0.5rem 1rem; border-radius:0.5rem; font-weight:600; font-size:0.85rem;" title="عرض وإدارة العميل">
+                        <span class="material-symbols-outlined" style="font-size:1.1rem;">manage_accounts</span>
+                        عرض وإدارة
+                    </button>
+                </td>
             </tr>
         `;
     });

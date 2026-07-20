@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>4U Delivery | إدارة الطلبات</title>
+    <title>4U Delivery | رسائل التواصل</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     <link rel="stylesheet" href="stamps.css">
     <style>
-        .order-list {
+        .message-list {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
             margin-top: 1.5rem;
         }
-        .order-card {
+        .message-card {
             background: rgba(255,255,255,0.03);
             border: 1px solid rgba(255,255,255,0.05);
             border-radius: 1rem;
@@ -22,46 +22,38 @@
             display: flex;
             flex-direction: column;
             gap: 1rem;
+            transition: all 0.3s;
         }
-        .order-header {
+        .message-card.unread {
+            border-color: rgba(240, 192, 64, 0.4);
+            box-shadow: 0 4px 15px rgba(240, 192, 64, 0.1);
+        }
+        .message-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             border-bottom: 1px solid rgba(255,255,255,0.05);
             padding-bottom: 1rem;
         }
-        .order-meta {
+        .message-meta {
             display: flex;
             flex-direction: column;
             gap: 0.25rem;
         }
-        .order-id { font-family: monospace; color: var(--gold); font-size: 0.9rem; }
-        .order-time { color: var(--dark-300); font-size: 0.85rem; }
-        .res-name { font-weight: bold; font-size: 1.25rem; color: #fff; display: flex; align-items: center; gap: 0.5rem; }
+        .message-subject { font-weight: bold; font-size: 1.25rem; color: var(--gold); display: flex; align-items: center; gap: 0.5rem; }
+        .message-time { color: var(--dark-300); font-size: 0.85rem; }
         
-        .order-status {
-            padding: 0.5rem 1rem;
-            border-radius: 2rem;
-            font-weight: bold;
-            font-size: 0.9rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .status-pending { background: rgba(240, 192, 64, 0.2); color: var(--gold); border: 1px solid rgba(240, 192, 64, 0.4); }
-        .status-on_the_way { background: rgba(52, 152, 219, 0.2); color: #3498db; border: 1px solid rgba(52, 152, 219, 0.4); }
-        .status-delivered { background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.4); }
-        
-        .order-details-box {
+        .message-body-box {
             background: rgba(0,0,0,0.3);
             border-radius: 0.5rem;
             padding: 1rem;
             border: 1px dashed rgba(255,255,255,0.1);
+            margin-top: 0.5rem;
         }
-        .order-details-text {
+        .message-text {
             white-space: pre-wrap;
             line-height: 1.6;
-            color: var(--dark-100);
+            color: var(--dark-50);
         }
         
         .customer-info {
@@ -93,14 +85,14 @@
             font-size: 1.25rem;
         }
         
-        .order-actions {
+        .message-actions {
             display: flex;
             gap: 1rem;
             margin-top: 1rem;
             border-top: 1px solid rgba(255,255,255,0.05);
             padding-top: 1rem;
         }
-        .btn-status {
+        .btn-action {
             flex: 1;
             padding: 0.75rem;
             border-radius: 0.5rem;
@@ -109,11 +101,15 @@
             cursor: pointer;
             transition: all 0.3s;
             border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
-        .btn-status:hover { filter: brightness(1.2); }
-        .btn-pending { background: rgba(240, 192, 64, 0.1); color: var(--gold); border-color: rgba(240, 192, 64, 0.3); }
-        .btn-on_the_way { background: rgba(52, 152, 219, 0.1); color: #3498db; border-color: rgba(52, 152, 219, 0.3); }
-        .btn-delivered { background: rgba(46, 204, 113, 0.1); color: #2ecc71; border-color: rgba(46, 204, 113, 0.3); }
+        .btn-action:hover { filter: brightness(1.2); }
+        .btn-read { background: rgba(46, 204, 113, 0.1); color: #2ecc71; border-color: rgba(46, 204, 113, 0.3); }
+        .btn-delete { background: rgba(200, 16, 46, 0.1); color: var(--brand-light); border-color: rgba(200, 16, 46, 0.3); }
+        .btn-whatsapp { background: rgba(37, 211, 102, 0.1); color: #25D366; border-color: rgba(37, 211, 102, 0.3); text-decoration: none; }
         
         /* Toast */
         .toast-container { position: fixed; top: 1rem; right: 1rem; z-index: 99999; display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none; }
@@ -154,65 +150,12 @@
         .btn-refresh-custom:active .icon-spin, .btn-refresh-custom.spinning .icon-spin {
             transform: rotate(360deg);
         }
-        
-        /* Filters */
-        .filters-container {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1.5fr;
-            gap: 1rem;
-            margin: 1.5rem 0;
-            background: rgba(0,0,0,0.2);
-            padding: 1rem;
-            border-radius: 1rem;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        @media (max-width: 900px) {
-            .filters-container { grid-template-columns: 1fr 1fr; }
-        }
-        @media (max-width: 600px) {
-            .filters-container { grid-template-columns: 1fr; }
-        }
-        .filter-group {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-        .filter-icon {
-            position: absolute;
-            right: 1rem;
-            color: var(--dark-300);
-            pointer-events: none;
-        }
-        .filter-input, .filter-select {
-            width: 100%;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-            padding: 0.75rem 1rem;
-            border-radius: 0.75rem;
-            font-family: inherit;
-            outline: none;
-            transition: all 0.3s;
-            appearance: none;
-            font-size: 0.95rem;
-        }
-        .filter-input { padding-right: 3rem; }
-        .filter-input::placeholder { color: var(--dark-300); }
-        .filter-input:focus, .filter-select:focus {
-            border-color: var(--gold);
-            background: rgba(255,255,255,0.1);
-            box-shadow: 0 0 0 3px rgba(240, 192, 64, 0.1);
-        }
-        .filter-select { cursor: pointer; padding-left: 2rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: left 0.75rem center; background-size: 1.5rem; }
-        .filter-select option { background: #1a1a1a; color: white; padding: 0.5rem; }
     </style>
 </head>
 <body class="admin-layout">
 
-    <!-- Page Transition Curtain -->
     <div class="page-transition-curtain"></div>
 
-    <!-- ═══ MOBILE HEADER & OVERLAY ═══ -->
     <div class="mobile-admin-header">
         <button class="btn-mobile-menu ripple-btn" id="admin-menu-toggle">
             <span class="material-symbols-outlined">menu</span>
@@ -221,11 +164,10 @@
             <div class="sidebar-logo" style="margin: 0;">4U</div>
             <span style="font-size: 1.5rem; font-weight: 900; color: white; letter-spacing: -0.5px; margin-top: 4px;">Delivery</span>
         </div>
-        <div style="flex:1"></div> <!-- spacer -->
+        <div style="flex:1"></div>
     </div>
     <div class="admin-sidebar-overlay" id="admin-sidebar-overlay"></div>
 
-    <!-- ═══ SIDEBAR ADMIN ═══ -->
     <aside class="admin-sidebar glass">
         <div class="sidebar-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
             <a href="../_3/home.html" style="text-decoration: none; color: inherit;">
@@ -255,7 +197,7 @@
                 <span class="material-symbols-outlined">storefront</span>
                 إدارة المطاعم
             </a>
-            <a href="admin_orders.html" class="sidebar-link active ripple-btn">
+            <a href="admin_orders.html" class="sidebar-link inactive ripple-btn">
                 <span class="material-symbols-outlined">receipt_long</span>
                 إدارة الطلبات
             </a>
@@ -263,7 +205,7 @@
                 <span class="material-symbols-outlined">local_offer</span>
                 إدارة العروض
             </a>
-            <a href="admin_messages.html" class="sidebar-link inactive ripple-btn">
+            <a href="admin_messages.html" class="sidebar-link active ripple-btn">
                 <span class="material-symbols-outlined">support_agent</span>
                 رسائل التواصل
             </a>
@@ -277,54 +219,25 @@
         </div>
     </aside>
 
-    <!-- ═══ MAIN DASHBOARD ═══ -->
     <main class="admin-main">
         <div class="admin-container">
             
             <header class="admin-page-header">
-                <h1 class="admin-page-title">الطلبات الواردة</h1>
-                <p class="admin-page-desc">تابع طلبات العملاء من المطاعم وقم بتحديث حالتها أولاً بأول.</p>
+                <h1 class="admin-page-title">رسائل التواصل المباشر</h1>
+                <p class="admin-page-desc">اقرأ ورد على رسائل واستفسارات العملاء الواردة من صفحة المساعدة.</p>
             </header>
 
             <div class="glass" style="border-radius: 1.5rem; padding: 2rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
-                    <h2 style="font-size: 1.25rem; font-weight: 800; color: white;">سجل الطلبات</h2>
+                    <h2 style="font-size: 1.25rem; font-weight: 800; color: white;">سجل الرسائل</h2>
                     <button id="btn-refresh" class="btn-refresh-custom ripple-btn">
                         <span class="material-symbols-outlined icon-spin">refresh</span>
                         تحديث القائمة
                     </button>
                 </div>
                 
-                <div class="filters-container">
-                    <div class="filter-group">
-                        <span class="material-symbols-outlined filter-icon">search</span>
-                        <input type="text" id="filter-search" class="filter-input" placeholder="بحث بالهاتف أو كود الطلب...">
-                    </div>
-                    <div class="filter-group">
-                        <select id="filter-status" class="filter-select">
-                            <option value="all">كل الحالات</option>
-                            <option value="pending">قيد المراجعة</option>
-                            <option value="on_the_way">جاري التوصيل</option>
-                            <option value="delivered">مكتمل</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <select id="filter-date" class="filter-select">
-                            <option value="all">كل الأوقات</option>
-                            <option value="today">اليوم</option>
-                            <option value="yesterday">الأمس</option>
-                            <option value="week">آخر 7 أيام</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <select id="filter-restaurant" class="filter-select">
-                            <option value="all">كل المطاعم</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div id="orders-list-container" class="order-list">
-                    <div style="text-align: center; padding: 3rem; color: #aaa;">جاري تحميل الطلبات...</div>
+                <div id="messages-list-container" class="message-list">
+                    <div style="text-align: center; padding: 3rem; color: #aaa;">جاري تحميل الرسائل...</div>
                 </div>
             </div>
 
@@ -332,10 +245,8 @@
     </main>
 
     <div id="toast-container" class="toast-container"></div>
-    <!-- Firebase SDK & Custom Scripts -->
-    <script type="module" src="admin_orders.js"></script>
+    <script type="module" src="admin_messages.js"></script>
     <script>
-        // Mobile Sidebar Toggle
         const menuToggle = document.getElementById('admin-menu-toggle');
         const closeBtn = document.getElementById('admin-close-sidebar-btn');
         const sidebar = document.querySelector('.admin-sidebar');

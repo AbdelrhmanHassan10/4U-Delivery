@@ -185,6 +185,7 @@ const btnAdd = document.getElementById('btn-add-res');
 addForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
+    const editId = document.getElementById('edit-res-id').value;
     const name = document.getElementById('res-name').value;
     
     const checkedCategories = document.querySelectorAll('.category-checkbox:checked');
@@ -213,19 +214,44 @@ addForm.addEventListener('submit', async (e) => {
     btnAdd.disabled = true;
 
     try {
-        await addDoc(collection(db, "restaurants"), {
-            name: name,
-            category: categories,
-            rating: rating,
-            deliveryTime: time,
-            deliveryFee: fee,
-            image: currentBase64Image,
-            menuImages: currentBase64Menus,
-            isFeatured: false,
-            createdAt: new Date().toISOString()
-        });
+        if (editId) {
+            const updateData = {
+                name: name,
+                category: categories,
+                rating: rating,
+                deliveryTime: time,
+                deliveryFee: fee,
+            };
+            if (currentBase64Image) updateData.image = currentBase64Image;
+            if (currentBase64Menus && currentBase64Menus.length > 0) updateData.menuImages = currentBase64Menus;
 
-        showToast("تم إضافة المطعم بنجاح!");
+            await updateDoc(doc(db, "restaurants", editId), updateData);
+            showToast("تم تعديل المطعم بنجاح!");
+            
+            document.getElementById('edit-res-id').value = '';
+            document.querySelector('.admin-page-title').textContent = "إضافة مطعم جديد";
+            document.querySelector('.admin-page-desc').textContent = "قم بإدخال بيانات المطعم وصورته لإضافته فوراً في التطبيق للعملاء.";
+        } else {
+            if(!currentBase64Image) {
+                btnAdd.innerHTML = 'إضافة المطعم';
+                btnAdd.disabled = false;
+                showToast("يرجى اختيار صورة المطعم!", "error");
+                return;
+            }
+            await addDoc(collection(db, "restaurants"), {
+                name: name,
+                category: categories,
+                rating: rating,
+                deliveryTime: time,
+                deliveryFee: fee,
+                image: currentBase64Image,
+                menuImages: currentBase64Menus,
+                isFeatured: false,
+                createdAt: new Date().toISOString()
+            });
+            showToast("تم إضافة المطعم بنجاح!");
+        }
+
         addForm.reset();
         document.querySelectorAll('.category-checkbox').forEach(cb => cb.checked = false);
         imgPreview.src = "";
@@ -272,9 +298,14 @@ async function loadRestaurants() {
 
             html += `
                 <div class="res-card">
-                    <button class="btn-delete" onclick="deleteRestaurant('${doc.id}', '${data.name}')" title="حذف المطعم">
-                        <span class="material-symbols-outlined">delete</span>
-                    </button>
+                    <div style="position: absolute; top: 1rem; left: 1rem; display: flex; gap: 0.5rem; z-index: 10;">
+                        <button class="btn-action edit" onclick="editRestaurant('${doc.id}')" title="تعديل المطعم" style="background: rgba(255,255,255,0.2); border: none; color: #fff; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(5px); transition: 0.3s;">
+                            <span class="material-symbols-outlined" style="font-size: 1.1rem;">edit</span>
+                        </button>
+                        <button class="btn-action delete" onclick="deleteRestaurant('${doc.id}', '${data.name}')" title="حذف المطعم" style="background: rgba(200, 16, 46, 0.8); border: none; color: #fff; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(5px); transition: 0.3s;">
+                            <span class="material-symbols-outlined" style="font-size: 1.1rem;">delete</span>
+                        </button>
+                    </div>
                     <img src="${imgSrc}" alt="${data.name}">
                     <div class="res-title">${data.name}</div>
                     <div class="res-category" style="line-height: 1.5; word-break: break-word;">${categoryText}</div>
@@ -301,6 +332,15 @@ window.deleteRestaurant = async (id, name) => {
     
     try {
         await deleteDoc(doc(db, "restaurants", id));
+        if (document.getElementById('edit-res-id').value === id) {
+            document.getElementById('add-res-form').reset();
+            document.getElementById('edit-res-id').value = '';
+            document.querySelector('.admin-page-title').textContent = "إضافة مطعم جديد";
+            const btnAdd = document.getElementById('btn-add-res');
+            btnAdd.innerHTML = 'إضافة المطعم';
+            currentBase64Image = '';
+            imgPreview.src = '';
+        }
         showToast("تم حذف المطعم بنجاح");
         loadRestaurants();
     } catch (error) {
@@ -308,3 +348,75 @@ window.deleteRestaurant = async (id, name) => {
         showToast("حدث خطأ أثناء الحذف", "error");
     }
 };
+
+// Edit Restaurant
+window.editRestaurant = async (id) => {
+    try {
+        const docSnap = await getDoc(doc(db, "restaurants", id));
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            document.getElementById('edit-res-id').value = id;
+            document.getElementById('res-name').value = data.name;
+            document.getElementById('res-rating').value = data.rating;
+            document.getElementById('res-time').value = data.deliveryTime;
+            document.getElementById('res-fee').value = data.deliveryFee;
+            
+            // Handle image preview
+            if (data.image) {
+                currentBase64Image = data.image;
+                document.getElementById('res-image-preview').src = data.image;
+            } else {
+                currentBase64Image = '';
+                document.getElementById('res-image-preview').src = '';
+            }
+
+            // Handle menus preview
+            if (data.menuImages) {
+                currentBase64Menus = data.menuImages;
+                const menuPreviewContainer = document.getElementById('res-menu-preview-container');
+                menuPreviewContainer.innerHTML = '';
+                data.menuImages.forEach(src => {
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.style.width = '60px';
+                    img.style.height = '80px';
+                    img.style.objectFit = 'cover';
+                    img.style.borderRadius = '0.5rem';
+                    img.style.border = '1px solid rgba(255,255,255,0.2)';
+                    menuPreviewContainer.appendChild(img);
+                });
+            }
+
+            // Handle categories
+            document.querySelectorAll('.category-checkbox').forEach(cb => cb.checked = false);
+            if (data.category && Array.isArray(data.category)) {
+                data.category.forEach(cat => {
+                    const checkbox = document.querySelector(`.category-checkbox[value="${cat}"]`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                    } else {
+                        // Create new chip for custom category
+                        const chip = document.createElement('label');
+                        chip.className = 'chip';
+                        chip.innerHTML = `<input type="checkbox" value="${cat}" class="category-checkbox" checked> ${cat}`;
+                        const customInput = document.getElementById('custom-category-input');
+                        document.getElementById('res-category-container').insertBefore(chip, customInput.parentElement);
+                    }
+                });
+            }
+
+            document.querySelector('.admin-page-title').textContent = "تعديل بيانات المطعم";
+            document.querySelector('.admin-page-desc').textContent = "تعديل البيانات واضغط حفظ.";
+            const btnAdd = document.getElementById('btn-add-res');
+            btnAdd.innerHTML = '<span class="material-symbols-outlined">save</span> حفظ التعديلات';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            const adminMain = document.querySelector('.admin-main');
+            if (adminMain) {
+                adminMain.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+    } catch(err) {
+        console.error(err);
+        showToast("خطأ في جلب بيانات المطعم", "error");
+    }
+}

@@ -1,5 +1,6 @@
 // legal.js - Shared JS for Terms, Privacy, Contact pages
-import { auth } from "../firebase-config.js";
+import { db, auth } from "../firebase-config.js";
+import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 // Page Transition
@@ -104,13 +105,46 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Contact form
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
+        contactForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            showToast('تم إرسال رسالتك بنجاح! هنرد عليك في أقرب وقت ✅', 'success');
-            contactForm.reset();
+            
+            const submitBtn = contactForm.querySelector('.btn-submit');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="material-symbols-outlined icon-spin">sync</span> جاري الإرسال...';
+            submitBtn.disabled = true;
+
+            try {
+                const name = document.getElementById('contact-name').value;
+                const phone = document.getElementById('contact-phone').value;
+                const email = document.getElementById('contact-email').value || '';
+                const subject = document.getElementById('contact-subject').value;
+                const message = document.getElementById('contact-message').value;
+                
+                const user = auth.currentUser;
+                const uid = user ? user.uid : 'anonymous';
+
+                await addDoc(collection(db, 'messages'), {
+                    name,
+                    phone,
+                    email,
+                    subject,
+                    message,
+                    uid,
+                    status: 'new',
+                    createdAt: serverTimestamp()
+                });
+
+                showToast('تم إرسال رسالتك بنجاح! هنرد عليك في أقرب وقت ✅', 'success');
+                contactForm.reset();
+            } catch (error) {
+                console.error("Error sending message:", error);
+                showToast('حدث خطأ أثناء الإرسال، حاول مرة أخرى.', 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
         });
     }
 });

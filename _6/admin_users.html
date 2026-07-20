@@ -81,14 +81,34 @@
     <!-- Page Transition Curtain -->
     <div class="page-transition-curtain"></div>
 
+    <!-- ═══ MOBILE HEADER & OVERLAY ═══ -->
+    <div class="mobile-admin-header">
+        <button class="btn-mobile-menu ripple-btn" id="admin-menu-toggle">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="brand-logo-wrapper" style="display: flex; align-items: center; gap: 0.5rem; margin: 0 auto;">
+            <div class="sidebar-logo" style="margin: 0;">4U</div>
+            <span style="font-size: 1.5rem; font-weight: 900; color: white; letter-spacing: -0.5px; margin-top: 4px;">Delivery</span>
+        </div>
+        <div style="flex:1"></div> <!-- spacer -->
+    </div>
+    <div class="admin-sidebar-overlay" id="admin-sidebar-overlay"></div>
+
     <!-- ═══ SIDEBAR ADMIN ═══ -->
     <aside class="admin-sidebar glass">
-        <div class="sidebar-header">
-            <div class="sidebar-logo">4U</div>
-            <div>
-                <h2 class="sidebar-title">Admin</h2>
-                <p class="sidebar-subtitle">نظام الأختام</p>
-            </div>
+        <div class="sidebar-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <a href="../_3/home.html" style="text-decoration: none; color: inherit;">
+                <div class="brand-logo-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div class="sidebar-logo" style="margin: 0;">4U</div>
+                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                        <span style="font-size: 1.25rem; font-weight: 900; color: white; letter-spacing: -0.5px; line-height: 1;">Delivery</span>
+                        <span style="color: var(--brand-light); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-top: 2px;">Admin Panel</span>
+                    </div>
+                </div>
+            </a>
+            <button class="btn-close-sidebar ripple-btn" id="admin-close-sidebar-btn" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.5rem; color: white; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                <span class="material-symbols-outlined" style="font-size: 1.25rem;">close</span>
+            </button>
         </div>
         
         <nav class="sidebar-nav">
@@ -111,6 +131,10 @@
             <a href="admin_offers.html" class="sidebar-link inactive ripple-btn">
                 <span class="material-symbols-outlined">local_offer</span>
                 إدارة العروض
+            </a>
+            <a href="admin_messages.html" class="sidebar-link inactive ripple-btn">
+                <span class="material-symbols-outlined">support_agent</span>
+                رسائل التواصل
             </a>
         </nav>
         
@@ -145,14 +169,13 @@
                             <th>العميل</th>
                             <th>رقم الموبايل</th>
                             <th>المستوى (Tier)</th>
-                            <th>إجمالي الأختام</th>
-                            <th>النقاط</th>
-                            <th>المحفظة</th>
+                            <th>النقاط والأختام</th>
+                            <th>الإجراءات</th>
                         </tr>
                     </thead>
                     <tbody id="users-table-body">
                         <tr>
-                            <td colspan="6" style="text-align: center; color: var(--dark-400);">جاري التحميل <span class="material-symbols-outlined animate-spin" style="font-size: 1rem; vertical-align: middle;">progress_activity</span></td>
+                            <td colspan="5" style="text-align: center; color: var(--dark-400);">جاري التحميل <span class="material-symbols-outlined animate-spin" style="font-size: 1rem; vertical-align: middle;">progress_activity</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -162,5 +185,27 @@
     </main>
 
     <script type="module" src="admin_users.js"></script>
+    <script>
+        // Mobile Sidebar Toggle
+        const menuToggle = document.getElementById('admin-menu-toggle');
+        const closeBtn = document.getElementById('admin-close-sidebar-btn');
+        const sidebar = document.querySelector('.admin-sidebar');
+        const overlay = document.getElementById('admin-sidebar-overlay');
+        
+        if(sidebar && overlay) {
+            if(menuToggle) {
+                menuToggle.addEventListener('click', () => {
+                    sidebar.classList.add('open');
+                    overlay.classList.add('show');
+                });
+            }
+            const closeSidebar = () => {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+            };
+            if(closeBtn) closeBtn.addEventListener('click', closeSidebar);
+            if(overlay) overlay.addEventListener('click', closeSidebar);
+        }
+    </script>
 </body>
 </html>

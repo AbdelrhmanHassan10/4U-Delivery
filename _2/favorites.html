@@ -50,37 +50,10 @@
     <section class="page-content stagger-2">
         <a href="profile.html" class="btn-back" onclick="navigateWithCurtain(this.href); return false;"><span class="material-symbols-outlined">arrow_forward</span> العودة للبروفايل</a>
 
-        <div class="items-grid">
-            <!-- Favorite Restaurant 1 -->
-            <div class="item-card">
-                <div class="item-info">
-                    <div class="item-icon"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=150&h=150" alt="Burger"></div>
-                    <div class="item-details">
-                        <h3>بافلو برجر</h3>
-                        <p>برجر • وجبات سريعة</p>
-                        <p style="color:var(--gold); display:flex; align-items:center; gap:0.25rem;"><span class="material-symbols-outlined icon-filled" style="font-size:16px;">star</span> 4.8 (أكثر من 500 تقييم)</p>
-                    </div>
-                </div>
-                <div class="item-actions">
-                    <button class="btn-icon-only" onclick="this.closest('.item-card').style.display='none'; window.showToast('تم إزالة المطعم من المفضلة')"><span class="material-symbols-outlined icon-filled" style="color:var(--brand-light);">favorite</span></button>
-                    <a href="../_4/res.html" class="btn-action btn-primary-action"><span class="material-symbols-outlined">storefront</span> زيارة المطعم</a>
-                </div>
-            </div>
-
-            <!-- Favorite Restaurant 2 -->
-            <div class="item-card">
-                <div class="item-info">
-                    <div class="item-icon"><img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=150&h=150" alt="Pizza"></div>
-                    <div class="item-details">
-                        <h3>بيتزا هت</h3>
-                        <p>بيتزا • إيطالي</p>
-                        <p style="color:var(--gold); display:flex; align-items:center; gap:0.25rem;"><span class="material-symbols-outlined icon-filled" style="font-size:16px;">star</span> 4.5 (أكثر من 300 تقييم)</p>
-                    </div>
-                </div>
-                <div class="item-actions">
-                    <button class="btn-icon-only" onclick="this.closest('.item-card').style.display='none'; window.showToast('تم إزالة المطعم من المفضلة')"><span class="material-symbols-outlined icon-filled" style="color:var(--brand-light);">favorite</span></button>
-                    <a href="../_4/res.html" class="btn-action btn-primary-action"><span class="material-symbols-outlined">storefront</span> زيارة المطعم</a>
-                </div>
+        <div class="items-grid" id="favorites-container">
+            <div style="text-align:center; padding:3rem; grid-column: 1/-1;">
+                <span class="material-symbols-outlined icon-spin" style="font-size:3rem; color:var(--brand);">sync</span>
+                <p style="margin-top:1rem; color:var(--dark-100);">جاري تحميل المفضلة...</p>
             </div>
         </div>
     </section>
@@ -99,6 +72,6 @@
     </footer>
 
     <button class="btn-float ripple-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})"><span class="material-symbols-outlined">arrow_upward</span></button>
-    <script type="module" src="profile.js"></script>
+    <script type="module" src="favorites.js"></script>
 </body>
 </html>

@@ -140,97 +140,172 @@ onAuthStateChanged(auth, async (user) => {
                 const name = data.name || "مستخدم 4U";
                 document.getElementById('profile-name').textContent = name;
                 document.getElementById('profile-email').textContent = data.email || user.email;
+                const phoneEl = document.getElementById('profile-phone');
+                if (phoneEl) phoneEl.textContent = data.phone || "لا يوجد رقم موبايل";
                 const navUserName = document.getElementById('nav-user-name');
                 if(navUserName) navUserName.textContent = name.split(' ')[0];
-                document.getElementById('stat-points').textContent = (data.points || 0).toLocaleString('ar-EG');
                 
-                const statCards = document.getElementById('stat-cards');
-                if (statCards) statCards.textContent = (data.cards || 0).toLocaleString('ar-EG');
+                const pointsMap = data.pointsMap || {};
+                const stampsMap = data.stamps || {};
+                const tierMap = data.tierMap || {};
                 
-                document.getElementById('stat-tier').textContent = data.tier || "Silver";
+                const brandsSet = new Set([...Object.keys(pointsMap), ...Object.keys(stampsMap), ...Object.keys(tierMap)]);
+                const brands = Array.from(brandsSet);
                 
-                // Avatar
-                if (data.avatar) {
-                    document.getElementById('profile-avatar-bg').style.backgroundImage = `url('${data.avatar}')`;
-                }
-                
-                // Update Loyalty Card
-                document.getElementById('loyalty-title').innerHTML = `عضوية 4U <span class="text-gradient-gold">${data.tier || "Silver"}</span>`;
-                
-                const points = data.points || 0;
-                let nextTier = "Gold";
-                let nextTierPoints = 1000;
-                let progressPercent = 0;
+                const brandSelectContainer = document.getElementById('profile-brand-selector-container');
+                const brandSelect = document.getElementById('profile-brand-select');
 
-                if (points < 1000) {
-                    nextTier = "Gold";
-                    nextTierPoints = 1000;
-                    progressPercent = (points / 1000) * 100;
-                    document.getElementById('loyalty-subtitle').textContent = `باقيلك ${1000 - points} نقطة عشان توصل لـ ${nextTier}!`;
-                    document.getElementById('loyalty-current-tier').textContent = "Silver (0)";
-                    document.getElementById('loyalty-next-tier').textContent = "Gold (1000)";
-                } else if (points < 2500) {
-                    nextTier = "Platinum";
-                    nextTierPoints = 2500;
-                    progressPercent = ((points - 1000) / 1500) * 100;
-                    document.getElementById('loyalty-subtitle').textContent = `باقيلك ${2500 - points} نقطة عشان توصل لـ ${nextTier}!`;
-                    document.getElementById('loyalty-current-tier').textContent = "Gold (1000)";
-                    document.getElementById('loyalty-next-tier').textContent = "Platinum (2500)";
+                const renderStatsForBrand = (brand) => {
+                    if (!brand) {
+                        document.getElementById('stat-points').textContent = "0";
+                        const statCards = document.getElementById('stat-cards');
+                        if (statCards) statCards.textContent = "0";
+                        document.getElementById('stat-tier').textContent = "Bronze";
+                        
+                        document.getElementById('loyalty-title').innerHTML = `عضوية 4U <span class="text-gradient-gold">Bronze</span>`;
+                        document.getElementById('loyalty-subtitle').textContent = `لم تبدأ بعد في تجميع النقاط!`;
+                        document.getElementById('loyalty-progress-fill').style.width = `0%`;
+                        document.getElementById('loyalty-current-tier').textContent = "Bronze";
+                        document.getElementById('loyalty-next-tier').textContent = "Silver";
+                        return;
+                    }
+
+                    const points = pointsMap[brand] || 0;
+                    const stamps = stampsMap[brand] || 0;
+                    const tier = tierMap[brand] || "Bronze";
+                    const completedCards = Math.floor(stamps / 10);
+
+                    document.getElementById('stat-points').textContent = points.toLocaleString('ar-EG');
+                    const statCards = document.getElementById('stat-cards');
+                    if (statCards) statCards.textContent = completedCards.toLocaleString('ar-EG');
+                    document.getElementById('stat-tier').textContent = tier;
+                    
+                    document.getElementById('loyalty-title').innerHTML = `عضوية 4U <span class="text-gradient-gold">${tier}</span>`;
+                    
+                    let nextTier = "Silver";
+                    let progressPercent = 0;
+
+                    if (points <= 500) {
+                        nextTier = "Silver";
+                        progressPercent = (points / 500) * 100;
+                        document.getElementById('loyalty-subtitle').textContent = `جمّع نقاط في ${brand} لترقية مستواك لـ ${nextTier}!`;
+                        document.getElementById('loyalty-current-tier').textContent = "Bronze";
+                        document.getElementById('loyalty-next-tier').textContent = "Silver";
+                    } else if (points <= 1000) {
+                        nextTier = "Gold";
+                        progressPercent = ((points - 500) / 500) * 100;
+                        document.getElementById('loyalty-subtitle').textContent = `جمّع نقاط في ${brand} لترقية مستواك لـ ${nextTier}!`;
+                        document.getElementById('loyalty-current-tier').textContent = "Silver";
+                        document.getElementById('loyalty-next-tier').textContent = "Gold";
+                    } else if (points <= 1500) {
+                        nextTier = "Platinum";
+                        progressPercent = ((points - 1000) / 500) * 100;
+                        document.getElementById('loyalty-subtitle').textContent = `جمّع نقاط في ${brand} لترقية مستواك لـ ${nextTier}!`;
+                        document.getElementById('loyalty-current-tier').textContent = "Gold";
+                        document.getElementById('loyalty-next-tier').textContent = "Platinum";
+                    } else if (points <= 2000) {
+                        nextTier = "Elite";
+                        progressPercent = ((points - 1500) / 500) * 100;
+                        document.getElementById('loyalty-subtitle').textContent = `جمّع نقاط في ${brand} لترقية مستواك لـ ${nextTier}!`;
+                        document.getElementById('loyalty-current-tier').textContent = "Platinum";
+                        document.getElementById('loyalty-next-tier').textContent = "Elite";
+                    } else {
+                        progressPercent = 100;
+                        document.getElementById('loyalty-subtitle').textContent = `أنت في أعلى مستوى في ${brand}!`;
+                        document.getElementById('loyalty-current-tier').textContent = "Elite";
+                        document.getElementById('loyalty-next-tier').textContent = "VIP";
+                    }
+
+                    document.getElementById('loyalty-progress-fill').style.width = `${progressPercent}%`;
+                };
+
+                if (brands.length === 0) {
+                    if (brandSelectContainer) brandSelectContainer.classList.add('hidden');
+                    renderStatsForBrand(null);
                 } else {
-                    progressPercent = 100;
-                    document.getElementById('loyalty-subtitle').textContent = `أنت في أعلى مستوى!`;
-                    document.getElementById('loyalty-current-tier').textContent = "Platinum (2500)";
-                    document.getElementById('loyalty-next-tier').textContent = "VIP";
+                    if (brandSelectContainer && brandSelect) {
+                        brandSelectContainer.classList.remove('hidden');
+                        let optionsHtml = '';
+                        brands.forEach(b => {
+                            optionsHtml += `<option value="${b}">${b}</option>`;
+                        });
+                        brandSelect.innerHTML = optionsHtml;
+                        
+                        // Select default
+                        const previouslySelected = brandSelect.getAttribute('data-last-selected');
+                        const targetBrand = previouslySelected && brands.includes(previouslySelected) ? previouslySelected : brands[0];
+                        brandSelect.value = targetBrand;
+                        renderStatsForBrand(targetBrand);
+                        
+                        brandSelect.addEventListener('change', (e) => {
+                            const selected = e.target.value;
+                            brandSelect.setAttribute('data-last-selected', selected);
+                            renderStatsForBrand(selected);
+                        });
+                    } else {
+                        renderStatsForBrand(brands[0]);
+                    }
                 }
-
-                document.getElementById('loyalty-progress-fill').style.width = `${progressPercent}%`;
-
                 // Update Avatar
                 if (data.avatar) {
                     const avatarBg = document.getElementById('profile-avatar-bg');
                     if(avatarBg) avatarBg.style.backgroundImage = `url('${data.avatar}')`;
                 }
 
-                // Fetch Recent Activity
+                // Fetch Recent Activity (Orders)
                 const activityContainer = document.getElementById('recent-activity-list');
                 if (activityContainer) {
                     try {
                         const actQuery = query(
-                            collection(db, "activities"), 
-                            where("userId", "==", user.uid),
-                            limit(5)
+                            collection(db, "orders"), 
+                            where("userId", "==", user.uid)
                         );
-                        // Try fetching with index (if it fails due to missing index, we fallback)
+                        
                         let html = '';
                         try {
                             const actSnap = await getDocs(actQuery);
                             if (actSnap.empty) {
-                                html = '<p class="text-center w-100" style="padding: 1rem; color: #aaa;">لا يوجد نشاطات حالياً.</p>';
+                                html = '<p class="text-center w-100" style="padding: 1rem; color: #aaa;">لا يوجد نشاطات أو طلبات حالياً.</p>';
                             } else {
-                                actSnap.forEach(docSnap => {
-                                    const act = docSnap.data();
-                                    // simple ui rendering
-                                    const isGold = act.type === 'points';
-                                    const cardClass = isGold ? 'card-gold' : 'card-brand';
-                                    const valClass = isGold ? 'val-gold' : 'val-brand';
-                                    const icon = isGold ? 'stars' : 'payments'; // generic
+                                let orders = [];
+                                actSnap.forEach(docSnap => orders.push(docSnap.data()));
+                                
+                                // Sort descending in memory to avoid Firebase Index errors
+                                orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                                
+                                // Take top 3
+                                const recentOrders = orders.slice(0, 3);
+                                
+                                recentOrders.forEach(act => {
+                                    const icon = 'restaurant';
+                                    let statusText = 'قيد المراجعة';
+                                    let valClass = 'val-brand';
+                                    
+                                    if(act.status === 'delivered') { statusText = 'تم التوصيل'; valClass = 'text-gradient-gold'; }
+                                    else if(act.status === 'on_the_way') { statusText = 'في الطريق'; valClass = 'val-brand'; }
+                                    else if(act.status === 'pending') { statusText = 'جاري التجهيز'; valClass = 'val-brand'; }
+                                    
+                                    // Format Date
+                                    const dateObj = new Date(act.createdAt);
+                                    const dateStr = dateObj.toLocaleDateString('ar-EG', { month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit' });
+
                                     html += `
                                     <div class="activity-item">
                                         <div class="activity-info">
-                                            <div class="activity-icon ${cardClass}" style="background: rgba(255,255,255,0.1);"><span class="material-symbols-outlined icon-filled">${icon}</span></div>
+                                            <div class="activity-icon card-brand" style="background: rgba(255,255,255,0.1);"><span class="material-symbols-outlined icon-filled">${icon}</span></div>
                                             <div>
-                                                <p class="activity-title">${act.title}</p>
-                                                <p class="activity-time">${act.date || 'مؤخراً'}</p>
+                                                <p class="activity-title">طلب من ${act.restaurantName || 'مطعم'}</p>
+                                                <p class="activity-time" style="direction:ltr; text-align:right;">${dateStr}</p>
                                             </div>
                                         </div>
-                                        <span class="activity-value ${valClass}">${act.value}</span>
+                                        <span class="activity-value ${valClass}" style="font-size:0.9rem;">${statusText}</span>
                                     </div>
                                     `;
                                 });
                             }
                         } catch(err) {
-                            // Fallback if index is missing: just show empty state
                             html = '<p class="text-center w-100" style="padding: 1rem; color: #aaa;">لا يوجد نشاطات حالياً.</p>';
+                            console.error("Error fetching activities", err);
                         }
                         activityContainer.innerHTML = html;
                     } catch (e) {
@@ -340,7 +415,7 @@ avatarUpload?.addEventListener('change', async (e) => {
 
                     // Update UI
                     avatarBg.style.backgroundImage = `url('${base64Avatar}')`;
-                    alert("تم تحديث الصورة بنجاح!");
+                    alert("تم تحديث الصورة بنجاح!", true);
                 } catch (dbError) {
                     console.error("Error saving avatar to db:", dbError);
                     alert("حدث خطأ أثناء حفظ الصورة في قاعدة البيانات.");

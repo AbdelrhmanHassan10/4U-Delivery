@@ -50,37 +50,38 @@
     <section class="page-content stagger-2">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
             <a href="profile.html" class="btn-back" style="margin:0;" onclick="navigateWithCurtain(this.href); return false;"><span class="material-symbols-outlined">arrow_forward</span> العودة</a>
-            <button class="btn-action btn-primary-action" onclick="window.showToast('إضافة عنوان ستتوفر قريباً!', 'success')"><span class="material-symbols-outlined">add</span> عنوان جديد</button>
+            <button class="btn-action btn-primary-action" id="btn-open-add-address"><span class="material-symbols-outlined">add</span> عنوان جديد</button>
         </div>
 
-        <div class="items-grid">
-            <!-- Home Address -->
-            <div class="item-card">
-                <div class="item-info">
-                    <div class="item-icon" style="background:rgba(240,192,64,0.1); color:var(--gold);"><span class="material-symbols-outlined icon-filled">home</span></div>
-                    <div class="item-details">
-                        <h3>المنزل <span class="status success" style="margin:0 0.5rem; font-size:0.7rem; padding:0.1rem 0.5rem;">الافتراضي</span></h3>
-                        <p>بني سويف الجديدة، الحي الرابع، المجاورة الثانية، عمارة 15، شقة 12</p>
-                    </div>
-                </div>
-                <div class="item-actions">
-                    <button class="btn-icon-only"><span class="material-symbols-outlined">edit</span></button>
-                    <button class="btn-icon-only" style="color:var(--brand-light);" onclick="this.closest('.item-card').style.display='none'; window.showToast('تم حذف العنوان')"><span class="material-symbols-outlined">delete</span></button>
+        <div class="items-grid" id="addresses-container">
+            <div style="text-align:center; padding:3rem; grid-column: 1/-1;">
+                <span class="material-symbols-outlined icon-spin" style="font-size:3rem; color:var(--brand);">sync</span>
+                <p style="margin-top:1rem; color:var(--dark-100);">جاري تحميل العناوين...</p>
+            </div>
+        </div>
+
+        <!-- Add Address Modal -->
+        <div id="add-address-modal" class="hidden glass-strong" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:10000; display:flex; align-items:center; justify-content:center; padding:1rem;">
+            <div class="glass" style="width:100%; max-width:400px; padding:2rem; border-radius:1rem; position:relative;">
+                <h3 style="margin-bottom:1.5rem; font-size:1.5rem; color:white; font-weight:700; text-align:center;">إضافة عنوان جديد</h3>
+                <input type="text" id="new-addr-title" placeholder="اسم العنوان (مثال: المنزل، العمل)" style="width:100%; margin-bottom:1rem; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); color:white; padding:1rem; border-radius:0.8rem; font-family:'Cairo', sans-serif; font-size:1rem; outline:none; transition:border-color 0.3s;" onfocus="this.style.borderColor='var(--brand)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                <textarea id="new-addr-details" placeholder="التفاصيل (الشارع، العمارة، الدور)" rows="3" style="width:100%; margin-bottom:1.5rem; background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1); color:white; padding:1rem; border-radius:0.8rem; font-family:'Cairo', sans-serif; font-size:1rem; outline:none; resize:none; transition:border-color 0.3s;" onfocus="this.style.borderColor='var(--brand)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"></textarea>
+                <div style="display:flex; gap:1rem;">
+                    <button id="btn-save-address" class="btn-primary ripple-btn" style="flex:1; padding:0.8rem; border-radius:0.8rem; font-size:1.1rem;">حفظ</button>
+                    <button id="btn-close-address" class="btn-outline ripple-btn" style="flex:1; padding:0.8rem; border-radius:0.8rem; font-size:1.1rem; border:1px solid rgba(255,255,255,0.1); color:var(--dark-100); background:transparent;">إلغاء</button>
                 </div>
             </div>
+        </div>
 
-            <!-- Work Address -->
-            <div class="item-card">
-                <div class="item-info">
-                    <div class="item-icon" style="background:rgba(255,255,255,0.05); color:#fff;"><span class="material-symbols-outlined icon-filled">work</span></div>
-                    <div class="item-details">
-                        <h3>العمل</h3>
-                        <p>الكورنيش، بجوار نادي المهندسين، برج الأمل، الدور الخامس</p>
-                    </div>
-                </div>
-                <div class="item-actions">
-                    <button class="btn-icon-only"><span class="material-symbols-outlined">edit</span></button>
-                    <button class="btn-icon-only" style="color:var(--brand-light);" onclick="this.closest('.item-card').style.display='none'; window.showToast('تم حذف العنوان')"><span class="material-symbols-outlined">delete</span></button>
+        <!-- Confirm Delete Modal -->
+        <div id="confirm-delete-modal" class="hidden glass-strong" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:10000; display:flex; align-items:center; justify-content:center; padding:1rem;">
+            <div class="glass glow-red" style="width:100%; max-width:400px; padding:2rem; border-radius:1rem; text-align:center;">
+                <span class="material-symbols-outlined icon-filled" style="font-size:3.5rem; color:var(--brand); margin-bottom:1rem; display:block;">warning</span>
+                <h3 style="margin-bottom:1rem; font-size:1.3rem; color:white; font-weight:700;">متأكد إنك عايز تحذف العنوان؟</h3>
+                <p style="color:var(--dark-100); margin-bottom:2rem; font-size:0.95rem;">العنوان ده هيتحذف نهائياً ومش هتقدر تستخدمه تاني إلا لو ضفته من جديد.</p>
+                <div style="display:flex; gap:1rem;">
+                    <button id="btn-confirm-delete" class="btn-primary ripple-btn" style="flex:1; padding:0.8rem; border-radius:0.8rem; font-size:1.1rem; background:var(--brand);">نعم، احذف</button>
+                    <button id="btn-cancel-delete" class="btn-outline ripple-btn" style="flex:1; padding:0.8rem; border-radius:0.8rem; font-size:1.1rem; border:1px solid rgba(255,255,255,0.1); color:white; background:transparent;">إلغاء</button>
                 </div>
             </div>
         </div>
@@ -100,6 +101,6 @@
     </footer>
 
     <button class="btn-float ripple-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})"><span class="material-symbols-outlined">arrow_upward</span></button>
-    <script type="module" src="profile.js"></script>
+    <script type="module" src="addresses.js"></script>
 </body>
 </html>
