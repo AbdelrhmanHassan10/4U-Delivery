@@ -49,6 +49,19 @@ let currentUserUid = null;
 let userAddresses = [];
 
 onAuthStateChanged(auth, async (user) => {
+    const navAuthButtons = document.getElementById('nav-auth-buttons');
+    const navProfileButton = document.getElementById('nav-profile-button');
+    const mobileAuthBtn = document.getElementById('mobile-auth-btn');
+
+    if (user) {
+        if(navAuthButtons) navAuthButtons.classList.add('hidden');
+        if(navProfileButton) navProfileButton.classList.remove('hidden');
+        if(mobileAuthBtn) {
+            mobileAuthBtn.textContent = 'حسابي';
+            mobileAuthBtn.href = '../_2/profile.html';
+        }
+    }
+
     const container = document.getElementById('addresses-container');
     if (!container) return;
 
@@ -75,7 +88,22 @@ async function loadAddresses() {
 
         if (!userSnap.exists()) return;
 
-        userAddresses = userSnap.data().addresses || [];
+        const userData = userSnap.data();
+        const navUserName = document.getElementById('nav-user-name');
+        if (navUserName && userData.name) navUserName.textContent = userData.name.split(' ')[0];
+        
+        const mobileAdminLink = document.getElementById('mobile-admin-link');
+        if (mobileAdminLink && userData.isAdmin) {
+            mobileAdminLink.style.display = 'flex';
+        }
+        const navAdminLink = document.getElementById('nav-admin-link');
+        const navAdminDivider = document.getElementById('nav-admin-divider');
+        if (navAdminLink && userData.isAdmin) {
+            navAdminLink.style.display = 'flex';
+            if (navAdminDivider) navAdminDivider.style.display = 'block';
+        }
+
+        userAddresses = userData.addresses || [];
 
         if (userAddresses.length === 0) {
             container.innerHTML = `
@@ -207,5 +235,16 @@ document.getElementById('btn-save-address').addEventListener('click', async () =
     } finally {
         btn.textContent = 'حفظ';
         btn.disabled = false;
+    }
+});
+
+// Mobile Menu Listener
+document.addEventListener('DOMContentLoaded', () => {
+    const mBtn = document.getElementById('mobile-menu-btn');
+    const cBtn = document.getElementById('close-menu-btn');
+    const mMenu = document.getElementById('mobile-menu');
+    if (mBtn && cBtn && mMenu) {
+        mBtn.addEventListener('click', () => mMenu.classList.add('open'));
+        cBtn.addEventListener('click', () => mMenu.classList.remove('open'));
     }
 });

@@ -15,41 +15,65 @@
 
     <!-- NAVBAR -->
     <nav class="navbar" id="navbar">
-        <div class="navbar-inner">
-            <a href="../_3/home.html" class="nav-brand"><div class="nav-brand-icon">4U</div><span>Delivery</span></a>
+        <div class="container navbar-inner">
+            <a href="../_3/home.html" class="nav-brand group">
+                <div class="nav-brand-icon group-hover:scale-110">4U</div>
+                <span class="group-hover:text-gold">Delivery</span>
+            </a>
+            
             <div class="nav-links">
                 <a href="../_3/home.html" class="nav-link">الرئيسية</a>
                 <a href="../_4/res.html" class="nav-link">المطاعم</a>
                 <a href="../_5/About.html" class="nav-link">عننا</a>
+                
+                <!-- Dropdown -->
                 <div class="nav-dropdown">
-                    <button class="nav-dropdown-btn">القائمة <span class="material-symbols-outlined">expand_more</span></button>
+                    <button class="nav-dropdown-btn">
+                        القائمة <span class="material-symbols-outlined">expand_more</span>
+                    </button>
                     <div class="nav-dropdown-content">
                         <a href="../_6/stamp_card.html" class="nav-dropdown-item"><span class="material-symbols-outlined">card_membership</span> كارت الأختام</a>
                         <a href="../_7/contact.html" class="nav-dropdown-item"><span class="material-symbols-outlined">support_agent</span> المساعدة</a>
                         <a href="../_7/terms.html" class="nav-dropdown-item"><span class="material-symbols-outlined">rule</span> الشروط والأحكام</a>
                     </div>
                 </div>
-                <div style="width:1px;height:16px;background:rgba(255,255,255,0.1);margin:0 0.5rem;"></div>
-                <a href="../_6/admin_stamps.html" class="nav-link" style="color:var(--gold);display:flex;align-items:center;gap:0.25rem;"><span class="material-symbols-outlined">admin_panel_settings</span> الإدارة</a>
+
+                <div id="nav-admin-divider" style="width: 1px; height: 16px; background: rgba(255,255,255,0.1); margin: 0 0.5rem; display: none;"></div>
+                <a href="../_6/admin_stamps.html" class="nav-link" id="nav-admin-link" style="color: var(--gold); display: none; align-items: center; gap: 0.25rem;">
+                    <span class="material-symbols-outlined">admin_panel_settings</span> الإدارة
+                </a>
             </div>
+
             <div class="nav-actions">
-                <div id="nav-auth-buttons" style="display:flex;gap:1rem;align-items:center;">
+                <!-- Logged Out State -->
+                <div id="nav-auth-buttons" style="display: flex; gap: 1rem; align-items: center;">
                     <a href="../_1/login.html" class="btn-login" onclick="localStorage.setItem('authTab','login')">دخول</a>
                     <a href="../_1/login.html" class="btn-primary ripple-btn" onclick="localStorage.setItem('authTab','register')">اعمل حساب</a>
                 </div>
+                <!-- Logged In State -->
                 <div id="nav-profile-button" class="hidden">
-                    <a href="../_2/profile.html" class="btn-primary ripple-btn" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);"><span class="material-symbols-outlined">person</span> <span id="nav-user-name">حسابي</span></a>
+                    <a href="../_2/profile.html" class="btn-primary ripple-btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+                        <span class="material-symbols-outlined">person</span> <span id="nav-user-name">حسابي</span>
+                    </a>
                 </div>
-                <button id="mobile-menu-btn" class="btn-menu ripple-btn"><span class="material-symbols-outlined">menu</span></button>
+
+                <button id="mobile-menu-btn" class="btn-menu ripple-btn">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
             </div>
         </div>
     </nav>
 
-    <!-- Mobile Menu -->
+    <!-- Mobile Menu Overlay -->
     <div id="mobile-menu" class="mobile-menu-overlay">
         <div class="mobile-header">
-            <div class="nav-brand"><div class="nav-brand-icon">4U</div><span>Delivery</span></div>
-            <button id="close-menu-btn" class="btn-close-menu ripple-btn"><span class="material-symbols-outlined">close</span></button>
+            <div class="nav-brand">
+                <div class="nav-brand-icon">4U</div>
+                <span>Delivery</span>
+            </div>
+            <button id="close-menu-btn" class="btn-close-menu ripple-btn">
+                <span class="material-symbols-outlined">close</span>
+            </button>
         </div>
         <div class="mobile-nav">
             <a href="../_3/home.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">home</span> الرئيسية</a>
@@ -59,9 +83,11 @@
             <div class="mobile-divider"></div>
             <a href="../_7/contact.html" class="mobile-link active" style="color: var(--brand);"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">support_agent</span> المساعدة</a>
             <a href="../_7/terms.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">rule</span> الشروط والأحكام</a>
-            <a href="../_6/admin_stamps.html" class="mobile-admin-link" style="color:var(--gold); display:flex; align-items:center; gap:0.5rem; margin-top: 1rem;"><span class="material-symbols-outlined">admin_panel_settings</span> لوحة الإدارة</a>
+            <a href="../_6/admin_stamps.html" class="mobile-admin-link" id="mobile-admin-link" style="color:var(--gold); display:none; align-items:center; gap:0.5rem; margin-top: 1rem;"><span class="material-symbols-outlined">admin_panel_settings</span> لوحة الإدارة</a>
         </div>
-        <div class="mobile-bottom"><a href="../_1/login.html" class="btn-mobile-auth ripple-btn" id="mobile-auth-btn">دخول / تسجيل حساب</a></div>
+        <div class="mobile-bottom">
+            <a href="../_1/login.html" class="btn-mobile-auth ripple-btn" id="mobile-auth-btn">دخول / تسجيل حساب</a>
+        </div>
     </div>
 
     <!-- Hero -->
@@ -79,7 +105,7 @@
                 <div class="contact-card-icon brand"><span class="material-symbols-outlined icon-filled">call</span></div>
                 <h3>اتصل بينا</h3>
                 <p>متاحين من 10 صباحاً لـ 12 بالليل</p>
-                <a href="tel:0103273273" class="btn-brand ripple-btn"><span class="material-symbols-outlined" style="font-size:18px;">call</span> 0103273273</a>
+                <a href="tel:01032799273" class="btn-brand ripple-btn"><span class="material-symbols-outlined" style="font-size:18px;">call</span> 01032799273</a>
             </div>
 
             <!-- WhatsApp -->
@@ -185,7 +211,7 @@
 
             <div class="faq-item">
                 <button class="faq-question">نسيت كلمة السر، أعمل إيه؟ <span class="material-symbols-outlined">expand_more</span></button>
-                <div class="faq-answer">تواصل مع فريق الدعم الفني عبر الواتساب على الرقم 01111139271 أو اتصل بينا على 0103273273 وهنساعدك تسترجع حسابك.</div>
+                <div class="faq-answer">تواصل مع فريق الدعم الفني عبر الواتساب على الرقم 01111139271 أو اتصل بينا على 01032799273 وهنساعدك تسترجع حسابك.</div>
             </div>
         </div>
     </div>
@@ -211,7 +237,7 @@
                     <h4>تواصل معنا</h4>
                     <div class="footer-links">
                         <div class="contact-item"><span class="material-symbols-outlined">location_on</span><span>بني سويف الجديدة - الكورنيش</span></div>
-                        <div class="contact-item"><span class="material-symbols-outlined">call</span><span dir="ltr">0103273273</span></div>
+                        <div class="contact-item"><span class="material-symbols-outlined">call</span><span dir="ltr">01032799273</span></div>
                         <div class="contact-item"><span class="material-symbols-outlined">call</span><span dir="ltr">01111139271</span></div>
                     </div>
                 </div>

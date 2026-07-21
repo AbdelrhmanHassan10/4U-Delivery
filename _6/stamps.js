@@ -309,19 +309,25 @@ const initAdminPanel = async () => {
 
     const updateAdminUI = () => {
         let currentStamps = 0;
-        let currentPoints = 0;
-        let currentTier = 'Bronze';
+        let globalPoints = 0;
+        let globalStamps = 0;
         
         if (currentUserData) {
             const stampsMap = currentUserData.stamps || {};
             currentStamps = stampsMap[selectedBrand] || 0;
             
             const pointsMap = currentUserData.pointsMap || {};
-            currentPoints = pointsMap[selectedBrand] || 0;
             
-            const tierMap = currentUserData.tierMap || {};
-            currentTier = tierMap[selectedBrand] || "Bronze";
+            Object.values(pointsMap).forEach(p => globalPoints += (p || 0));
+            Object.values(stampsMap).forEach(s => globalStamps += (s || 0));
         }
+
+        let globalTier = "Bronze";
+        if (globalPoints <= 600) globalTier = "Bronze";
+        else if (globalPoints <= 1200) globalTier = "Silver";
+        else if (globalPoints <= 1800) globalTier = "Gold";
+        else if (globalPoints <= 2400) globalTier = "Platinum";
+        else globalTier = "Elite";
 
         const activeStamps = (currentStamps > 0 && currentStamps % 10 === 0) ? 10 : (currentStamps % 10);
         const completedCards = Math.floor(currentStamps / 10);
@@ -332,9 +338,9 @@ const initAdminPanel = async () => {
         }
         
         const pointsEl = document.getElementById('admin-user-points');
-        if (pointsEl) pointsEl.textContent = currentPoints.toLocaleString('ar-EG');
+        if (pointsEl) pointsEl.textContent = globalPoints.toLocaleString('ar-EG');
         const tierEl = document.getElementById('admin-user-tier');
-        if (tierEl) tierEl.textContent = currentTier;
+        if (tierEl) tierEl.textContent = globalTier;
         
         const url = `../_6/stamp_card.html?brand=${encodeURIComponent(selectedBrand)}&stamps=${activeStamps}`;
         if (iframeEl) iframeEl.src = url;
@@ -524,10 +530,10 @@ const initAdminPanel = async () => {
     }
 
     const recalculateTier = (points) => {
-        if (points > 2000) return "Elite";
-        if (points > 1500) return "Platinum";
-        if (points > 1000) return "Gold";
-        if (points > 500) return "Silver";
+        if (points > 2400) return "Elite";
+        if (points > 1800) return "Platinum";
+        if (points > 1200) return "Gold";
+        if (points > 600) return "Silver";
         return "Bronze";
     };
 
@@ -542,23 +548,12 @@ const initAdminPanel = async () => {
         currentStamps++;
         stampsMap[selectedBrand] = currentStamps;
         
-        const pointsMap = currentUserData.pointsMap || {};
-        const currentPoints = pointsMap[selectedBrand] || 0;
-        const newPoints = currentPoints + 50;
-        pointsMap[selectedBrand] = newPoints;
-        
-        const tierMap = currentUserData.tierMap || {};
-        const nextTier = recalculateTier(newPoints);
-        tierMap[selectedBrand] = nextTier;
-        
         btnAddStamp.innerHTML = '<span class="material-symbols-outlined animate-spin" style="animation: spin 1s linear infinite;">progress_activity</span> جاري الإضافة...';
         btnAddStamp.disabled = true;
 
         try {
             await updateDoc(doc(db, "users", currentUserDoc.id), {
-                stamps: stampsMap,
-                pointsMap: pointsMap,
-                tierMap: tierMap
+                stamps: stampsMap
             });
             
             // Log activity
@@ -566,23 +561,21 @@ const initAdminPanel = async () => {
                 userId: currentUserDoc.id,
                 title: `إضافة ختم - ${selectedBrand}`,
                 type: 'stamp',
-                value: '+1 ختم (+50 نقطة)',
+                value: '+1 ختم',
                 date: new Date().toLocaleDateString('ar-EG'),
                 createdAt: new Date().toISOString()
             });
 
             // Update local data
             currentUserData.stamps = stampsMap;
-            currentUserData.pointsMap = pointsMap;
-            currentUserData.tierMap = tierMap;
 
             updateAdminUI();
-            showToast(`تم إضافة الختم و 50 نقطة بنجاح!`);
+            showToast(`تم إضافة الختم بنجاح!`);
         } catch (error) {
             console.error("Error adding stamp:", error);
             showToast("حدث خطأ أثناء الإضافة.", "error");
         }
-        btnAddStamp.innerHTML = '<span class="material-symbols-outlined text-brand">verified</span> إضافة ختم جديد الآن (+50 نقطة)';
+        btnAddStamp.innerHTML = '<span class="material-symbols-outlined text-brand">verified</span> إضافة ختم جديد الآن';
         btnAddStamp.disabled = false;
     });
 
@@ -597,23 +590,12 @@ const initAdminPanel = async () => {
                 currentStamps--;
                 stampsMap[selectedBrand] = currentStamps;
                 
-                const pointsMap = currentUserData.pointsMap || {};
-                const currentPoints = pointsMap[selectedBrand] || 0;
-                const newPoints = Math.max(0, currentPoints - 50);
-                pointsMap[selectedBrand] = newPoints;
-                
-                const tierMap = currentUserData.tierMap || {};
-                const nextTier = recalculateTier(newPoints);
-                tierMap[selectedBrand] = nextTier;
-                
                 btnRemoveStamp.innerHTML = '<span class="material-symbols-outlined animate-spin" style="animation: spin 1s linear infinite;">progress_activity</span> جاري الإزالة...';
                 btnRemoveStamp.disabled = true;
 
                 try {
                     await updateDoc(doc(db, "users", currentUserDoc.id), {
-                        stamps: stampsMap,
-                        pointsMap: pointsMap,
-                        tierMap: tierMap
+                        stamps: stampsMap
                     });
                     
                     // Log activity
@@ -621,23 +603,21 @@ const initAdminPanel = async () => {
                         userId: currentUserDoc.id,
                         title: `إزالة ختم - ${selectedBrand}`,
                         type: 'stamp',
-                        value: '-1 ختم (-50 نقطة)',
+                        value: '-1 ختم',
                         date: new Date().toLocaleDateString('ar-EG'),
                         createdAt: new Date().toISOString()
                     });
 
                     // Update local data
                     currentUserData.stamps = stampsMap;
-                    currentUserData.pointsMap = pointsMap;
-                    currentUserData.tierMap = tierMap;
 
                     updateAdminUI();
-                    showToast(`تم إزالة الختم وخصم 50 نقطة بنجاح!`);
+                    showToast(`تم إزالة الختم بنجاح!`);
                 } catch (error) {
                     console.error("Error removing stamp:", error);
                     showToast("حدث خطأ أثناء الإزالة.", "error");
                 }
-                btnRemoveStamp.innerHTML = '<span class="material-symbols-outlined text-dark-300">do_not_disturb_on</span> إزالة ختم (-50 نقطة)';
+                btnRemoveStamp.innerHTML = '<span class="material-symbols-outlined text-dark-300">do_not_disturb_on</span> إزالة ختم';
                 btnRemoveStamp.disabled = false;
             } else {
                 showToast('لا يوجد أختام لإزالتها من هذا المطعم!', 'error');
@@ -645,31 +625,36 @@ const initAdminPanel = async () => {
         });
     }
 
-    // Add Points Handler
-    addPointsBtn?.addEventListener('click', async () => {
+    // Add Points Logic
+    const processAddPoints = async (pointsToAdd, btnElement, originalText) => {
         if (!currentUserDoc || !currentUserData) return;
-        const pointsToAdd = parseInt(addPointsInput.value, 10);
         if (!pointsToAdd || pointsToAdd === 0) {
             showToast('يرجى إدخال عدد نقاط صحيح', 'error');
             return;
         }
 
-        addPointsBtn.innerHTML = 'جاري الإضافة...';
-        addPointsBtn.disabled = true;
+        btnElement.innerHTML = '<span class="material-symbols-outlined animate-spin" style="animation: spin 1s linear infinite;">progress_activity</span> جاري الإضافة...';
+        btnElement.disabled = true;
 
         try {
             const pointsMap = currentUserData.pointsMap || {};
             const currentPoints = pointsMap[selectedBrand] || 0;
             const newPoints = Math.max(0, currentPoints + pointsToAdd);
             pointsMap[selectedBrand] = newPoints;
+            
+            let globalPoints = 0;
+            Object.values(pointsMap).forEach(p => globalPoints += (p || 0));
 
-            const tierMap = currentUserData.tierMap || {};
-            const nextTier = recalculateTier(newPoints);
-            tierMap[selectedBrand] = nextTier;
+            let globalTier = "Bronze";
+            if (globalPoints <= 600) globalTier = "Bronze";
+            else if (globalPoints <= 1200) globalTier = "Silver";
+            else if (globalPoints <= 1800) globalTier = "Gold";
+            else if (globalPoints <= 2400) globalTier = "Platinum";
+            else globalTier = "Elite";
 
             await updateDoc(doc(db, "users", currentUserDoc.id), {
                 pointsMap: pointsMap,
-                tierMap: tierMap
+                tier: globalTier
             });
 
             // Log activity
@@ -684,18 +669,28 @@ const initAdminPanel = async () => {
 
             // Update local data
             currentUserData.pointsMap = pointsMap;
-            currentUserData.tierMap = tierMap;
+            currentUserData.tier = globalTier;
 
             updateAdminUI();
 
-            addPointsInput.value = '';
+            if (addPointsInput) addPointsInput.value = '';
             showToast(`تم ${pointsToAdd > 0 ? 'إضافة' : 'خصم'} ${Math.abs(pointsToAdd)} نقطة بنجاح! الرصيد: ${newPoints}`);
         } catch (error) {
             console.error("Error adding points:", error);
             showToast("حدث خطأ أثناء إضافة النقاط.", "error");
         }
-        addPointsBtn.innerHTML = 'إضافة نقاط';
-        addPointsBtn.disabled = false;
+        btnElement.innerHTML = originalText;
+        btnElement.disabled = false;
+    };
+
+    addPointsBtn?.addEventListener('click', () => {
+        const pointsToAdd = parseInt(addPointsInput.value, 10);
+        processAddPoints(pointsToAdd, addPointsBtn, 'إضافة نقاط');
+    });
+
+    const add30PointsBtn = document.getElementById('admin-add-30-points-btn');
+    add30PointsBtn?.addEventListener('click', () => {
+        processAddPoints(30, add30PointsBtn, '+30 نقطة (سريع)');
     });
 
     // Auto Search if URL has ?phone=...

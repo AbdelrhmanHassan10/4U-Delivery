@@ -6,7 +6,7 @@
     <title>4U Delivery | المطعم</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="restaurant.css">
+    <link rel="stylesheet" href="restaurant.css?v=3">
 </head>
 <body>
     <!-- Page Transition Curtain -->
@@ -21,13 +21,80 @@
 
     <!-- ═══ NAVBAR ═══ -->
     <nav class="navbar" id="navbar">
-        <div class="navbar-inner">
+        <div class="container navbar-inner">
             <a href="../_3/home.html" class="nav-brand group">
                 <div class="nav-brand-icon group-hover:scale-110">4U</div>
                 <span class="group-hover:text-gold">Delivery</span>
             </a>
+            
+            <div class="nav-links">
+                <a href="../_3/home.html" class="nav-link">الرئيسية</a>
+                <a href="../_4/res.html" class="nav-link active">المطاعم</a>
+                <a href="../_5/About.html" class="nav-link">عننا</a>
+                
+                <!-- Dropdown -->
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">
+                        القائمة <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <div class="nav-dropdown-content">
+                        <a href="../_6/stamp_card.html" class="nav-dropdown-item"><span class="material-symbols-outlined">card_membership</span> كارت الأختام</a>
+                        <a href="../_7/contact.html" class="nav-dropdown-item"><span class="material-symbols-outlined">support_agent</span> المساعدة</a>
+                        <a href="../_7/terms.html" class="nav-dropdown-item"><span class="material-symbols-outlined">rule</span> الشروط والأحكام</a>
+                    </div>
+                </div>
+
+                <div id="nav-admin-divider" style="width: 1px; height: 16px; background: rgba(255,255,255,0.1); margin: 0 0.5rem; display: none;"></div>
+                <a href="../_6/admin_stamps.html" class="nav-link" id="nav-admin-link" style="color: var(--gold); display: none; align-items: center; gap: 0.25rem;">
+                    <span class="material-symbols-outlined">admin_panel_settings</span> الإدارة
+                </a>
+            </div>
+
+            <div class="nav-actions">
+                <!-- Logged Out State -->
+                <div id="nav-auth-buttons" style="display: flex; gap: 1rem; align-items: center;">
+                    <a href="../_1/login.html" class="btn-login" onclick="localStorage.setItem('authTab','login')">دخول</a>
+                    <a href="../_1/login.html" class="btn-primary ripple-btn" onclick="localStorage.setItem('authTab','register')">اعمل حساب</a>
+                </div>
+                <!-- Logged In State -->
+                <div id="nav-profile-button" class="hidden">
+                    <a href="../_2/profile.html" class="btn-primary ripple-btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+                        <span class="material-symbols-outlined">person</span> <span id="nav-user-name">حسابي</span>
+                    </a>
+                </div>
+
+                <button id="mobile-menu-btn" class="btn-menu ripple-btn">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+            </div>
         </div>
     </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="mobile-menu-overlay">
+        <div class="mobile-header">
+            <div class="nav-brand">
+                <div class="nav-brand-icon">4U</div>
+                <span>Delivery</span>
+            </div>
+            <button id="close-menu-btn" class="btn-close-menu ripple-btn">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="mobile-nav">
+            <a href="../_3/home.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">home</span> الرئيسية</a>
+            <a href="../_4/res.html" class="mobile-link active" style="color: var(--brand);"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">restaurant</span> المطاعم</a>
+            <a href="../_6/stamp_card.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">card_membership</span> المكافآت</a>
+            <a href="../_5/About.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">info</span> عننا</a>
+            <div class="mobile-divider"></div>
+            <a href="../_7/contact.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">support_agent</span> المساعدة</a>
+            <a href="../_7/terms.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">rule</span> الشروط والأحكام</a>
+            <a href="../_6/admin_stamps.html" class="mobile-admin-link" id="mobile-admin-link" style="color:var(--gold); display:none; align-items:center; gap:0.5rem; margin-top: 1rem;"><span class="material-symbols-outlined">admin_panel_settings</span> لوحة الإدارة</a>
+        </div>
+        <div class="mobile-bottom">
+            <a href="../_1/login.html" class="btn-mobile-auth ripple-btn" id="mobile-auth-btn">دخول / تسجيل حساب</a>
+        </div>
+    </div>
 
     <!-- ═══ MAIN LAYOUT ═══ -->
     <main class="main-layout">
@@ -158,6 +225,6 @@
     </div>
 
     <div id="toast-container" class="toast-container"></div>
-    <script type="module" src="restaurant.js"></script>
+    <script type="module" src="restaurant.js?v=3"></script>
 </body>
 </html>

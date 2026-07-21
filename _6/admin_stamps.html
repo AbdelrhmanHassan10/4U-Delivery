@@ -144,7 +144,10 @@
                                 <input type="number" id="admin-add-points-input" placeholder="العدد..." class="input-control" dir="rtl" style="padding-right: 3rem;" />
                                 <span class="material-symbols-outlined" style="left: auto; right: 1rem; color: var(--gold);">stars</span>
                             </div>
-                            <button class="btn-search ripple-btn" id="admin-add-points-btn" style="background: var(--gold); color: #000; margin-top: 10px;">إضافة نقاط</button>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 10px;">
+                                <button class="btn-search ripple-btn" id="admin-add-points-btn" style="background: var(--gold); color: #000; flex: 1; min-width: max-content; white-space: nowrap; display: flex; align-items: center; justify-content: center;">إضافة نقاط</button>
+                                <button class="btn-search ripple-btn" id="admin-add-30-points-btn" style="background: rgba(240, 192, 64, 0.1); color: var(--gold); border: 1px solid rgba(240, 192, 64, 0.3); flex: 1; min-width: max-content; white-space: nowrap; display: flex; align-items: center; justify-content: center;">+30 نقطة (سريع)</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -175,11 +178,11 @@
                             <div style="display: flex; gap: 0.5rem; flex-direction: column;">
                                 <button class="btn-add-stamp ripple-btn" id="btn-add-stamp-action">
                                     <span class="material-symbols-outlined text-brand">verified</span>
-                                    إضافة ختم جديد الآن (+50 نقطة)
+                                    إضافة ختم جديد الآن
                                 </button>
                                 <button class="btn-search ripple-btn" id="btn-remove-stamp-action" style="background: var(--dark-800); color: white; border: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 1rem; border-radius: 1rem;">
                                     <span class="material-symbols-outlined text-dark-300">do_not_disturb_on</span>
-                                    إزالة ختم (-50 نقطة)
+                                    إزالة ختم
                                 </button>
                             </div>
                         </div>
@@ -238,7 +241,7 @@
         </div>
     </main>
 
-    <script type="module" src="stamps.js"></script>
+    <script type="module" src="stamps.js?v=4"></script>
     <script>
         // Mobile Sidebar Toggle
         const menuToggle = document.getElementById('admin-menu-toggle');

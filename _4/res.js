@@ -139,11 +139,22 @@ onAuthStateChanged(auth, async (user) => {
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 const userData = docSnap.data();
-                // Get first name only for navbar
                 const firstName = userData.name ? userData.name.split(' ')[0] : 'حسابي';
                 navUserName.textContent = firstName;
                 userFavorites = userData.favorites || [];
                 window.userStampsMap = userData.stamps || {}; // For loyalty highlighting
+                
+                const mobileAdminLink = document.getElementById('mobile-admin-link');
+                if (mobileAdminLink && userData.isAdmin) {
+                    mobileAdminLink.style.display = 'flex';
+                }
+                const navAdminLink = document.getElementById('nav-admin-link');
+                const navAdminDivider = document.getElementById('nav-admin-divider');
+                if (navAdminLink && userData.isAdmin) {
+                    navAdminLink.style.display = 'flex';
+                    if (navAdminDivider) navAdminDivider.style.display = 'block';
+                }
+
                 renderRestaurants(); // Update UI if favorites loaded after restaurants
             }
         } catch (error) {
@@ -158,6 +169,9 @@ onAuthStateChanged(auth, async (user) => {
         navProfileButton.classList.add('hidden');
         mobileAuthBtn.textContent = 'دخول / تسجيل حساب';
         mobileAuthBtn.href = '../_1/login.html';
+        
+        const mobileAdminLink = document.getElementById('mobile-admin-link');
+        if (mobileAdminLink) mobileAdminLink.style.display = 'none';
     }
 });
 
@@ -337,6 +351,15 @@ function renderRestaurants() {
             filtered.sort((a, b) => (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0));
         } else if (sortVal === 'time') {
             filtered.sort((a, b) => (parseInt(a.deliveryTime) || 999) - (parseInt(b.deliveryTime) || 999));
+        } else {
+            // Default sort: if user has stamps, bring those restaurants to the top
+            if (window.userStampsMap) {
+                filtered.sort((a, b) => {
+                    const countA = window.userStampsMap[a.name] || 0;
+                    const countB = window.userStampsMap[b.name] || 0;
+                    return countB - countA;
+                });
+            }
         }
     }
     
@@ -358,9 +381,15 @@ function renderRestaurants() {
             const count = window.userStampsMap ? (window.userStampsMap[data.name] || 0) : 0;
             const stampClass = window.userStampsMap ? (count > 0 ? 'has-stamps' : 'no-stamps') : '';
             const activeCount = count % 10 === 0 && count > 0 ? 10 : count % 10;
-            const badgeHtml = window.userStampsMap && count > 0 
-                ? `<div class="stamp-badge"><span class="stamp-count">${activeCount}</span> <span class="material-symbols-outlined" style="font-size: 14px;">card_giftcard</span></div>`
-                : `<div class="stamp-badge hidden"><span class="stamp-count"></span> <span class="material-symbols-outlined" style="font-size: 14px;">card_giftcard</span></div>`;
+            
+            let badgeHtml = '';
+            if (window.userStampsMap) {
+                if (count > 0) {
+                    badgeHtml = `<div class="stamp-badge active-badge"><span class="stamp-count">${activeCount}</span> <span class="material-symbols-outlined" style="font-size: 14px;">card_giftcard</span></div>`;
+                } else {
+                    badgeHtml = `<div class="stamp-badge new-badge"><span style="font-size: 11px; font-weight:700;">ابدأ التجميع</span> <span class="material-symbols-outlined" style="font-size: 14px;">add_circle</span></div>`;
+                }
+            }
 
             html += `
             <div class="res-card-large glass ${stampClass}">

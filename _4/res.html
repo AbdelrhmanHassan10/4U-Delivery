@@ -6,7 +6,7 @@
     <title>4U Delivery | المطاعم</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="res.css">
+    <link rel="stylesheet" href="res.css?v=2">
 </head>
 <body>
     <!-- Page Transition Curtain -->
@@ -21,7 +21,7 @@
 
     <!-- ═══ NAVBAR ═══ -->
     <nav class="navbar" id="navbar">
-        <div class="navbar-inner">
+        <div class="container navbar-inner">
             <a href="../_3/home.html" class="nav-brand group">
                 <div class="nav-brand-icon group-hover:scale-110">4U</div>
                 <span class="group-hover:text-gold">Delivery</span>
@@ -44,8 +44,8 @@
                     </div>
                 </div>
 
-                <div style="width: 1px; height: 16px; background: rgba(255,255,255,0.1); margin: 0 0.5rem;"></div>
-                <a href="../_6/admin_stamps.html" class="nav-link" style="color: var(--gold); display: flex; align-items: center; gap: 0.25rem;">
+                <div id="nav-admin-divider" style="width: 1px; height: 16px; background: rgba(255,255,255,0.1); margin: 0 0.5rem; display: none;"></div>
+                <a href="../_6/admin_stamps.html" class="nav-link" id="nav-admin-link" style="color: var(--gold); display: none; align-items: center; gap: 0.25rem;">
                     <span class="material-symbols-outlined">admin_panel_settings</span> الإدارة
                 </a>
             </div>
@@ -89,7 +89,7 @@
             <div class="mobile-divider"></div>
             <a href="../_7/contact.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">support_agent</span> المساعدة</a>
             <a href="../_7/terms.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">rule</span> الشروط والأحكام</a>
-            <a href="../_6/admin_stamps.html" class="mobile-admin-link" style="color:var(--gold); display:flex; align-items:center; gap:0.5rem; margin-top: 1rem;"><span class="material-symbols-outlined">admin_panel_settings</span> لوحة الإدارة</a>
+            <a href="../_6/admin_stamps.html" class="mobile-admin-link" id="mobile-admin-link" style="color:var(--gold); display:none; align-items:center; gap:0.5rem; margin-top: 1rem;"><span class="material-symbols-outlined">admin_panel_settings</span> لوحة الإدارة</a>
         </div>
         <div class="mobile-bottom">
             <a href="../_1/login.html" class="btn-mobile-auth ripple-btn" id="mobile-auth-btn">دخول / تسجيل حساب</a>
@@ -228,6 +228,6 @@
         <button onclick="window.scrollTo({top:0,behavior:'smooth'})" class="btn-float-up ripple-btn"><span class="material-symbols-outlined">arrow_upward</span></button>
     </div>
 
-    <script type="module" src="res.js"></script>
+    <script type="module" src="res.js?v=3"></script>
 </body>
 </html>

@@ -42,6 +42,7 @@ body {
 }
 
 /* Glassmorphism */
+.hidden { display: none !important; }
 .glass { 
     background: rgba(26,26,26,0.6); 
     backdrop-filter: blur(20px); 
@@ -445,8 +446,10 @@ body {
 .scroll-indicator {
     position: absolute;
     bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: max-content;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -999,21 +1002,40 @@ body {
 /* Mobile Adjustments */
 @media (max-width: 768px) {
     .nav-links { display: none; }
-    .btn-login, .btn-primary { display: none; }
+    #nav-auth-buttons { display: none !important; }
     .btn-menu { display: block; }
     
     .hero-title { font-size: 2.25rem; }
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-grid { grid-template-columns: 1fr; gap: 1.5rem; }
     .loyalty-intro-card { padding: 2rem; }
     .loyalty-title { font-size: 2rem; }
     
-    .levels-grid { grid-template-columns: repeat(2, 1fr); }
+    .levels-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
     .level-card.elite { grid-column: span 2; }
     
     .benefits-grid { grid-template-columns: 1fr; }
-    .iphone-card { flex-direction: column; text-align: center; padding: 2rem; }
+    .iphone-card { flex-direction: column; text-align: center; padding: 2rem; gap: 2rem; }
+    .iphone-title { font-size: 2rem; }
+    .iphone-image-wrapper { width: 100%; max-width: 260px; height: 260px; margin: 0 auto; }
     
     .features-grid { grid-template-columns: 1fr; }
     .cta-buttons { flex-direction: column; }
-    .footer-grid { grid-template-columns: 1fr; }
+    
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; text-align: center; gap: 1rem; }
 }
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay { position: fixed; inset: 0; background: var(--dark-950); z-index: 200; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); padding: 1.5rem; display: flex; flex-direction: column; }
+.mobile-menu-overlay.open { transform: translateX(0); }
+.mobile-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; }
+.btn-close-menu { color: white; padding: 0.5rem; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: background 0.3s; border: none; cursor: pointer; }
+.btn-close-menu:hover { background: rgba(255,255,255,0.1); }
+.mobile-nav { display: flex; flex-direction: column; gap: 1.5rem; text-align: right; }
+.mobile-link { font-size: 1.5rem; font-weight: 900; color: white; transition: color 0.3s; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+.mobile-link:hover { color: var(--brand); }
+.mobile-divider { border-bottom: 1px solid rgba(255,255,255,0.1); margin: 1rem 0; }
+.mobile-admin-link { color: var(--gold); font-size: 1.25rem; font-weight: 900; display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem; text-decoration: none; }
+.mobile-bottom { margin-top: auto; padding-top: 2.5rem; }
+.btn-mobile-auth { display: block; width: 100%; text-align: center; background: var(--brand); color: white; font-weight: 700; padding: 1rem; border-radius: 0.75rem; transition: background 0.3s; text-decoration: none; border: none; cursor: pointer; font-size: 1rem; }
+.btn-mobile-auth:hover { background: var(--brand-light); }

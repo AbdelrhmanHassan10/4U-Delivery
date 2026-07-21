@@ -6,12 +6,16 @@
     <title>4U Delivery | المكافآت والأختام</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="profile-pages.css">
+    <link rel="stylesheet" href="profile-pages.css?v=3">
     <link rel="stylesheet" href="../_6/stamps.css">
     <style>
         .loyalty-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
             margin-bottom: 2rem;
+            width: 100%;
         }
         .loyalty-header h1 {
             font-size: 2rem;
@@ -23,6 +27,21 @@
         }
         .loyalty-header p {
             color: var(--dark-400);
+        }
+        
+        @media (max-width: 768px) {
+            .loyalty-header h1 {
+                font-size: 1.8rem;
+            }
+            .loyalty-header p {
+                font-size: 0.95rem;
+                padding: 0 1rem;
+            }
+            .page-icon-wrapper {
+                width: 65px;
+                height: 65px;
+                font-size: 2rem;
+            }
         }
         
         /* Unified container for both cards */
@@ -54,6 +73,57 @@
             position: absolute;
             top: 0; left: 0; width: 100%; height: 4px;
             background: var(--brand);
+        }
+
+        .stamp-icon.filled {
+            color: var(--brand);
+        }
+
+        /* Brand Chips */
+        .brand-chips-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            margin: 0.5rem auto;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            max-width: 100%;
+            justify-content: center;
+        }
+        .brand-chips-container::-webkit-scrollbar {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .brand-chips-container {
+                justify-content: flex-start;
+                padding-right: 1.5rem;
+                padding-left: 1.5rem;
+            }
+        }
+        .brand-chip {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--dark-200);
+            padding: 0.5rem 1.25rem;
+            border-radius: 2rem;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        .brand-chip:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        .brand-chip.active {
+            background: var(--gold);
+            color: #000;
+            border-color: var(--gold);
+            box-shadow: 0 4px 15px rgba(240, 192, 64, 0.2);
         }
         
         .loyalty-box.gold-box::before {
@@ -102,22 +172,81 @@
     <div class="bg-effects pointer-events-none"><div class="particles"></div><div class="glow-brand animate-float"></div><div class="glow-gold animate-float" style="animation-delay:-3s;"></div></div>
 
     <!-- NAVBAR -->
-    <nav class="navbar glass-strong" id="navbar">
+    <nav class="navbar" id="navbar">
         <div class="container navbar-inner">
-            <a href="../_3/home.html" class="nav-brand ripple-btn"><div class="nav-brand-icon">4U</div><span>Delivery</span></a>
+            <a href="../_3/home.html" class="nav-brand group">
+                <div class="nav-brand-icon group-hover:scale-110">4U</div>
+                <span class="group-hover:text-gold">Delivery</span>
+            </a>
+            
             <div class="nav-links">
                 <a href="../_3/home.html" class="nav-link">الرئيسية</a>
                 <a href="../_4/res.html" class="nav-link">المطاعم</a>
                 <a href="../_5/About.html" class="nav-link">عننا</a>
-                <a href="../_2/profile.html" class="nav-link active">بروفايلي</a>
-            </div>
-            <div class="nav-actions">
-                <a href="profile.html" class="btn-primary ripple-btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
-                    <span class="material-symbols-outlined">person</span> <span id="nav-user-name">حسابي</span>
+                
+                <!-- Dropdown -->
+                <div class="nav-dropdown">
+                    <button class="nav-dropdown-btn">
+                        القائمة <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <div class="nav-dropdown-content">
+                        <a href="../_6/stamp_card.html" class="nav-dropdown-item"><span class="material-symbols-outlined">card_membership</span> كارت الأختام</a>
+                        <a href="../_7/contact.html" class="nav-dropdown-item"><span class="material-symbols-outlined support_agent">support_agent</span> المساعدة</a>
+                        <a href="../_7/terms.html" class="nav-dropdown-item"><span class="material-symbols-outlined rule">rule</span> الشروط والأحكام</a>
+                    </div>
+                </div>
+
+                <div id="nav-admin-divider" style="width: 1px; height: 16px; background: rgba(255,255,255,0.1); margin: 0 0.5rem; display: none;"></div>
+                <a href="../_6/admin_stamps.html" class="nav-link" id="nav-admin-link" style="color: var(--gold); display: none; align-items: center; gap: 0.25rem;">
+                    <span class="material-symbols-outlined">admin_panel_settings</span> الإدارة
                 </a>
+            </div>
+
+            <div class="nav-actions">
+                <!-- Logged Out State -->
+                <div id="nav-auth-buttons" style="display: flex; gap: 1rem; align-items: center;">
+                    <a href="../_1/login.html" class="btn-login" onclick="localStorage.setItem('authTab','login')">دخول</a>
+                    <a href="../_1/login.html" class="btn-primary ripple-btn" onclick="localStorage.setItem('authTab','register')">اعمل حساب</a>
+                </div>
+                <!-- Logged In State -->
+                <div id="nav-profile-button" class="hidden">
+                    <a href="../_2/profile.html" class="btn-primary ripple-btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+                        <span class="material-symbols-outlined">person</span> <span id="nav-user-name">حسابي</span>
+                    </a>
+                </div>
+
+                <button id="mobile-menu-btn" class="btn-menu ripple-btn">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
             </div>
         </div>
     </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="mobile-menu-overlay">
+        <div class="mobile-header">
+            <div class="nav-brand">
+                <div class="nav-brand-icon">4U</div>
+                <span>Delivery</span>
+            </div>
+            <button id="close-menu-btn" class="btn-close-menu ripple-btn">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <div class="mobile-nav">
+            <a href="../_3/home.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">home</span> الرئيسية</a>
+            <a href="../_4/res.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">restaurant</span> المطاعم</a>
+            <a href="../_6/stamp_card.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">card_membership</span> المكافآت</a>
+            <a href="../_5/About.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">info</span> عننا</a>
+            <div class="mobile-divider"></div>
+            <a href="../_7/contact.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">support_agent</span> المساعدة</a>
+            <a href="../_7/terms.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">rule</span> الشروط والأحكام</a>
+            <a href="../_6/admin_stamps.html" class="mobile-admin-link" id="mobile-admin-link" style="color:var(--gold); display:none; align-items:center; gap:0.5rem; margin-top: 1rem;"><span class="material-symbols-outlined">admin_panel_settings</span> لوحة الإدارة</a>
+        </div>
+        <div class="mobile-bottom">
+            <a href="../_1/login.html" class="btn-mobile-auth ripple-btn" id="mobile-auth-btn">دخول / تسجيل حساب</a>
+        </div>
+    </div>
 
     <!-- CONTENT -->
     <section class="page-content container" style="margin-top: 100px;">
@@ -130,7 +259,7 @@
             
             <div id="brand-selector-container" class="hidden" style="margin-top: 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
                 <label style="color: var(--dark-400); font-size: 0.9rem;">اختر المطعم لعرض رصيدك:</label>
-                <select id="customer-brand-select" class="input-control" style="max-width: 300px; background: var(--dark-900); border-radius: 0.5rem; font-size: 1rem; font-weight: 700; cursor: pointer; text-align: center; border: 1px solid rgba(255,255,255,0.2);"></select>
+                <div id="customer-brand-select" class="brand-chips-container" style="max-width: 100%;"></div>
             </div>
             <h2 id="brand-name" style="margin-top: 1.5rem; color: white; font-size: 1.5rem; font-weight: 800;">جاري التحميل...</h2>
         </div>
@@ -258,6 +387,6 @@
     </footer>
 
     <!-- Use loyalty.js instead of profile.js and stamps.js -->
-    <script type="module" src="loyalty.js"></script>
+    <script type="module" src="loyalty.js?v=2"></script>
 </body>
 </html>

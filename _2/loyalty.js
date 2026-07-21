@@ -98,7 +98,7 @@ window.requestReward = async (rewardTitle, costType, costValue, event) => {
     const customerSelect = document.getElementById('customer-brand-select');
     let selectedBrand = null;
     if (customerSelect && !customerSelect.classList.contains('hidden')) {
-        selectedBrand = customerSelect.value;
+        selectedBrand = customerSelect.getAttribute('data-last-selected');
     } else {
         const brandNameEl = document.getElementById('brand-name');
         selectedBrand = brandNameEl ? brandNameEl.textContent : null;
@@ -274,32 +274,51 @@ const renderLoyaltyData = (data) => {
             brandNameEl.classList.add('hidden');
             brandSelectorContainer.classList.remove('hidden');
             
-            let optionsHtml = '';
-            brands.forEach(b => {
-                optionsHtml += `<option value="${b}">${b}</option>`;
-            });
-            customerSelect.innerHTML = optionsHtml;
-            
             // Render first one by default if not previously selected
             const previouslySelected = customerSelect.getAttribute('data-last-selected');
             const targetBrand = previouslySelected && brands.includes(previouslySelected) ? previouslySelected : brands[0];
-            customerSelect.value = targetBrand;
+            
+            let chipsHtml = '';
+            brands.forEach(b => {
+                const activeClass = b === targetBrand ? 'active' : '';
+                chipsHtml += `<button class="brand-chip ${activeClass}" data-brand="${b}">${b}</button>`;
+            });
+            customerSelect.innerHTML = chipsHtml;
+            customerSelect.setAttribute('data-last-selected', targetBrand);
             renderBrandData(targetBrand);
             
-            // Clean old listener
-            const newSelect = customerSelect.cloneNode(true);
-            customerSelect.parentNode.replaceChild(newSelect, customerSelect);
-            
-            newSelect.addEventListener('change', (e) => {
-                const selected = e.target.value;
-                newSelect.setAttribute('data-last-selected', selected);
-                renderBrandData(selected);
+            // Add click listeners
+            const chips = customerSelect.querySelectorAll('.brand-chip');
+            chips.forEach(chip => {
+                chip.addEventListener('click', () => {
+                    const selected = chip.getAttribute('data-brand');
+                    
+                    // Update active class
+                    chips.forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    
+                    customerSelect.setAttribute('data-last-selected', selected);
+                    renderBrandData(selected);
+                });
             });
         }
     }
 };
 
 onAuthStateChanged(auth, async (user) => {
+    const navAuthButtons = document.getElementById('nav-auth-buttons');
+    const navProfileButton = document.getElementById('nav-profile-button');
+    const mobileAuthBtn = document.getElementById('mobile-auth-btn');
+
+    if (user) {
+        if(navAuthButtons) navAuthButtons.classList.add('hidden');
+        if(navProfileButton) navProfileButton.classList.remove('hidden');
+        if(mobileAuthBtn) {
+            mobileAuthBtn.textContent = 'حسابي';
+            mobileAuthBtn.href = '../_2/profile.html';
+        }
+    }
+
     if (!user) {
         window.navigateWithCurtain('../_1/login.html');
         return;
@@ -309,10 +328,27 @@ onAuthStateChanged(auth, async (user) => {
         const urlParams = new URLSearchParams(window.location.search);
         const previewPhone = urlParams.get('previewPhone');
 
+        const uDoc = await getDoc(doc(db, "users", user.uid));
+        if (uDoc.exists()) {
+            const userData = uDoc.data();
+            const navUserName = document.getElementById('nav-user-name');
+            if (navUserName && userData.name) navUserName.textContent = userData.name.split(' ')[0];
+            
+            const mobileAdminLink = document.getElementById('mobile-admin-link');
+            if (mobileAdminLink && userData.isAdmin) {
+                mobileAdminLink.style.display = 'flex';
+            }
+            const navAdminLink = document.getElementById('nav-admin-link');
+            const navAdminDivider = document.getElementById('nav-admin-divider');
+            if (navAdminLink && userData.isAdmin) {
+                navAdminLink.style.display = 'flex';
+                if (navAdminDivider) navAdminDivider.style.display = 'block';
+            }
+        }
+
         if (previewPhone) {
             // Check admin
-            const adminDoc = await getDoc(doc(db, "users", user.uid));
-            if (adminDoc.exists() && adminDoc.data().isAdmin) {
+            if (uDoc.exists() && uDoc.data().isAdmin) {
                 const q = query(collection(db, "users"), where("phone", "==", previewPhone));
                 const snap = await getDocs(q);
                 if (!snap.empty) {
@@ -349,5 +385,16 @@ onAuthStateChanged(auth, async (user) => {
 
     } catch (error) {
         console.error("Error loading loyalty data:", error);
+    }
+});
+
+// Mobile Menu Listener
+document.addEventListener('DOMContentLoaded', () => {
+    const mBtn = document.getElementById('mobile-menu-btn');
+    const cBtn = document.getElementById('close-menu-btn');
+    const mMenu = document.getElementById('mobile-menu');
+    if (mBtn && cBtn && mMenu) {
+        mBtn.addEventListener('click', () => mMenu.classList.add('open'));
+        cBtn.addEventListener('click', () => mMenu.classList.remove('open'));
     }
 });

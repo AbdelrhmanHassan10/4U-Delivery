@@ -29,14 +29,17 @@ window.showToast = function(msg, type='success') {
 };
 
 onAuthStateChanged(auth, async (user) => {
-    const navActions = document.querySelector('.nav-actions');
-    if (user && navActions) {
-        navActions.innerHTML = `
-            <a href="../_2/profile.html" class="btn-primary ripple-btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
-                <span class="material-symbols-outlined">person</span> حسابي
-            </a>
-            <button class="btn-menu ripple-btn"><span class="material-symbols-outlined">menu</span></button>
-        `;
+    const navAuthButtons = document.getElementById('nav-auth-buttons');
+    const navProfileButton = document.getElementById('nav-profile-button');
+    const mobileAuthBtn = document.getElementById('mobile-auth-btn');
+
+    if (user) {
+        if(navAuthButtons) navAuthButtons.classList.add('hidden');
+        if(navProfileButton) navProfileButton.classList.remove('hidden');
+        if(mobileAuthBtn) {
+            mobileAuthBtn.textContent = 'حسابي';
+            mobileAuthBtn.href = '../_2/profile.html';
+        }
     }
 
     const container = document.getElementById('favorites-container');
@@ -61,7 +64,22 @@ onAuthStateChanged(auth, async (user) => {
             throw new Error("بيانات المستخدم غير موجودة");
         }
 
-        const favIds = userSnap.data().favorites || [];
+        const userData = userSnap.data();
+        const navUserName = document.getElementById('nav-user-name');
+        if (navUserName && userData.name) navUserName.textContent = userData.name.split(' ')[0];
+        
+        const mobileAdminLink = document.getElementById('mobile-admin-link');
+        if (mobileAdminLink && userData.isAdmin) {
+            mobileAdminLink.style.display = 'flex';
+        }
+        const navAdminLink = document.getElementById('nav-admin-link');
+        const navAdminDivider = document.getElementById('nav-admin-divider');
+        if (navAdminLink && userData.isAdmin) {
+            navAdminLink.style.display = 'flex';
+            if (navAdminDivider) navAdminDivider.style.display = 'block';
+        }
+
+        const favIds = userData.favorites || [];
 
         if (favIds.length === 0) {
             container.innerHTML = `
@@ -157,5 +175,16 @@ onAuthStateChanged(auth, async (user) => {
     } catch (e) {
         console.error("Error loading favorites:", e);
         container.innerHTML = `<div style="text-align:center; padding:3rem; grid-column: 1/-1; color:#ff4757;">حدث خطأ في تحميل المفضلة: ${e.message}</div>`;
+    }
+});
+
+// Mobile Menu Listener
+document.addEventListener('DOMContentLoaded', () => {
+    const mBtn = document.getElementById('mobile-menu-btn');
+    const cBtn = document.getElementById('close-menu-btn');
+    const mMenu = document.getElementById('mobile-menu');
+    if (mBtn && cBtn && mMenu) {
+        mBtn.addEventListener('click', () => mMenu.classList.add('open'));
+        cBtn.addEventListener('click', () => mMenu.classList.remove('open'));
     }
 });

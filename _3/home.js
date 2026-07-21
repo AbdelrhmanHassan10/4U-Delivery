@@ -158,6 +158,14 @@ onAuthStateChanged(auth, async (user) => {
                 
                 // Store stamps for loyalty highlighting
                 window.userStampsMap = userData.stamps || {};
+
+                // Show Admin Link if user is admin
+                if (userData.isAdmin) {
+                    const navAdminLink = document.getElementById('nav-admin-link');
+                    const navAdminDiv = document.getElementById('nav-admin-divider');
+                    if (navAdminLink) navAdminLink.style.display = 'flex';
+                    if (navAdminDiv) navAdminDiv.style.display = 'block';
+                }
             } else {
                 window.userStampsMap = {};
             }

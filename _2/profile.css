@@ -254,7 +254,7 @@ ul { list-style: none; }
 
 /* Dashboard Grid */
 .dashboard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-@media (min-width: 768px) { .dashboard-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 768px) { .dashboard-grid { gap: 1.5rem; } }
 .dash-card { padding: 1.5rem; border-radius: 1rem; position: relative; overflow: hidden; cursor: pointer; transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1); }
 .dash-card:hover { transform: translateY(-6px); }
 .dash-icon-bg { position: absolute; bottom: -0.75rem; left: -0.75rem; opacity: 0.05; font-size: 5rem; pointer-events: none; }

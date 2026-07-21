@@ -51,7 +51,17 @@ let currentUser = null;
 // Auth Check
 onAuthStateChanged(auth, async (user) => {
     currentUser = user;
+    const navAuthButtons = document.getElementById('nav-auth-buttons');
+    const navProfileButton = document.getElementById('nav-profile-button');
+    const mobileAuthBtn = document.getElementById('mobile-auth-btn');
+
     if (user) {
+        if(navAuthButtons) navAuthButtons.classList.add('hidden');
+        if(navProfileButton) navProfileButton.classList.remove('hidden');
+        if(mobileAuthBtn) {
+            mobileAuthBtn.textContent = 'حسابي';
+            mobileAuthBtn.href = '../_2/profile.html';
+        }
         try {
             const userDoc = await getDoc(doc(db, "users", user.uid));
             if (userDoc.exists()) {
@@ -79,8 +89,32 @@ onAuthStateChanged(auth, async (user) => {
                         }
                     });
                 }
+                
+                const mobileAdminLink = document.getElementById('mobile-admin-link');
+                if (mobileAdminLink && uData.isAdmin) {
+                    mobileAdminLink.style.display = 'flex';
+                }
+                const navAdminLink = document.getElementById('nav-admin-link');
+                const navAdminDivider = document.getElementById('nav-admin-divider');
+                if (navAdminLink && uData.isAdmin) {
+                    navAdminLink.style.display = 'flex';
+                    if (navAdminDivider) navAdminDivider.style.display = 'block';
+                }
+                const navUserName = document.getElementById('nav-user-name');
+                if (navUserName && uData.name) {
+                    navUserName.textContent = uData.name.split(' ')[0];
+                }
             }
         } catch(e) { console.error("Error fetching addresses", e); }
+    } else {
+        if(navAuthButtons) navAuthButtons.classList.remove('hidden');
+        if(navProfileButton) navProfileButton.classList.add('hidden');
+        if(mobileAuthBtn) {
+            mobileAuthBtn.textContent = 'دخول / تسجيل حساب';
+            mobileAuthBtn.href = '../_1/login.html';
+        }
+        const mobileAdminLink = document.getElementById('mobile-admin-link');
+        if (mobileAdminLink) mobileAdminLink.style.display = 'none';
     }
 });
 
@@ -290,4 +324,13 @@ orderForm.addEventListener('submit', async (e) => {
 
 document.addEventListener('DOMContentLoaded', () => {
     loadRestaurantDetails();
+    
+    // Mobile Menu Listener
+    const mBtn = document.getElementById('mobile-menu-btn');
+    const cBtn = document.getElementById('close-menu-btn');
+    const mMenu = document.getElementById('mobile-menu');
+    if (mBtn && cBtn && mMenu) {
+        mBtn.addEventListener('click', () => mMenu.classList.add('open'));
+        cBtn.addEventListener('click', () => mMenu.classList.remove('open'));
+    }
 });

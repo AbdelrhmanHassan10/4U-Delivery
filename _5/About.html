@@ -6,44 +6,58 @@
     <title>4U Delivery | عننا</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="about.css">
+    <link rel="stylesheet" href="about.css?v=3">
 </head>
 <body>
     <!-- Page Transition Curtain -->
     <div class="page-transition-curtain"></div>
-
-    <!-- ═══ NAVBAR ═══ -->
-    <nav class="navbar glass-strong" id="navbar">
+ <!-- ═══ NAVBAR ═══ -->
+    <nav class="navbar" id="navbar">
         <div class="container navbar-inner">
-            <a href="../_3/home.html" class="nav-brand ripple-btn">
-                <div class="nav-brand-icon">4U</div>
-                <span>Delivery</span>
+            <a href="../_3/home.html" class="nav-brand group">
+                <div class="nav-brand-icon group-hover:scale-110">4U</div>
+                <span class="group-hover:text-gold">Delivery</span>
             </a>
             
             <div class="nav-links">
                 <a href="../_3/home.html" class="nav-link">الرئيسية</a>
                 <a href="../_4/res.html" class="nav-link">المطاعم</a>
-                <a href="../_5/About.html" class="nav-link active">عننا</a>                
-                <!-- Menu Dropdown -->
+                <a href="../_5/About.html" class="nav-link active">عننا</a>
+                
+                <!-- Dropdown -->
                 <div class="nav-dropdown">
-                    <button class="nav-dropdown-btn ripple-btn">القائمة <span class="material-symbols-outlined">expand_more</span></button>
-                    <div class="nav-dropdown-content glass">
-                        <a href="../_6/stamp_card.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">card_membership</span> كارت الأختام</a>
-                        <a href="../_7/contact.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">support_agent</span> المساعدة</a>
-                        <a href="../_7/terms.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">rule</span> الشروط والأحكام</a>
+                    <button class="nav-dropdown-btn">
+                        القائمة <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <div class="nav-dropdown-content">
+                        <a href="../_6/stamp_card.html" class="nav-dropdown-item"><span class="material-symbols-outlined">card_membership</span> كارت الأختام</a>
+                        <a href="../_7/contact.html" class="nav-dropdown-item"><span class="material-symbols-outlined">support_agent</span> المساعدة</a>
+                        <a href="../_7/terms.html" class="nav-dropdown-item"><span class="material-symbols-outlined">rule</span> الشروط والأحكام</a>
                     </div>
                 </div>
 
-                <!-- Admin Link -->
-                <a href="../_6/admin_stamps.html" class="nav-link text-gradient-gold" style="display:flex;gap:0.25rem;">
-                    <span class="material-symbols-outlined icon-filled">admin_panel_settings</span> الإدارة
+                <div id="nav-admin-divider" style="width: 1px; height: 16px; background: rgba(255,255,255,0.1); margin: 0 0.5rem; display: none;"></div>
+                <a href="../_6/admin_stamps.html" class="nav-link" id="nav-admin-link" style="color: var(--gold); display: none; align-items: center; gap: 0.25rem;">
+                    <span class="material-symbols-outlined">admin_panel_settings</span> الإدارة
                 </a>
             </div>
 
             <div class="nav-actions">
-                <a href="../_1/login.html" class="btn-login" onclick="localStorage.setItem('authTab','login'); window.navigateWithCurtain(this.href); return false;">دخول</a>
-                <a href="../_1/login.html" class="btn-primary ripple-btn" onclick="localStorage.setItem('authTab','register'); window.navigateWithCurtain(this.href); return false;">اعمل حساب</a>
-                <button id="mobile-menu-btn" class="btn-menu ripple-btn"><span class="material-symbols-outlined">menu</span></button>
+                <!-- Logged Out State -->
+                <div id="nav-auth-buttons" style="display: flex; gap: 1rem; align-items: center;">
+                    <a href="../_1/login.html" class="btn-login" onclick="localStorage.setItem('authTab','login')">دخول</a>
+                    <a href="../_1/login.html" class="btn-primary ripple-btn" onclick="localStorage.setItem('authTab','register')">اعمل حساب</a>
+                </div>
+                <!-- Logged In State -->
+                <div id="nav-profile-button" class="hidden">
+                    <a href="../_2/profile.html" class="btn-primary ripple-btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+                        <span class="material-symbols-outlined">person</span> <span id="nav-user-name">حسابي</span>
+                    </a>
+                </div>
+
+                <button id="mobile-menu-btn" class="btn-menu ripple-btn">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -73,6 +87,7 @@
             <a href="../_1/login.html" class="btn-mobile-auth ripple-btn" id="mobile-auth-btn">دخول / تسجيل حساب</a>
         </div>
     </div>
+
 
     <!-- ═══ ABOUT HERO ═══ -->
     <section class="about-hero">
@@ -177,7 +192,7 @@
                 <h2 class="section-title">مستويات العضوية</h2>
                 <div class="section-divider"></div>
                 <p class="section-subtitle">
-                    مع كل أوردر بتطلبه أو بتشحنه معانا، بتحصل على <span class="text-gold" style="font-weight:700; font-size:1.25rem;">50 Point</span>
+                    مع كل أوردر بتطلبه أو بتشحنه معانا، بتحصل على <span class="text-gold" style="font-weight:700; font-size:1.25rem;">30 Point</span>
                     <br>وكل نقطة بتفتحلك ليفل أعلى، مميزات أقوى، وفرص أكبر للمكافآت.
                 </p>
             </div>
@@ -187,25 +202,25 @@
                 <div class="level-card glass bronze">
                     <span class="material-symbols-outlined icon-filled level-icon">military_tech</span>
                     <h3 class="level-name">Bronze</h3>
-                    <p class="level-range">0 → 500 Point</p>
+                    <p class="level-range">0 → 600 Point</p>
                 </div>
                 <!-- Silver -->
                 <div class="level-card glass silver">
                     <span class="material-symbols-outlined icon-filled level-icon">military_tech</span>
                     <h3 class="level-name">Silver</h3>
-                    <p class="level-range">501 → 1000 Point</p>
+                    <p class="level-range">601 → 1200 Point</p>
                 </div>
                 <!-- Gold -->
                 <div class="level-card glass gold">
                     <span class="material-symbols-outlined icon-filled level-icon">military_tech</span>
                     <h3 class="level-name">Gold</h3>
-                    <p class="level-range">1001 → 1500 Point</p>
+                    <p class="level-range">1201 → 1800 Point</p>
                 </div>
                 <!-- Platinum -->
                 <div class="level-card glass platinum">
                     <span class="material-symbols-outlined icon-filled level-icon">diamond</span>
                     <h3 class="level-name">Platinum</h3>
-                    <p class="level-range">1501 → 2000 Point</p>
+                    <p class="level-range">1801 → 2400 Point</p>
                 </div>
                 <!-- Elite -->
                 <div class="level-card glass elite">
@@ -213,7 +228,7 @@
                     <div class="relative">
                         <span class="material-symbols-outlined icon-filled level-icon">workspace_premium</span>
                         <h3 class="level-name">Elite</h3>
-                        <p class="level-range">2001 → 2500 Point</p>
+                        <p class="level-range">2401+ Point</p>
                     </div>
                 </div>
             </div>
@@ -397,7 +412,7 @@
                         </div>
                         <div class="contact-item" dir="ltr">
                             <span class="material-symbols-outlined">call</span>
-                            <span>0103273273</span>
+                            <span>01032799273</span>
                         </div>
                         <div class="contact-item" dir="ltr">
                             <span class="material-symbols-outlined">call</span>
@@ -426,6 +441,6 @@
         </button>
     </div>
 
-    <script type="module" src="about.js"></script>
+    <script type="module" src="about.js?v=3"></script>
 </body>
 </html>

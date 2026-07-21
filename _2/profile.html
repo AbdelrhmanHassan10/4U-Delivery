@@ -6,7 +6,7 @@
     <title>4U Delivery | بروفايلي</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="profile.css?v=3">
 </head>
 <body>
     <!-- Page Transition Curtain -->
@@ -20,11 +20,11 @@
     </div>
 
     <!-- ═══ NAVBAR ═══ -->
-    <nav class="navbar glass-strong" id="navbar">
+    <nav class="navbar" id="navbar">
         <div class="container navbar-inner">
-            <a href="../_3/home.html" class="nav-brand ripple-btn">
-                <div class="nav-brand-icon">4U</div>
-                <span>Delivery</span>
+            <a href="../_3/home.html" class="nav-brand group">
+                <div class="nav-brand-icon group-hover:scale-110">4U</div>
+                <span class="group-hover:text-gold">Delivery</span>
             </a>
             
             <div class="nav-links">
@@ -32,26 +32,40 @@
                 <a href="../_4/res.html" class="nav-link">المطاعم</a>
                 <a href="../_5/About.html" class="nav-link">عننا</a>
                 
-                <!-- Menu Dropdown -->
+                <!-- Dropdown -->
                 <div class="nav-dropdown">
-                    <button class="nav-dropdown-btn ripple-btn">القائمة <span class="material-symbols-outlined">expand_more</span></button>
-                    <div class="nav-dropdown-content glass">
-                        <a href="../_6/stamp_card.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">card_membership</span> كارت الأختام</a>
-                        <a href="../_7/contact.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">support_agent</span> المساعدة</a>
-                        <a href="../_7/terms.html" class="nav-dropdown-item"><span class="material-symbols-outlined icon-filled">rule</span> الشروط والأحكام</a>
+                    <button class="nav-dropdown-btn">
+                        القائمة <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <div class="nav-dropdown-content">
+                        <a href="../_6/stamp_card.html" class="nav-dropdown-item"><span class="material-symbols-outlined">card_membership</span> كارت الأختام</a>
+                        <a href="../_7/contact.html" class="nav-dropdown-item"><span class="material-symbols-outlined">support_agent</span> المساعدة</a>
+                        <a href="../_7/terms.html" class="nav-dropdown-item"><span class="material-symbols-outlined">rule</span> الشروط والأحكام</a>
                     </div>
                 </div>
 
-                <!-- Admin Link -->
-                <a href="../_6/admin_stamps.html" class="nav-link text-gradient-gold" style="display:flex;gap:0.25rem;">
-                    <span class="material-symbols-outlined icon-filled">admin_panel_settings</span> الإدارة
+                <div id="nav-admin-divider" style="width: 1px; height: 16px; background: rgba(255,255,255,0.1); margin: 0 0.5rem; display: none;"></div>
+                <a href="../_6/admin_stamps.html" class="nav-link" id="nav-admin-link" style="color: var(--gold); display: none; align-items: center; gap: 0.25rem;">
+                    <span class="material-symbols-outlined">admin_panel_settings</span> الإدارة
                 </a>
             </div>
 
             <div class="nav-actions">
-                <a href="../_1/login.html" class="btn-login" onclick="localStorage.setItem('authTab','login'); navigateWithCurtain(this.href); return false;">دخول</a>
-                <a href="../_1/login.html" class="btn-primary ripple-btn" onclick="localStorage.setItem('authTab','register'); navigateWithCurtain(this.href); return false;">اعمل حساب</a>
-                <button id="mobile-menu-btn" class="btn-menu ripple-btn"><span class="material-symbols-outlined">menu</span></button>
+                <!-- Logged Out State -->
+                <div id="nav-auth-buttons" style="display: flex; gap: 1rem; align-items: center;">
+                    <a href="../_1/login.html" class="btn-login" onclick="localStorage.setItem('authTab','login')">دخول</a>
+                    <a href="../_1/login.html" class="btn-primary ripple-btn" onclick="localStorage.setItem('authTab','register')">اعمل حساب</a>
+                </div>
+                <!-- Logged In State -->
+                <div id="nav-profile-button" class="hidden">
+                    <a href="../_2/profile.html" class="btn-primary ripple-btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
+                        <span class="material-symbols-outlined">person</span> <span id="nav-user-name">حسابي</span>
+                    </a>
+                </div>
+
+                <button id="mobile-menu-btn" class="btn-menu ripple-btn">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -75,7 +89,7 @@
             <div class="mobile-divider"></div>
             <a href="../_7/contact.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">support_agent</span> المساعدة</a>
             <a href="../_7/terms.html" class="mobile-link"><span class="material-symbols-outlined" style="font-size: 1.1rem; margin-left: 5px;">rule</span> الشروط والأحكام</a>
-            <a href="../_6/admin_stamps.html" class="mobile-admin-link" style="color:var(--gold); display:flex; align-items:center; gap:0.5rem; margin-top: 1rem;"><span class="material-symbols-outlined">admin_panel_settings</span> لوحة الإدارة</a>
+            <a href="../_6/admin_stamps.html" class="mobile-admin-link" id="mobile-admin-link" style="color:var(--gold); display:none; align-items:center; gap:0.5rem; margin-top: 1rem;"><span class="material-symbols-outlined">admin_panel_settings</span> لوحة الإدارة</a>
         </div>
         <div class="mobile-bottom">
             <a href="../_1/login.html" class="btn-mobile-auth ripple-btn" id="mobile-auth-btn">دخول / تسجيل حساب</a>
@@ -103,9 +117,7 @@
                 <h1 class="profile-name stagger-2" id="profile-name">...</h1>
                 <p class="profile-email stagger-3" id="profile-email">...</p>
                 
-                <div id="profile-brand-selector-container" class="stagger-4 hidden" style="margin: 1.5rem 0 0.5rem; display: flex; justify-content: center;">
-                    <select id="profile-brand-select" class="input-control" style="background: rgba(255,255,255,0.05); color: white; border-radius: 2rem; font-size: 0.95rem; font-weight: 700; cursor: pointer; text-align: center; border: 1px solid rgba(255,255,255,0.1); width: auto; min-width: 150px; padding: 0.5rem 2rem; appearance: auto;"></select>
-                </div>
+
 
                 <div class="profile-stats stagger-4" style="margin-top: 1.5rem;">
                     <div class="stat-box">
@@ -189,13 +201,13 @@
                 <span class="dash-link">استبدال <span class="material-symbols-outlined" style="font-size:16px;">arrow_back_ios</span></span>
             </div>
             <!-- Settings -->
-            <div class="dash-card glass card-dark ripple-btn" onclick="navigateWithCurtain('settings.html')">
+            <!-- <div class="dash-card glass card-dark ripple-btn" onclick="navigateWithCurtain('settings.html')">
                 <div class="dash-icon-bg"><span class="material-symbols-outlined icon-filled">settings</span></div>
                 <div class="dash-icon-wrapper"><span class="material-symbols-outlined icon-filled">settings</span></div>
                 <h3 class="dash-title">الإعدادات</h3>
                 <p class="dash-desc">اللغة، الإشعارات، الخصوصية</p>
                 <span class="dash-link">تعديل <span class="material-symbols-outlined" style="font-size:16px;">arrow_back_ios</span></span>
-            </div>
+            </div> -->
         </div>
     </section>
 
@@ -235,6 +247,6 @@
         <span class="material-symbols-outlined">arrow_upward</span>
     </button>
 
-    <script type="module" src="profile.js"></script>
+    <script type="module" src="profile.js?v=4"></script>
 </body>
 </html>

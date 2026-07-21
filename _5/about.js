@@ -2,6 +2,54 @@ import { auth, db } from "../firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+// Firebase Auth State Listener
+onAuthStateChanged(auth, async (user) => {
+    const navAuthButtons = document.getElementById('nav-auth-buttons');
+    const navProfileButton = document.getElementById('nav-profile-button');
+    const navUserName = document.getElementById('nav-user-name');
+    const mobileAuthBtn = document.getElementById('mobile-auth-btn');
+
+    if (user) {
+        // User is logged in
+        if (navAuthButtons) navAuthButtons.classList.add('hidden');
+        if (navProfileButton) navProfileButton.classList.remove('hidden');
+        if (mobileAuthBtn) {
+            mobileAuthBtn.textContent = 'حسابي';
+            mobileAuthBtn.href = '../_2/profile.html';
+        }
+
+        try {
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                const userData = docSnap.data();
+                // Get first name only for navbar
+                const firstName = userData.name ? userData.name.split(' ')[0] : 'حسابي';
+                if (navUserName) navUserName.textContent = firstName;
+
+                // Show Admin Link if user is admin
+                if (userData.isAdmin) {
+                    const navAdminLink = document.getElementById('nav-admin-link');
+                    const navAdminDiv = document.getElementById('nav-admin-divider');
+                    if (navAdminLink) navAdminLink.style.display = 'flex';
+                    if (navAdminDiv) navAdminDiv.style.display = 'block';
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+
+    } else {
+        // User is logged out
+        if (navAuthButtons) navAuthButtons.classList.remove('hidden');
+        if (navProfileButton) navProfileButton.classList.add('hidden');
+        if (mobileAuthBtn) {
+            mobileAuthBtn.textContent = 'دخول / تسجيل حساب';
+            mobileAuthBtn.href = '../_1/login.html';
+        }
+    }
+});
+
 // Navbar Scroll
 const navbar = document.getElementById('navbar');
 if (navbar) {
@@ -15,13 +63,15 @@ if (navbar) {
 }
 
 // Mobile Menu
-const mBtn = document.getElementById('mobile-menu-btn');
-const cBtn = document.getElementById('close-menu-btn');
-const mMenu = document.getElementById('mobile-menu');
-if (mBtn && cBtn && mMenu) {
-    mBtn.addEventListener('click', () => mMenu.classList.add('open'));
-    cBtn.addEventListener('click', () => mMenu.classList.remove('open'));
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const mBtn = document.getElementById('mobile-menu-btn');
+    const cBtn = document.getElementById('close-menu-btn');
+    const mMenu = document.getElementById('mobile-menu');
+    if (mBtn && cBtn && mMenu) {
+        mBtn.addEventListener('click', () => mMenu.classList.add('open'));
+        cBtn.addEventListener('click', () => mMenu.classList.remove('open'));
+    }
+});
 
 // Intersection Observer for Reveal
 const observer = new IntersectionObserver((entries) => { 
@@ -171,16 +221,16 @@ document.addEventListener('mousemove', (e) => {
 
 // Firebase Logic
 onAuthStateChanged(auth, async (user) => {
-    const navActions = document.querySelector('.nav-actions');
-    
+    const navAuthButtons = document.getElementById('nav-auth-buttons');
+    const navProfileButton = document.getElementById('nav-profile-button');
+    const mobileAuthBtn = document.getElementById('mobile-auth-btn');
+
     if (user) {
-        if (navActions) {
-            navActions.innerHTML = `
-                <a href="../_2/profile.html" class="btn-primary ripple-btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
-                    <span class="material-symbols-outlined">person</span> <span id="nav-user-name">حسابي</span>
-                </a>
-                <button class="btn-menu ripple-btn"><span class="material-symbols-outlined">menu</span></button>
-            `;
+        if(navAuthButtons) navAuthButtons.classList.add('hidden');
+        if(navProfileButton) navProfileButton.classList.remove('hidden');
+        if(mobileAuthBtn) {
+            mobileAuthBtn.textContent = 'حسابي';
+            mobileAuthBtn.href = '../_2/profile.html';
         }
 
         try {
@@ -205,12 +255,11 @@ onAuthStateChanged(auth, async (user) => {
         }
     } else {
         // User is signed out, restore default buttons
-        if (navActions) {
-            navActions.innerHTML = `
-                <a href="../_1/login.html" class="btn-login" onclick="localStorage.setItem('authTab','login'); window.navigateWithCurtain(this.href); return false;">دخول</a>
-                <a href="../_1/login.html" class="btn-primary ripple-btn" onclick="localStorage.setItem('authTab','register'); window.navigateWithCurtain(this.href); return false;">اعمل حساب</a>
-                <button class="btn-menu ripple-btn"><span class="material-symbols-outlined">menu</span></button>
-            `;
+        if(navAuthButtons) navAuthButtons.classList.remove('hidden');
+        if(navProfileButton) navProfileButton.classList.add('hidden');
+        if(mobileAuthBtn) {
+            mobileAuthBtn.textContent = 'دخول / تسجيل حساب';
+            mobileAuthBtn.href = '../_1/login.html';
         }
     }
 });

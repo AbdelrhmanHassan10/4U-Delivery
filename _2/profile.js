@@ -128,13 +128,15 @@ onAuthStateChanged(auth, async (user) => {
     const navActions = document.querySelector('.nav-actions');
     
     if (user) {
-        if (navActions) {
-            navActions.innerHTML = `
-                <a href="../_2/profile.html" class="btn-primary ripple-btn" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);">
-                    <span class="material-symbols-outlined">person</span> <span id="nav-user-name">حسابي</span>
-                </a>
-                <button id="mobile-menu-btn" class="btn-menu ripple-btn" onclick="document.getElementById('mobile-menu')?.classList.add('open')"><span class="material-symbols-outlined">menu</span></button>
-            `;
+        const navAuthButtons = document.getElementById('nav-auth-buttons');
+        const navProfileButton = document.getElementById('nav-profile-button');
+        const mobileAuthBtn = document.getElementById('mobile-auth-btn');
+
+        if(navAuthButtons) navAuthButtons.classList.add('hidden');
+        if(navProfileButton) navProfileButton.classList.remove('hidden');
+        if(mobileAuthBtn) {
+            mobileAuthBtn.textContent = 'حسابي';
+            mobileAuthBtn.href = '../_2/profile.html';
         }
 
         try {
@@ -154,107 +156,70 @@ onAuthStateChanged(auth, async (user) => {
                 const navUserName = document.getElementById('nav-user-name');
                 if(navUserName) navUserName.textContent = name.split(' ')[0];
                 
+                const mobileAdminLink = document.getElementById('mobile-admin-link');
+                if (mobileAdminLink && data.isAdmin) {
+                    mobileAdminLink.style.display = 'flex';
+                }
+                const navAdminLink = document.getElementById('nav-admin-link');
+                const navAdminDivider = document.getElementById('nav-admin-divider');
+                if (navAdminLink && data.isAdmin) {
+                    navAdminLink.style.display = 'flex';
+                    if (navAdminDivider) navAdminDivider.style.display = 'block';
+                }
+                
                 const pointsMap = data.pointsMap || {};
                 const stampsMap = data.stamps || {};
-                const tierMap = data.tierMap || {};
                 
-                const brandsSet = new Set([...Object.keys(pointsMap), ...Object.keys(stampsMap), ...Object.keys(tierMap)]);
-                const brands = Array.from(brandsSet);
+                let globalPoints = 0;
+                let globalStamps = 0;
                 
-                const brandSelectContainer = document.getElementById('profile-brand-selector-container');
-                const brandSelect = document.getElementById('profile-brand-select');
-
-                const renderStatsForBrand = (brand) => {
-                    if (!brand) {
-                        document.getElementById('stat-points').textContent = "0";
-                        const statCards = document.getElementById('stat-cards');
-                        if (statCards) statCards.textContent = "0";
-                        document.getElementById('stat-tier').textContent = "Bronze";
-                        
-                        document.getElementById('loyalty-title').innerHTML = `عضوية 4U <span class="text-gradient-gold">Bronze</span>`;
-                        document.getElementById('loyalty-subtitle').textContent = `لم تبدأ بعد في تجميع النقاط!`;
-                        document.getElementById('loyalty-progress-fill').style.width = `0%`;
-                        document.getElementById('loyalty-current-tier').textContent = "Bronze";
-                        document.getElementById('loyalty-next-tier').textContent = "Silver";
-                        return;
-                    }
-
-                    const points = pointsMap[brand] || 0;
-                    const stamps = stampsMap[brand] || 0;
-                    const tier = tierMap[brand] || "Bronze";
-                    const completedCards = Math.floor(stamps / 10);
-
-                    document.getElementById('stat-points').textContent = points.toLocaleString('ar-EG');
-                    const statCards = document.getElementById('stat-cards');
-                    if (statCards) statCards.textContent = completedCards.toLocaleString('ar-EG');
-                    document.getElementById('stat-tier').textContent = tier;
-                    
-                    document.getElementById('loyalty-title').innerHTML = `عضوية 4U <span class="text-gradient-gold">${tier}</span>`;
-                    
-                    let nextTier = "Silver";
-                    let progressPercent = 0;
-
-                    if (points <= 500) {
-                        nextTier = "Silver";
-                        progressPercent = (points / 500) * 100;
-                        document.getElementById('loyalty-subtitle').textContent = `جمّع نقاط في ${brand} لترقية مستواك لـ ${nextTier}!`;
-                        document.getElementById('loyalty-current-tier').textContent = "Bronze";
-                        document.getElementById('loyalty-next-tier').textContent = "Silver";
-                    } else if (points <= 1000) {
-                        nextTier = "Gold";
-                        progressPercent = ((points - 500) / 500) * 100;
-                        document.getElementById('loyalty-subtitle').textContent = `جمّع نقاط في ${brand} لترقية مستواك لـ ${nextTier}!`;
-                        document.getElementById('loyalty-current-tier').textContent = "Silver";
-                        document.getElementById('loyalty-next-tier').textContent = "Gold";
-                    } else if (points <= 1500) {
-                        nextTier = "Platinum";
-                        progressPercent = ((points - 1000) / 500) * 100;
-                        document.getElementById('loyalty-subtitle').textContent = `جمّع نقاط في ${brand} لترقية مستواك لـ ${nextTier}!`;
-                        document.getElementById('loyalty-current-tier').textContent = "Gold";
-                        document.getElementById('loyalty-next-tier').textContent = "Platinum";
-                    } else if (points <= 2000) {
-                        nextTier = "Elite";
-                        progressPercent = ((points - 1500) / 500) * 100;
-                        document.getElementById('loyalty-subtitle').textContent = `جمّع نقاط في ${brand} لترقية مستواك لـ ${nextTier}!`;
-                        document.getElementById('loyalty-current-tier').textContent = "Platinum";
-                        document.getElementById('loyalty-next-tier').textContent = "Elite";
-                    } else {
-                        progressPercent = 100;
-                        document.getElementById('loyalty-subtitle').textContent = `أنت في أعلى مستوى في ${brand}!`;
-                        document.getElementById('loyalty-current-tier').textContent = "Elite";
-                        document.getElementById('loyalty-next-tier').textContent = "VIP";
-                    }
-
-                    document.getElementById('loyalty-progress-fill').style.width = `${progressPercent}%`;
-                };
-
-                if (brands.length === 0) {
-                    if (brandSelectContainer) brandSelectContainer.classList.add('hidden');
-                    renderStatsForBrand(null);
+                Object.values(pointsMap).forEach(p => globalPoints += (p || 0));
+                Object.values(stampsMap).forEach(s => globalStamps += (s || 0));
+                
+                const globalCards = Math.floor(globalStamps / 10);
+                
+                let globalTier = "Bronze";
+                let nextTier = "Silver";
+                let progressPercent = 0;
+                let subtitleText = "";
+                
+                if (globalPoints <= 600) {
+                    globalTier = "Bronze";
+                    nextTier = "Silver";
+                    progressPercent = (globalPoints / 600) * 100;
+                    subtitleText = `جمّع نقاط إضافية لترقية مستواك لـ ${nextTier}!`;
+                } else if (globalPoints <= 1200) {
+                    globalTier = "Silver";
+                    nextTier = "Gold";
+                    progressPercent = ((globalPoints - 600) / 600) * 100;
+                    subtitleText = `جمّع نقاط إضافية لترقية مستواك لـ ${nextTier}!`;
+                } else if (globalPoints <= 1800) {
+                    globalTier = "Gold";
+                    nextTier = "Platinum";
+                    progressPercent = ((globalPoints - 1200) / 600) * 100;
+                    subtitleText = `جمّع نقاط إضافية لترقية مستواك لـ ${nextTier}!`;
+                } else if (globalPoints <= 2400) {
+                    globalTier = "Platinum";
+                    nextTier = "Elite";
+                    progressPercent = ((globalPoints - 1800) / 600) * 100;
+                    subtitleText = `جمّع نقاط إضافية لترقية مستواك لـ ${nextTier}!`;
                 } else {
-                    if (brandSelectContainer && brandSelect) {
-                        brandSelectContainer.classList.remove('hidden');
-                        let optionsHtml = '';
-                        brands.forEach(b => {
-                            optionsHtml += `<option value="${b}">${b}</option>`;
-                        });
-                        brandSelect.innerHTML = optionsHtml;
-                        
-                        // Select default
-                        const previouslySelected = brandSelect.getAttribute('data-last-selected');
-                        const targetBrand = previouslySelected && brands.includes(previouslySelected) ? previouslySelected : brands[0];
-                        brandSelect.value = targetBrand;
-                        renderStatsForBrand(targetBrand);
-                        
-                        brandSelect.addEventListener('change', (e) => {
-                            const selected = e.target.value;
-                            brandSelect.setAttribute('data-last-selected', selected);
-                            renderStatsForBrand(selected);
-                        });
-                    } else {
-                        renderStatsForBrand(brands[0]);
-                    }
+                    globalTier = "Elite";
+                    nextTier = "VIP";
+                    progressPercent = 100;
+                    subtitleText = `أنت في أعلى مستوى!`;
                 }
+                
+                document.getElementById('stat-points').textContent = globalPoints.toLocaleString('ar-EG');
+                const statCards = document.getElementById('stat-cards');
+                if (statCards) statCards.textContent = globalCards.toLocaleString('ar-EG');
+                document.getElementById('stat-tier').textContent = globalTier;
+                
+                document.getElementById('loyalty-title').innerHTML = `عضوية 4U <span class="text-gradient-gold">${globalTier}</span>`;
+                document.getElementById('loyalty-subtitle').textContent = subtitleText;
+                document.getElementById('loyalty-current-tier').textContent = globalTier;
+                document.getElementById('loyalty-next-tier').textContent = nextTier;
+                document.getElementById('loyalty-progress-fill').style.width = `${progressPercent}%`;
                 // Update Avatar
                 if (data.avatar) {
                     const avatarBg = document.getElementById('profile-avatar-bg');
