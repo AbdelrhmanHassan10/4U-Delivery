@@ -155,6 +155,8 @@ window.requestReward = async (rewardTitle, costType, costValue, event) => {
     }
 };
 
+let restaurantsImageMap = {};
+
 // Points & Stamps Logic
 const renderLoyaltyData = (data) => {
     if (!data) return;
@@ -177,13 +179,25 @@ const renderLoyaltyData = (data) => {
     const brandNameEl = document.getElementById('brand-name');
     
     const renderBrandData = (brand) => {
+        const bgImgElements = document.querySelectorAll('.loyalty-box-bg');
+        
         if (!brand) {
             brandNameEl.textContent = "لم تبدأ بعد";
             brandNameEl.classList.remove('hidden');
             if (brandSelectorContainer) brandSelectorContainer.classList.add('hidden');
+            bgImgElements.forEach(el => el.style.backgroundImage = 'none');
             updateUIForBrand(0, "Bronze", 0);
             return;
         }
+
+        const brandImg = restaurantsImageMap[brand];
+        bgImgElements.forEach(el => {
+            if (brandImg) {
+                el.style.backgroundImage = `url('${brandImg}')`;
+            } else {
+                el.style.backgroundImage = 'none';
+            }
+        });
 
         const points = pointsMap[brand] || 0;
         const tier = tierMap[brand] || "Bronze";
@@ -200,26 +214,26 @@ const renderLoyaltyData = (data) => {
         let nextTier = "Silver";
         let progressPercent = 0;
 
-        if (points <= 500) {
+        if (points <= 600) {
             nextTier = "Silver";
-            progressPercent = (points / 500) * 100;
+            progressPercent = (points / 600) * 100;
             const nextTierText = document.getElementById('loyalty-next-tier-text');
-            if (nextTierText) nextTierText.textContent = `باقي ${501 - points} نقطة لـ ${nextTier}`;
-        } else if (points <= 1000) {
+            if (nextTierText) nextTierText.textContent = `باقي ${601 - points} نقطة لـ ${nextTier}`;
+        } else if (points <= 1200) {
             nextTier = "Gold";
-            progressPercent = ((points - 500) / 500) * 100;
+            progressPercent = ((points - 600) / 600) * 100;
             const nextTierText = document.getElementById('loyalty-next-tier-text');
-            if (nextTierText) nextTierText.textContent = `باقي ${1001 - points} نقطة لـ ${nextTier}`;
-        } else if (points <= 1500) {
+            if (nextTierText) nextTierText.textContent = `باقي ${1201 - points} نقطة لـ ${nextTier}`;
+        } else if (points <= 1800) {
             nextTier = "Platinum";
-            progressPercent = ((points - 1000) / 500) * 100;
+            progressPercent = ((points - 1200) / 600) * 100;
             const nextTierText = document.getElementById('loyalty-next-tier-text');
-            if (nextTierText) nextTierText.textContent = `باقي ${1501 - points} نقطة لـ ${nextTier}`;
-        } else if (points <= 2000) {
+            if (nextTierText) nextTierText.textContent = `باقي ${1801 - points} نقطة لـ ${nextTier}`;
+        } else if (points <= 2400) {
             nextTier = "Elite";
-            progressPercent = ((points - 1500) / 500) * 100;
+            progressPercent = ((points - 1800) / 600) * 100;
             const nextTierText = document.getElementById('loyalty-next-tier-text');
-            if (nextTierText) nextTierText.textContent = `باقي ${2001 - points} نقطة لـ ${nextTier}`;
+            if (nextTierText) nextTierText.textContent = `باقي ${2401 - points} نقطة لـ ${nextTier}`;
         } else {
             progressPercent = 100;
             const nextTierText = document.getElementById('loyalty-next-tier-text');
@@ -325,6 +339,16 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     try {
+        if (Object.keys(restaurantsImageMap).length === 0) {
+            const snap = await getDocs(collection(db, "restaurants"));
+            snap.forEach(doc => {
+                const data = doc.data();
+                if (data.name && data.image) {
+                    restaurantsImageMap[data.name] = data.image;
+                }
+            });
+        }
+        
         const urlParams = new URLSearchParams(window.location.search);
         const previewPhone = urlParams.get('previewPhone');
 

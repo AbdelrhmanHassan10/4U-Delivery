@@ -169,7 +169,9 @@
 </head>
 <body>
     <div class="page-transition-curtain"></div>
-    <div class="bg-effects pointer-events-none"><div class="particles"></div><div class="glow-brand animate-float"></div><div class="glow-gold animate-float" style="animation-delay:-3s;"></div></div>
+    <div class="bg-effects pointer-events-none">
+        <div class="particles"></div><div class="glow-brand animate-float"></div><div class="glow-gold animate-float" style="animation-delay:-3s;"></div>
+    </div>
 
     <!-- NAVBAR -->
     <nav class="navbar" id="navbar">
@@ -287,6 +289,7 @@
 
             <!-- Stamps Box -->
             <div class="loyalty-box glass">
+                <div class="loyalty-box-bg" style="position: absolute; inset: 0; background-size: cover; background-position: center; filter: blur(3px) brightness(0.7); transition: background-image 0.5s ease; z-index: -1;"></div>
                 <h2 class="section-title text-brand-light"><span class="material-symbols-outlined icon-filled">card_membership</span> كارت الأختام</h2>
                 
                 <div class="stamp-box">
@@ -340,8 +343,8 @@
                     </div>
                 </div>
                 <div class="item-actions">
-                    <button class="btn-action btn-primary-action" onclick="window.requestReward('قسيمة خصم 50 ج.م', 'points', 500, event)">
-                        استبدال بـ 500 نقطة
+                    <button class="btn-action btn-primary-action" onclick="window.requestReward('قسيمة خصم 50 ج.م', 'points', 600, event)">
+                        استبدال بـ 600 نقطة
                     </button>
                 </div>
             </div>
