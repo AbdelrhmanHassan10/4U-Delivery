@@ -143,6 +143,7 @@ onAuthStateChanged(auth, async (user) => {
                 navUserName.textContent = firstName;
                 userFavorites = userData.favorites || [];
                 window.userStampsMap = userData.stamps || {}; // For loyalty highlighting
+                window.userPointsMap = userData.pointsMap || {};
                 
                 const mobileAdminLink = document.getElementById('mobile-admin-link');
                 if (mobileAdminLink && userData.isAdmin) {
@@ -165,6 +166,8 @@ onAuthStateChanged(auth, async (user) => {
         // User is logged out
         currentUserUid = null;
         userFavorites = [];
+        window.userStampsMap = {};
+        window.userPointsMap = {};
         navAuthButtons.classList.remove('hidden');
         navProfileButton.classList.add('hidden');
         mobileAuthBtn.textContent = 'دخول / تسجيل حساب';
@@ -352,12 +355,18 @@ function renderRestaurants() {
         } else if (sortVal === 'time') {
             filtered.sort((a, b) => (parseInt(a.deliveryTime) || 999) - (parseInt(b.deliveryTime) || 999));
         } else {
-            // Default sort: if user has stamps, bring those restaurants to the top
-            if (window.userStampsMap) {
+            // Default sort: if user has stamps or points, bring those restaurants to the top
+            if (window.userStampsMap || window.userPointsMap) {
                 filtered.sort((a, b) => {
-                    const countA = window.userStampsMap[a.name] || 0;
-                    const countB = window.userStampsMap[b.name] || 0;
-                    return countB - countA;
+                    const stampsA = window.userStampsMap ? (window.userStampsMap[a.name] || 0) : 0;
+                    const pointsA = window.userPointsMap ? (window.userPointsMap[a.name] || 0) : 0;
+                    const scoreA = (stampsA > 0 || pointsA > 0) ? (pointsA + (stampsA * 10)) : 0;
+                    
+                    const stampsB = window.userStampsMap ? (window.userStampsMap[b.name] || 0) : 0;
+                    const pointsB = window.userPointsMap ? (window.userPointsMap[b.name] || 0) : 0;
+                    const scoreB = (stampsB > 0 || pointsB > 0) ? (pointsB + (stampsB * 10)) : 0;
+                    
+                    return scoreB - scoreA;
                 });
             }
         }
@@ -377,18 +386,29 @@ function renderRestaurants() {
                 categoryText = data.category || data.desc || '';
             }
 
-            // Stamp logic
-            const count = window.userStampsMap ? (window.userStampsMap[data.name] || 0) : 0;
-            const stampClass = window.userStampsMap ? (count > 0 ? 'has-stamps' : 'no-stamps') : '';
-            const activeCount = count % 10 === 0 && count > 0 ? 10 : count % 10;
+            // Stamp & Points logic
+            const stampCount = window.userStampsMap ? (window.userStampsMap[data.name] || 0) : 0;
+            const pointsCount = window.userPointsMap ? (window.userPointsMap[data.name] || 0) : 0;
+            const stampClass = window.userStampsMap ? ((stampCount > 0 || pointsCount > 0) ? 'has-stamps' : 'no-stamps') : '';
             
             let badgeHtml = '';
-            if (window.userStampsMap) {
-                if (count > 0) {
-                    badgeHtml = `<div class="stamp-badge active-badge"><span class="stamp-count">${activeCount}</span> <span class="material-symbols-outlined" style="font-size: 14px;">card_giftcard</span></div>`;
+            if (window.userStampsMap || window.userPointsMap) {
+                const activeStampCount = stampCount > 0 && stampCount % 10 === 0 ? 10 : stampCount % 10;
+                let stampBadge = '';
+                if (stampCount > 0) {
+                    stampBadge = `<div class="stamp-badge active-badge" title="الكروت"><span class="stamp-count">${activeStampCount}</span> <span class="material-symbols-outlined" style="font-size: 14px;">card_giftcard</span></div>`;
                 } else {
-                    badgeHtml = `<div class="stamp-badge new-badge"><span style="font-size: 11px; font-weight:700;">ابدأ التجميع</span> <span class="material-symbols-outlined" style="font-size: 14px;">add_circle</span></div>`;
+                    stampBadge = `<div class="stamp-badge new-badge" title="الكروت"><span style="font-size: 11px; font-weight:700;">ابدأ التجميع</span> <span class="material-symbols-outlined" style="font-size: 14px;">add_circle</span></div>`;
                 }
+
+                let pointsBadge = '';
+                if (pointsCount > 0) {
+                    pointsBadge = `<div class="points-badge active-points-badge" title="النقاط"><span class="points-count">${pointsCount}</span> <span class="material-symbols-outlined icon-filled" style="font-size: 14px; color: var(--gold);">stars</span></div>`;
+                } else {
+                    pointsBadge = `<div class="points-badge new-points-badge" title="النقاط"><span style="font-size: 11px; font-weight:700;">0</span> <span class="material-symbols-outlined" style="font-size: 14px; color: var(--dark-300);">stars</span></div>`;
+                }
+
+                badgeHtml = `<div class="res-badges-wrapper">${pointsBadge}${stampBadge}</div>`;
             }
 
             html += `

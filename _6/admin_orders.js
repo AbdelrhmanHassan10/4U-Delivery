@@ -1,6 +1,6 @@
 import { auth, db } from "../firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { collection, getDocs, doc, updateDoc, getDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { collection, getDocs, doc, updateDoc, getDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // Toast Notification
 window.showToast = function(msg, type='success') {
@@ -27,12 +27,23 @@ onAuthStateChanged(auth, async (user) => {
     }
     
     try {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
-        if (!docSnap.exists() || docSnap.data().isAdmin !== true) {
+        const docSnap = await getDoc(doc(db, "users", user.uid));
+        if (!docSnap.exists()) {
+            window.location.href = '../_3/home.html';
+            return;
+        }
+        const userData = docSnap.data();
+        if (userData.isAdmin !== true && userData.isModerator !== true) {
             alert("غير مصرح لك بدخول هذه الصفحة!");
             window.location.href = '../_3/home.html';
             return;
+        }
+        
+        // Show Admin-only links if user is a full Admin
+        if (userData.isModerator !== true) {
+            document.querySelectorAll('.admin-only-link').forEach(link => {
+                link.style.display = 'flex';
+            });
         }
     } catch (e) {
         window.location.href = '../_3/home.html';
@@ -50,6 +61,15 @@ const statusMap = {
 };
 
 let allOrders = [];
+let unsubscribeOrders = null;
+let isInitialLoad = true;
+
+function playNotificationSound() {
+    try {
+        const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
+        audio.play().catch(e => console.warn("Browser blocked audio play:", e));
+    } catch(e) {}
+}
 
 async function loadRestaurantsForFilter() {
     try {
@@ -80,47 +100,88 @@ async function loadRestaurantsForFilter() {
 
 async function loadOrders() {
     const listContainer = document.getElementById('orders-list-container');
-    listContainer.innerHTML = '<div style="text-align: center; padding: 3rem; color: #aaa;">جاري تحميل الطلبات...</div>';
+    if (isInitialLoad) {
+        listContainer.innerHTML = '<div style="text-align: center; padding: 3rem; color: #aaa;">جاري تحميل الطلبات...</div>';
+    }
     
     try {
         const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
-        const snap = await getDocs(q);
         
-        allOrders = [];
-        const userIds = new Set();
-        snap.forEach(doc => {
-            const data = doc.data();
-            data.id = doc.id;
-            allOrders.push(data);
-            if (data.userId && !data.customerName) {
-                userIds.add(data.userId);
-            }
-        });
+        if (unsubscribeOrders) unsubscribeOrders();
 
-        // Fetch missing users info for backwards compatibility
-        if (userIds.size > 0) {
-            const userPromises = Array.from(userIds).map(uid => getDoc(doc(db, "users", uid)));
-            const userSnaps = await Promise.all(userPromises);
-            const usersMap = {};
-            userSnaps.forEach(uSnap => {
-                if (uSnap.exists()) {
-                    usersMap[uSnap.id] = uSnap.data();
-                }
-            });
+        unsubscribeOrders = onSnapshot(q, async (snap) => {
+            allOrders = [];
+            const userIds = new Set();
             
-            allOrders.forEach(order => {
-                if (order.userId && !order.customerName && usersMap[order.userId]) {
-                    order.customerName = usersMap[order.userId].name;
-                    order.customerEmail = usersMap[order.userId].email;
+            // Handle notifications for new orders
+            if (!isInitialLoad) {
+                let hasNewOrders = false;
+                snap.docChanges().forEach(change => {
+                    if (change.type === 'added') {
+                        hasNewOrders = true;
+                    }
+                });
+                if (hasNewOrders) {
+                    playNotificationSound();
+                    showToast("طلب جديد وصل الآن!", "success");
+                }
+            }
+            
+            let pendingCount = 0;
+            snap.forEach(doc => {
+                const data = doc.data();
+                data.id = doc.id;
+                allOrders.push(data);
+                
+                if (data.status === 'pending') pendingCount++;
+                
+                if (data.userId && !data.customerName) {
+                    userIds.add(data.userId);
                 }
             });
-        }
 
-        renderOrders();
+            // Update pending counts in UI
+            const badgeEl = document.getElementById('sidebar-orders-badge');
+            const summaryEl = document.getElementById('pending-orders-count');
+            
+            if (summaryEl) summaryEl.textContent = pendingCount;
+            if (badgeEl) {
+                if (pendingCount > 0) {
+                    badgeEl.textContent = pendingCount;
+                    badgeEl.classList.remove('hidden');
+                } else {
+                    badgeEl.classList.add('hidden');
+                }
+            }
+
+            // Fetch missing users info for backwards compatibility
+            if (userIds.size > 0) {
+                const userPromises = Array.from(userIds).map(uid => getDoc(doc(db, "users", uid)));
+                const userSnaps = await Promise.all(userPromises);
+                const usersMap = {};
+                userSnaps.forEach(uSnap => {
+                    if (uSnap.exists()) {
+                        usersMap[uSnap.id] = uSnap.data();
+                    }
+                });
+                
+                allOrders.forEach(order => {
+                    if (order.userId && !order.customerName && usersMap[order.userId]) {
+                        order.customerName = usersMap[order.userId].name;
+                        order.customerEmail = usersMap[order.userId].email;
+                    }
+                });
+            }
+
+            renderOrders();
+            isInitialLoad = false;
+        }, (error) => {
+            console.error("Error listening to orders:", error);
+            listContainer.innerHTML = '<div style="text-align: center; padding: 3rem; color: #aaa;">حدث خطأ في جلب البيانات. يرجى مراجعة الـ Console.</div>';
+        });
         
     } catch (error) {
-        console.error("Error loading orders:", error);
-        listContainer.innerHTML = '<div style="text-align: center; padding: 3rem; color: #aaa;">حدث خطأ في جلب البيانات. يرجى مراجعة الـ Console.</div>';
+        console.error("Error setting up orders listener:", error);
     }
 }
 
@@ -249,7 +310,7 @@ window.updateOrderStatus = async function(orderId, newStatus) {
             status: newStatus
         });
         showToast("تم تحديث حالة الطلب بنجاح");
-        loadOrders(); // Refresh to reflect UI changes
+        // No need to call loadOrders() manually, onSnapshot handles it automatically!
     } catch (error) {
         console.error("Error updating status:", error);
         showToast("حدث خطأ أثناء تحديث الحالة", "error");

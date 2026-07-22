@@ -102,7 +102,7 @@ const initStampCard = async () => {
     const customerSelect = document.getElementById('customer-brand-select');
 
     // Helper to render the stamps
-    const renderStampCard = (brandName, stampsCount) => {
+    const renderStampCard = (brandName, stampsCount, pointsCount = 0) => {
         if (!brandName) brandName = "اختر مطعماً";
         brandNameEl.textContent = brandName;
         const watermark = document.getElementById('brand-watermark');
@@ -161,9 +161,51 @@ const initStampCard = async () => {
                         }
                         bgDiv.style.backgroundImage = `url('${imgUrl}')`;
                     }
+
+                    // Render dynamic rewards
+                    const rewardsGrid = document.getElementById('dynamic-rewards-grid');
+                    if (rewardsGrid) {
+                        rewardsGrid.innerHTML = '';
+                        if (brandData.rewards && brandData.rewards.length > 0) {
+                            brandData.rewards.forEach((r, idx) => {
+                                const box = document.createElement('div');
+                                const isBrand = idx % 2 !== 0;
+                                box.className = isBrand ? 'reward-box reward-box-brand' : 'reward-box reward-box-dark';
+                                
+                                // Make items take full width if 1, half if 2, etc.
+                                const itemsCount = brandData.rewards.length;
+                                box.style.flex = "1 1 calc(" + (100 / Math.min(itemsCount, 3)) + "% - 1rem)";
+                                box.style.minWidth = "120px";
+                                box.style.position = "relative";
+                                box.style.overflow = "hidden";
+                                
+                                const iconColor = isBrand ? 'text-brand-light' : 'text-gold';
+                                const canRedeem = pointsCount >= r.points;
+                                
+                                let statusHtml = '';
+                                if(canRedeem) {
+                                    box.style.boxShadow = "0 0 15px rgba(46, 204, 113, 0.4)";
+                                    box.style.border = "1px solid #2ecc71";
+                                    statusHtml = `<div style="position: absolute; top: 0; left: 0; background: #2ecc71; color: #fff; font-size: 0.7rem; padding: 0.1rem 0.4rem; border-bottom-right-radius: 0.5rem; font-weight: bold;">متاح</div>`;
+                                } else {
+                                    const progress = Math.min(100, Math.round((pointsCount / r.points) * 100));
+                                    statusHtml = `<div style="width: 100%; background: rgba(255,255,255,0.1); height: 4px; border-radius: 2px; margin-top: 0.5rem; overflow: hidden;"><div style="width: ${progress}%; background: ${canRedeem ? '#2ecc71' : (isBrand ? '#fff' : 'var(--gold)')}; height: 100%;"></div></div>`;
+                                }
+
+                                box.innerHTML = `
+                                    ${statusHtml}
+                                    <span class="material-symbols-outlined ${iconColor}" style="font-size:24px; margin-bottom: 0.25rem;">${r.icon || 'local_offer'}</span>
+                                    <span class="reward-text" style="font-size: 0.9rem;">${r.description}<br><small style="font-size: 0.75rem; opacity: 0.8; font-weight: normal; display: block; margin-top: 0.25rem;">${r.points} نقطة</small></span>
+                                `;
+                                rewardsGrid.appendChild(box);
+                            });
+                        } else {
+                            rewardsGrid.innerHTML = '<span style="color: #aaa; font-size: 0.9rem;">لا توجد جوائز محددة لهذا المطعم حالياً.</span>';
+                        }
+                    }
                 }
             } catch(e) {
-                console.error("Failed to load background image", e);
+                console.error("Failed to load background image or rewards", e);
             }
         })();
     };
@@ -182,16 +224,18 @@ const initStampCard = async () => {
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
                     const stampsMap = userData.stamps || {};
+                    const pointsMap = userData.pointsMap || {};
                     const brands = Object.keys(stampsMap);
 
                     if (brands.length === 0) {
                         // User has no stamps anywhere
-                        renderStampCard("لا توجد أختام بعد", 0);
+                        renderStampCard("لا توجد أختام بعد", 0, 0);
                     } else if (brands.length === 1) {
                         // One brand
                         const count = stampsMap[brands[0]] || 0;
+                        const pCount = pointsMap[brands[0]] || 0;
                         const activeCount = (count > 0 && count % 10 === 0) ? 10 : (count % 10);
-                        renderStampCard(brands[0], activeCount);
+                        renderStampCard(brands[0], activeCount, pCount);
                     } else {
                         // Multiple brands: show wallet
                         const walletContainer = document.getElementById('wallet-cards-container');
@@ -225,7 +269,8 @@ const initStampCard = async () => {
                                         const clickedBrand = card.getAttribute('data-brand');
                                         renderWallet(clickedBrand);
                                         const count = stampsMap[clickedBrand] || 0;
-                                        renderStampCard(clickedBrand, (count > 0 && count % 10 === 0) ? 10 : (count % 10));
+                                        const pCount = pointsMap[clickedBrand] || 0;
+                                        renderStampCard(clickedBrand, (count > 0 && count % 10 === 0) ? 10 : (count % 10), pCount);
                                     });
                                 });
                             };
@@ -233,7 +278,8 @@ const initStampCard = async () => {
                             // Initialize with the first brand
                             renderWallet(brands[0]);
                             const initCount = stampsMap[brands[0]] || 0;
-                            renderStampCard(brands[0], (initCount > 0 && initCount % 10 === 0) ? 10 : (initCount % 10));
+                            const initPCount = pointsMap[brands[0]] || 0;
+                            renderStampCard(brands[0], (initCount > 0 && initCount % 10 === 0) ? 10 : (initCount % 10), initPCount);
                         }
                     }
                 } else {
@@ -276,10 +322,22 @@ const initAdminPanel = async () => {
     }
     try {
         const docSnap = await getDoc(doc(db, "users", currentUser.uid));
-        if (!docSnap.exists() || docSnap.data().isAdmin !== true) {
+        if (!docSnap.exists()) {
+            window.location.href = '../_3/home.html';
+            return;
+        }
+        const userData = docSnap.data();
+        if (userData.isAdmin !== true && userData.isModerator !== true) {
             alert("غير مصرح لك بدخول هذه الصفحة!");
             window.location.href = '../_3/home.html';
             return;
+        }
+        
+        // Show Admin-only links if user is a full Admin
+        if (userData.isModerator !== true) {
+            document.querySelectorAll('.admin-only-link').forEach(link => {
+                link.style.display = 'flex';
+            });
         }
     } catch (e) {
         console.error(e);

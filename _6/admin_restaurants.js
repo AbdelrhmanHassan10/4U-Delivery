@@ -34,11 +34,24 @@ onAuthStateChanged(auth, async (user) => {
             window.location.href = '../_3/home.html';
             return;
         }
+        
+        // If user is a Moderator, redirect away
+        if (docSnap.data().isModerator === true) {
+            alert("غير مصرح لك بدخول هذه الصفحة! هذه الصفحة مخصصة للمدير فقط.");
+            window.location.href = 'admin_orders.html';
+            return;
+        } else {
+            // Full admin: show restricted links
+            document.querySelectorAll('.admin-only-link').forEach(link => {
+                link.style.display = 'flex';
+            });
+        }
     } catch (e) {
         window.location.href = '../_3/home.html';
         return;
     }
 
+    // Load data after passing auth check
     loadRestaurants();
 });
 
@@ -178,6 +191,43 @@ customCategoryInput.addEventListener('keypress', (e) => {
     }
 });
 
+// Rewards Logic
+const rewardsContainer = document.getElementById('rewards-container');
+const addRewardBtn = document.getElementById('add-reward-btn');
+
+function createRewardRow(points = '', desc = '', icon = 'local_offer') {
+    const row = document.createElement('div');
+    row.className = 'reward-row';
+    row.style = 'display: flex; gap: 0.5rem; align-items: center; background: rgba(255,255,255,0.02); padding: 0.5rem; border-radius: 0.5rem; border: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap;';
+    row.innerHTML = `
+        <div style="flex: 1; min-width: 80px;">
+            <input type="number" class="reward-points input-control" placeholder="النقاط (مثال: 300)" value="${points}" style="padding: 0.5rem; height: 35px; border-radius: 0.5rem; font-size: 0.9rem;" required>
+        </div>
+        <div style="flex: 2; min-width: 150px;">
+            <input type="text" class="reward-desc input-control" placeholder="وصف الجائزة (مثال: خصم 50%)" value="${desc}" style="padding: 0.5rem; height: 35px; border-radius: 0.5rem; font-size: 0.9rem;" required>
+        </div>
+        <div style="flex: 1; min-width: 120px;">
+            <select class="reward-icon input-control" style="padding: 0.5rem; height: 35px; border-radius: 0.5rem; font-size: 0.9rem;">
+                <option value="local_offer" ${icon === 'local_offer' ? 'selected' : ''}>خصم (تيكيت)</option>
+                <option value="local_shipping" ${icon === 'local_shipping' ? 'selected' : ''}>توصيل (موتوسيكل)</option>
+                <option value="inventory_2" ${icon === 'inventory_2' ? 'selected' : ''}>صندوق (بوكس)</option>
+                <option value="fastfood" ${icon === 'fastfood' ? 'selected' : ''}>وجبة (برجر)</option>
+                <option value="redeem" ${icon === 'redeem' ? 'selected' : ''}>هدية (صندوق)</option>
+                <option value="star" ${icon === 'star' ? 'selected' : ''}>نجمة</option>
+            </select>
+        </div>
+        <button type="button" class="btn-remove-reward" style="background: rgba(200, 16, 46, 0.2); color: #ff4d4d; border: none; width: 35px; height: 35px; border-radius: 0.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+            <span class="material-symbols-outlined" style="font-size: 1.1rem;">delete</span>
+        </button>
+    `;
+    row.querySelector('.btn-remove-reward').addEventListener('click', () => row.remove());
+    if(rewardsContainer) rewardsContainer.appendChild(row);
+}
+
+if(addRewardBtn) {
+    addRewardBtn.addEventListener('click', () => createRewardRow());
+}
+
 // Add Restaurant
 const addForm = document.getElementById('add-res-form');
 const btnAdd = document.getElementById('btn-add-res');
@@ -210,6 +260,18 @@ addForm.addEventListener('submit', async (e) => {
         return;
     }
 
+    // Collect Rewards
+    const rewardRows = document.querySelectorAll('.reward-row');
+    const rewards = [];
+    rewardRows.forEach(row => {
+        const p = row.querySelector('.reward-points').value;
+        const d = row.querySelector('.reward-desc').value.trim();
+        const i = row.querySelector('.reward-icon').value;
+        if(p && d) {
+            rewards.push({ points: parseInt(p), description: d, icon: i });
+        }
+    });
+
     btnAdd.innerHTML = 'جاري الإضافة...';
     btnAdd.disabled = true;
 
@@ -221,6 +283,7 @@ addForm.addEventListener('submit', async (e) => {
                 rating: rating,
                 deliveryTime: time,
                 deliveryFee: fee,
+                rewards: rewards
             };
             if (currentBase64Image) updateData.image = currentBase64Image;
             if (currentBase64Menus && currentBase64Menus.length > 0) updateData.menuImages = currentBase64Menus;
@@ -246,6 +309,7 @@ addForm.addEventListener('submit', async (e) => {
                 deliveryFee: fee,
                 image: currentBase64Image,
                 menuImages: currentBase64Menus,
+                rewards: rewards,
                 isFeatured: false,
                 createdAt: new Date().toISOString()
             });
@@ -258,6 +322,7 @@ addForm.addEventListener('submit', async (e) => {
         currentBase64Image = '';
         menuPreviewContainer.innerHTML = '';
         currentBase64Menus = [];
+        if(rewardsContainer) rewardsContainer.innerHTML = '';
         
         loadRestaurants(); // Refresh list
 
@@ -340,6 +405,7 @@ window.deleteRestaurant = async (id, name) => {
             btnAdd.innerHTML = 'إضافة المطعم';
             currentBase64Image = '';
             imgPreview.src = '';
+            if(rewardsContainer) rewardsContainer.innerHTML = '';
         }
         showToast("تم حذف المطعم بنجاح");
         loadRestaurants();
@@ -403,6 +469,16 @@ window.editRestaurant = async (id) => {
                         document.getElementById('res-category-container').insertBefore(chip, customInput.parentElement);
                     }
                 });
+            }
+
+            // Handle rewards
+            if(rewardsContainer) {
+                rewardsContainer.innerHTML = '';
+                if(data.rewards && Array.isArray(data.rewards)) {
+                    data.rewards.forEach(r => {
+                        createRewardRow(r.points, r.description, r.icon);
+                    });
+                }
             }
 
             document.querySelector('.admin-page-title').textContent = "تعديل بيانات المطعم";

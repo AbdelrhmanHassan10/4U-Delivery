@@ -247,19 +247,24 @@
                 <span class="material-symbols-outlined">qr_code_scanner</span>
                 إضافة أختام
             </a>
-            <a href="admin_users.html" class="sidebar-link inactive ripple-btn">
+            <a href="admin_points.html" class="sidebar-link inactive ripple-btn">
+                <span class="material-symbols-outlined">toll</span>
+                إضافة نقاط للمطاعم
+            </a>
+            <a href="admin_users.html" class="sidebar-link inactive ripple-btn admin-only-link">
                 <span class="material-symbols-outlined">group</span>
                 سجل العملاء
             </a>
-            <a href="admin_restaurants.html" class="sidebar-link inactive ripple-btn">
+            <a href="admin_restaurants.html" class="sidebar-link inactive ripple-btn admin-only-link">
                 <span class="material-symbols-outlined">storefront</span>
                 إدارة المطاعم
             </a>
-            <a href="admin_orders.html" class="sidebar-link active ripple-btn">
+            <a href="admin_orders.html" class="sidebar-link active ripple-btn" style="display: flex; align-items: center;">
                 <span class="material-symbols-outlined">receipt_long</span>
                 إدارة الطلبات
+                <span id="sidebar-orders-badge" class="hidden" style="background: #e74c3c; color: white; border-radius: 12px; padding: 2px 8px; font-size: 0.75rem; margin-right: auto; font-weight: bold; line-height: 1.2;">0</span>
             </a>
-            <a href="admin_offers.html" class="sidebar-link inactive ripple-btn">
+            <a href="admin_offers.html" class="sidebar-link inactive ripple-btn admin-only-link">
                 <span class="material-symbols-outlined">local_offer</span>
                 إدارة العروض
             </a>
@@ -272,7 +277,7 @@
         <div class="sidebar-footer">
             <a href="../index.html" class="sidebar-logout ripple-btn">
                 <span class="material-symbols-outlined">logout</span>
-                خروج
+                العوده الي الرئيسيه
             </a>
         </div>
     </aside>
@@ -281,9 +286,15 @@
     <main class="admin-main">
         <div class="admin-container">
             
-            <header class="admin-page-header">
-                <h1 class="admin-page-title">الطلبات الواردة</h1>
-                <p class="admin-page-desc">تابع طلبات العملاء من المطاعم وقم بتحديث حالتها أولاً بأول.</p>
+            <header class="admin-page-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <h1 class="admin-page-title">الطلبات الواردة</h1>
+                    <p class="admin-page-desc">تابع طلبات العملاء من المطاعم وقم بتحديث حالتها أولاً بأول.</p>
+                </div>
+                <div style="background: rgba(240, 192, 64, 0.1); border: 1px solid rgba(240, 192, 64, 0.3); padding: 0.75rem 1.5rem; border-radius: 1rem; text-align: center; min-width: 150px;">
+                    <div style="font-size: 2rem; font-weight: 900; color: var(--gold); line-height: 1;" id="pending-orders-count">0</div>
+                    <div style="color: var(--gold); font-size: 0.9rem; margin-top: 0.25rem;">طلب قيد المراجعة</div>
+                </div>
             </header>
 
             <div class="glass" style="border-radius: 1.5rem; padding: 2rem;">

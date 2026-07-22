@@ -986,3 +986,8 @@ body {
 .custom-modal-overlay.show .custom-modal-box {
     transform: scale(1);
 }
+
+/* Hide admin-only links by default to prevent flicker for moderators */
+.admin-only-link {
+    display: none;
+}

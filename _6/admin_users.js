@@ -16,6 +16,18 @@ onAuthStateChanged(auth, async (user) => {
             window.location.href = '../_3/home.html';
             return;
         }
+        
+        // If user is a Moderator, redirect away
+        if (docSnap.data().isModerator === true) {
+            alert("غير مصرح لك بدخول هذه الصفحة! هذه الصفحة مخصصة للمدير فقط.");
+            window.location.href = 'admin_orders.html';
+            return;
+        } else {
+            // Full admin: show restricted links
+            document.querySelectorAll('.admin-only-link').forEach(link => {
+                link.style.display = 'flex';
+            });
+        }
     } catch (e) {
         window.location.href = '../_3/home.html';
         return;
@@ -176,6 +188,17 @@ const renderTable = (users) => {
 
         const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() || '👤';
 
+        const isFullAdmin = user.isAdmin === true && user.isModerator !== true;
+        const isMod = user.isAdmin === true && user.isModerator === true;
+
+        const adminStyle = isFullAdmin 
+            ? `opacity:1; border:1px solid rgba(240,192,64,0.6); color:var(--gold); background:rgba(240,192,64,0.15);`
+            : `opacity:0.4; border:1px solid rgba(240,192,64,0.2); color:var(--gold); background:transparent;`;
+            
+        const modStyle = isMod
+            ? `opacity:1; border:1px solid rgba(52,152,219,0.6); color:#3498db; background:rgba(52,152,219,0.15);`
+            : `opacity:0.4; border:1px solid rgba(52,152,219,0.2); color:#3498db; background:transparent;`;
+
         html += `
             <tr>
                 <td>
@@ -202,13 +225,14 @@ const renderTable = (users) => {
                             <span class="material-symbols-outlined" style="font-size:1.1rem;">manage_accounts</span>
                             إدارة
                         </button>
-                        ${user.isAdmin ? 
-                            `<span style="display:inline-flex; align-items:center; gap:0.25rem; color:var(--gold); font-size:0.85rem; font-weight:700; padding:0.5rem 1rem; background:rgba(240,192,64,0.1); border-radius:0.5rem; border:1px solid rgba(240,192,64,0.3); white-space:nowrap;"><span class="material-symbols-outlined" style="font-size:1.1rem;">admin_panel_settings</span> أدمن</span>` : 
-                            `<button onclick="window.makeUserAdmin('${user.id}', this)" class="btn-action ripple-btn" style="border:none; cursor:pointer; display:inline-flex; align-items:center; gap:0.5rem; background:rgba(240,192,64,0.1); color:var(--gold); border:1px solid rgba(240,192,64,0.3); padding:0.5rem 1rem; border-radius:0.5rem; font-weight:600; font-size:0.85rem; white-space:nowrap;" title="منح صلاحيات الأدمن">
-                                <span class="material-symbols-outlined" style="font-size:1.1rem;">security</span>
-                                ترقية
-                            </button>`
-                        }
+                        
+                        <button onclick="window.toggleUserRole('${user.id}', 'moderator', this)" class="btn-action ripple-btn" style="cursor:pointer; display:inline-flex; align-items:center; gap:0.5rem; padding:0.5rem 1rem; border-radius:0.5rem; font-weight:600; font-size:0.85rem; white-space:nowrap; transition:all 0.2s; ${modStyle}" title="تبديل صلاحية مشرف">
+                            <span class="material-symbols-outlined" style="font-size:1.1rem;">shield_person</span> مشرف
+                        </button>
+                        
+                        <button onclick="window.toggleUserRole('${user.id}', 'admin', this)" class="btn-action ripple-btn" style="cursor:pointer; display:inline-flex; align-items:center; gap:0.5rem; padding:0.5rem 1rem; border-radius:0.5rem; font-weight:600; font-size:0.85rem; white-space:nowrap; transition:all 0.2s; ${adminStyle}" title="تبديل صلاحية أدمن">
+                            <span class="material-symbols-outlined" style="font-size:1.1rem;">security</span> مدير
+                        </button>
                     </div>
                 </td>
             </tr>
@@ -234,9 +258,45 @@ document.addEventListener('DOMContentLoaded', () => {
     // loadUsers() is now called after auth check
 });
 
-// Make User Admin Logic
-window.makeUserAdmin = async function(userId, btnElement) {
-    if(!confirm("هل أنت متأكد أنك تريد منح هذا العميل صلاحيات الأدمن كاملة؟")) return;
+// Toggle Role Logic
+window.toggleUserRole = async function(userId, roleToToggle, btnElement) {
+    const user = allUsers.find(u => u.id === userId);
+    if(!user) return;
+
+    const isCurrentlyFullAdmin = user.isAdmin === true && user.isModerator !== true;
+    const isCurrentlyMod = user.isAdmin === true && user.isModerator === true;
+    
+    let newIsAdmin = false;
+    let newIsModerator = false;
+    let msg = "";
+
+    if (roleToToggle === 'admin') {
+        if (isCurrentlyFullAdmin) {
+            // Remove admin -> make normal
+            newIsAdmin = false;
+            newIsModerator = false;
+            msg = "تم سحب صلاحيات الأدمن (أصبح مستخدم عادي)";
+        } else {
+            // Make full admin
+            newIsAdmin = true;
+            newIsModerator = false;
+            msg = "تم منح صلاحيات الأدمن بنجاح!";
+        }
+    } else if (roleToToggle === 'moderator') {
+        if (isCurrentlyMod) {
+            // Remove moderator -> make normal
+            newIsAdmin = false;
+            newIsModerator = false;
+            msg = "تم سحب صلاحيات المشرف (أصبح مستخدم عادي)";
+        } else {
+            // Make moderator
+            newIsAdmin = true;
+            newIsModerator = true;
+            msg = "تم تعيين المستخدم كمشرف بنجاح!";
+        }
+    }
+
+    if(!confirm(`هل أنت متأكد من تغيير صلاحيات هذا المستخدم؟`)) return;
     
     btnElement.disabled = true;
     const originalHtml = btnElement.innerHTML;
@@ -244,15 +304,17 @@ window.makeUserAdmin = async function(userId, btnElement) {
     
     try {
         await updateDoc(doc(db, "users", userId), {
-            isAdmin: true
+            isAdmin: newIsAdmin,
+            isModerator: newIsModerator
         });
-        alert("تم منح صلاحيات الأدمن بنجاح!");
-        const u = allUsers.find(u => u.id === userId);
-        if(u) u.isAdmin = true;
-        renderTable(allUsers);
+        
+        user.isAdmin = newIsAdmin;
+        user.isModerator = newIsModerator;
+        
+        renderTable(allUsers); // Re-render to update UI colors and state
     } catch(e) {
-        console.error("Error making user admin:", e);
-        alert("حدث خطأ أثناء تنفيذ الطلب!");
+        console.error("Error toggling user role:", e);
+        alert("حدث خطأ أثناء تغيير الصلاحيات!");
         btnElement.disabled = false;
         btnElement.innerHTML = originalHtml;
     }

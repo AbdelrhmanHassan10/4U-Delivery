@@ -158,6 +158,7 @@ onAuthStateChanged(auth, async (user) => {
                 
                 // Store stamps for loyalty highlighting
                 window.userStampsMap = userData.stamps || {};
+                window.userPointsMap = userData.pointsMap || {};
 
                 // Show Admin Link if user is admin
                 if (userData.isAdmin) {
@@ -168,10 +169,12 @@ onAuthStateChanged(auth, async (user) => {
                 }
             } else {
                 window.userStampsMap = {};
+                window.userPointsMap = {};
             }
         } catch (error) {
             console.error("Error fetching user data for navbar:", error);
             window.userStampsMap = {};
+            window.userPointsMap = {};
         }
 
         if (window.updateRestaurantLoyaltyUI) window.updateRestaurantLoyaltyUI();
@@ -191,33 +194,49 @@ window.updateRestaurantLoyaltyUI = function() {
     if (!cards || cards.length === 0) return;
     
     // If not logged in or no stamps fetched, revert to normal
-    if (!window.userStampsMap) {
+    if (!window.userStampsMap && !window.userPointsMap) {
         cards.forEach(card => {
             card.classList.remove('has-stamps', 'no-stamps');
-            const badge = card.querySelector('.stamp-badge');
-            if (badge) badge.classList.add('hidden');
+            const wrapper = card.querySelector('.res-badges-wrapper');
+            if (wrapper) wrapper.classList.add('hidden');
         });
         return;
     }
     
-    // Check stamps
     cards.forEach(card => {
         const rName = card.getAttribute('data-res-name');
-        const count = window.userStampsMap[rName] || 0;
-        const badge = card.querySelector('.stamp-badge');
+        const stampCount = window.userStampsMap ? (window.userStampsMap[rName] || 0) : 0;
+        const pointsCount = window.userPointsMap ? (window.userPointsMap[rName] || 0) : 0;
         
-        if (count > 0) {
+        const wrapper = card.querySelector('.res-badges-wrapper');
+        
+        if (stampCount > 0 || pointsCount > 0) {
             card.classList.add('has-stamps');
             card.classList.remove('no-stamps');
-            if (badge) {
-                const activeCount = count % 10 === 0 ? 10 : count % 10;
-                badge.querySelector('.stamp-count').textContent = activeCount;
-                badge.classList.remove('hidden');
-            }
+            if (wrapper) wrapper.classList.remove('hidden');
         } else {
             card.classList.remove('has-stamps');
             card.classList.add('no-stamps');
-            if (badge) badge.classList.add('hidden');
+            if (wrapper) wrapper.classList.remove('hidden'); // We might want to show empty state badges, or hide. Let's hide if 0 for both for clean look, or show empty states. Let's show empty states since we have 'new-badge'.
+        }
+        
+        if (wrapper) {
+            let stampBadgeHtml = '';
+            if (stampCount > 0) {
+                const activeCount = stampCount % 10 === 0 ? 10 : stampCount % 10;
+                stampBadgeHtml = `<div class="stamp-badge active-badge" title="الكروت"><span class="stamp-count">${activeCount}</span> <span class="material-symbols-outlined" style="font-size: 14px;">card_giftcard</span></div>`;
+            } else {
+                stampBadgeHtml = `<div class="stamp-badge new-badge" title="الكروت"><span style="font-size: 11px; font-weight:700;">ابدأ التجميع</span> <span class="material-symbols-outlined" style="font-size: 14px;">add_circle</span></div>`;
+            }
+            
+            let pointsBadgeHtml = '';
+            if (pointsCount > 0) {
+                pointsBadgeHtml = `<div class="points-badge active-points-badge" title="النقاط"><span class="points-count">${pointsCount}</span> <span class="material-symbols-outlined icon-filled" style="font-size: 14px; color: var(--gold);">stars</span></div>`;
+            } else {
+                pointsBadgeHtml = `<div class="points-badge new-points-badge" title="النقاط"><span style="font-size: 11px; font-weight:700;">0</span> <span class="material-symbols-outlined" style="font-size: 14px; color: var(--dark-300);">stars</span></div>`;
+            }
+            
+            wrapper.innerHTML = `${pointsBadgeHtml}${stampBadgeHtml}`;
         }
     });
 };
@@ -318,6 +337,20 @@ async function loadFeaturedRestaurants() {
             docs = allDocs.slice(0, 3);
         }
 
+        if (window.userStampsMap || window.userPointsMap) {
+            docs.sort((a, b) => {
+                const stampsA = window.userStampsMap ? (window.userStampsMap[a.name] || 0) : 0;
+                const pointsA = window.userPointsMap ? (window.userPointsMap[a.name] || 0) : 0;
+                const scoreA = (stampsA > 0 || pointsA > 0) ? (pointsA + (stampsA * 10)) : 0;
+                
+                const stampsB = window.userStampsMap ? (window.userStampsMap[b.name] || 0) : 0;
+                const pointsB = window.userPointsMap ? (window.userPointsMap[b.name] || 0) : 0;
+                const scoreB = (stampsB > 0 || pointsB > 0) ? (pointsB + (stampsB * 10)) : 0;
+                
+                return scoreB - scoreA;
+            });
+        }
+
         let html = '';
         if (docs.length === 0) {
             container.innerHTML = '<p class="text-center w-100" style="color:var(--dark-400);">لا توجد مطاعم حالياً</p>';
@@ -338,7 +371,7 @@ async function loadFeaturedRestaurants() {
                 <div class="res-image-wrapper">
                     <div class="res-image" style="background-image:url('${data.image}')"></div>
                     <div class="res-image-overlay"></div>
-                    <div class="stamp-badge hidden"><span class="stamp-count"></span> <span class="material-symbols-outlined" style="font-size: 14px;">card_giftcard</span></div>
+                    <div class="res-badges-wrapper hidden"></div>
                     <div class="res-rating">
                         <span class="material-symbols-outlined icon-filled">star</span>
                         <span class="res-rating-text">${data.rating || '4.5'}</span>
@@ -387,17 +420,33 @@ async function loadOffers() {
         activeOffers.forEach(data => {
             const cardClass = data.type === 'gold' ? 'offer-gold glass glow-gold' : 'offer-brand glow-red';
             
-            html += `
-            <div class="offer-card ${cardClass}">
-                <div class="offer-card-bg-icon"><span class="material-symbols-outlined icon-filled">${data.icon || 'local_offer'}</span></div>
-                <div class="offer-content">
-                    <div class="offer-badge">${data.badge}</div>
-                    <h4 class="offer-title">${data.title}</h4>
-                    <p class="offer-desc">${data.desc}</p>
-                    <a href="${data.link || '../_4/res.html'}" class="btn-offer ripple-btn" style="text-decoration:none;display:inline-block;">اطلب دلوقتي</a>
+            if (data.image) {
+                html += `
+                <div class="offer-card ${cardClass}" style="padding: 0; display: flex; flex-direction: row; align-items: stretch; justify-content: space-between; min-height: 180px;">
+                    <div class="offer-content" style="flex: 1; display: flex; flex-direction: column; z-index: 1; padding: 1.5rem;">
+                        <div class="offer-badge" style="align-self: flex-start; margin-bottom: 0.5rem;">${data.badge}</div>
+                        <h4 class="offer-title">${data.title}</h4>
+                        <p class="offer-desc" style="flex: 1;">${data.desc}</p>
+                        <a href="${data.link || '../_4/res.html'}" class="btn-offer ripple-btn" style="text-decoration:none; display:inline-block; margin-top: auto; align-self: flex-start;">اطلب دلوقتي</a>
+                    </div>
+                    <div class="offer-image-container" style="width: 40%; max-width: 220px; flex-shrink: 0;">
+                        <img src="${data.image}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 1rem 0 0 1rem;" alt="offer image">
+                    </div>
                 </div>
-            </div>
-            `;
+                `;
+            } else {
+                html += `
+                <div class="offer-card ${cardClass}">
+                    <div class="offer-card-bg-icon"><span class="material-symbols-outlined icon-filled">${data.icon || 'local_offer'}</span></div>
+                    <div class="offer-content" style="position: relative; z-index: 1; display: flex; flex-direction: column; height: 100%;">
+                        <div class="offer-badge" style="align-self: flex-start; margin-bottom: 0.5rem;">${data.badge}</div>
+                        <h4 class="offer-title">${data.title}</h4>
+                        <p class="offer-desc" style="flex: 1;">${data.desc}</p>
+                        <a href="${data.link || '../_4/res.html'}" class="btn-offer ripple-btn" style="text-decoration:none; display:inline-block; margin-top: auto; align-self: flex-start;">اطلب دلوقتي</a>
+                    </div>
+                </div>
+                `;
+            }
         });
         
         container.innerHTML = html;

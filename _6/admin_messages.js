@@ -31,10 +31,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         try {
             const userDoc = await getDoc(doc(db, "users", user.uid));
-            if (!userDoc.exists() || userDoc.data().isAdmin !== true) {
+            if (!userDoc.exists()) {
+                window.location.href = '../_3/home.html';
+                return;
+            }
+            const userData = userDoc.data();
+            if (userData.isAdmin !== true && userData.isModerator !== true) {
                 alert("غير مصرح لك بدخول هذه الصفحة!");
                 window.location.href = '../_3/home.html';
                 return;
+            }
+            
+            // Show Admin-only links if user is a full Admin
+            if (userData.isModerator !== true) {
+                document.querySelectorAll('.admin-only-link').forEach(link => {
+                    link.style.display = 'flex';
+                });
             }
             // Is Admin -> load messages
             loadMessages();

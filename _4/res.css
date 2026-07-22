@@ -230,27 +230,44 @@ input, select { font-family: inherit; }
 .res-card-large.no-stamps {
     opacity: 0.85;
 }
-.stamp-badge {
+.res-badges-wrapper {
     position: absolute;
     bottom: 1rem;
     right: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 10;
+}
+.stamp-badge, .points-badge {
     padding: 0.35rem 0.75rem;
     border-radius: 0.75rem;
     display: flex;
     align-items: center;
     gap: 0.25rem;
-    z-index: 10;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     backdrop-filter: blur(8px);
+    font-size: 0.85rem;
+    font-weight: 800;
 }
 .stamp-badge.active-badge {
     background: var(--gold);
     color: var(--dark-950);
     border: 1px solid rgba(255,255,255,0.4);
-    font-weight: 800;
 }
 .stamp-badge.new-badge {
     background: rgba(26,26,26,0.8);
     color: var(--gold);
     border: 1px solid var(--gold);
+}
+.points-badge.active-points-badge {
+    background: rgba(18, 18, 18, 0.85);
+    color: #ffffff;
+    border: 1px solid var(--gold);
+    box-shadow: 0 4px 15px rgba(240, 192, 64, 0.25);
+}
+.points-badge.new-points-badge {
+    background: rgba(26, 26, 26, 0.8);
+    color: var(--dark-300);
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
