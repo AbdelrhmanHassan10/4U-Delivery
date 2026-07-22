@@ -1,6 +1,6 @@
 import { auth, db } from "../firebase-config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { collection, getDocs, doc, updateDoc, getDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { collection, getDocs, doc, updateDoc, getDoc, query, orderBy, onSnapshot, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // Toast Notification
 window.showToast = function(msg, type='success') {
@@ -105,7 +105,7 @@ async function loadOrders() {
     }
     
     try {
-        const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
+        const q = query(collection(db, "orders"), orderBy("createdAt", "desc"), limit(100));
         
         if (unsubscribeOrders) unsubscribeOrders();
 

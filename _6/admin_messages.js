@@ -1,5 +1,5 @@
 import { db, auth } from "../firebase-config.js";
-import { collection, getDocs, query, orderBy, deleteDoc, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { collection, getDocs, doc, updateDoc, query, orderBy, limit, getDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 // Toast Notification Helper
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         messagesContainer.innerHTML = '<div style="text-align: center; padding: 3rem; color: #aaa;">جاري تحميل الرسائل...</div>';
         
         try {
-            const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
+            const q = query(collection(db, "messages"), orderBy("createdAt", "desc"), limit(100));
             const querySnapshot = await getDocs(q);
             
             if (querySnapshot.empty) {

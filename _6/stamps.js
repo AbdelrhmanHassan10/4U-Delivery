@@ -493,7 +493,7 @@ const initAdminPanel = async () => {
         allRestaurants = [];
         resSnap.forEach((doc) => {
             const data = doc.data();
-            allRestaurants.push({ name: data.name, points: data.points || 0 });
+            allRestaurants.push({ id: doc.id, name: data.name, points: data.points || 0 });
         });
         
         if (allRestaurants.length > 0 && customSelectText) {
@@ -681,17 +681,32 @@ const initAdminPanel = async () => {
         if (!currentUserDoc || !currentUserData) return;
 
         const stampsMap = currentUserData.stamps || {};
+        const pointsMap = currentUserData.pointsMap || {};
+        
         let currentStamps = stampsMap[selectedBrand] || 0;
+        let currentPoints = pointsMap[selectedBrand] || 0;
 
         currentStamps++;
+        currentPoints += 30; // 30 points per stamp
+
         stampsMap[selectedBrand] = currentStamps;
+        pointsMap[selectedBrand] = currentPoints;
+        
+        // Calculate global points
+        let globalPoints = 0;
+        Object.values(pointsMap).forEach(p => globalPoints += (p || 0));
+        const newTier = recalculateTier(globalPoints);
         
         btnAddStamp.innerHTML = '<span class="material-symbols-outlined animate-spin" style="animation: spin 1s linear infinite;">progress_activity</span> جاري الإضافة...';
         btnAddStamp.disabled = true;
 
         try {
+            // Update User
             await updateDoc(doc(db, "users", currentUserDoc.id), {
-                stamps: stampsMap
+                stamps: stampsMap,
+                pointsMap: pointsMap,
+                points: globalPoints,
+                tier: newTier
             });
             
             // Log activity
@@ -699,13 +714,25 @@ const initAdminPanel = async () => {
                 userId: currentUserDoc.id,
                 title: `إضافة ختم - ${selectedBrand}`,
                 type: 'stamp',
-                value: '+1 ختم',
+                value: '+1 ختم (+30 نقطة)',
                 date: new Date().toLocaleDateString('ar-EG'),
                 createdAt: new Date().toISOString()
             });
 
+            // Update Restaurant (10 points to the restaurant)
+            const resData = allRestaurants.find(r => r.name === selectedBrand);
+            if (resData && resData.id) {
+                resData.points = (resData.points || 0) + 10;
+                await updateDoc(doc(db, "restaurants", resData.id), {
+                    points: resData.points
+                });
+            }
+
             // Update local data
             currentUserData.stamps = stampsMap;
+            currentUserData.pointsMap = pointsMap;
+            currentUserData.points = globalPoints;
+            currentUserData.tier = newTier;
 
             updateAdminUI();
             showToast(`تم إضافة الختم بنجاح!`);
@@ -722,18 +749,32 @@ const initAdminPanel = async () => {
             if (!currentUserDoc || !currentUserData) return;
 
             const stampsMap = currentUserData.stamps || {};
+            const pointsMap = currentUserData.pointsMap || {};
+            
             let currentStamps = stampsMap[selectedBrand] || 0;
+            let currentPoints = pointsMap[selectedBrand] || 0;
 
             if (currentStamps > 0) {
                 currentStamps--;
-                stampsMap[selectedBrand] = currentStamps;
+                currentPoints = Math.max(0, currentPoints - 30);
                 
+                stampsMap[selectedBrand] = currentStamps;
+                pointsMap[selectedBrand] = currentPoints;
+                
+                // Calculate global points
+                let globalPoints = 0;
+                Object.values(pointsMap).forEach(p => globalPoints += (p || 0));
+                const newTier = recalculateTier(globalPoints);
+
                 btnRemoveStamp.innerHTML = '<span class="material-symbols-outlined animate-spin" style="animation: spin 1s linear infinite;">progress_activity</span> جاري الإزالة...';
                 btnRemoveStamp.disabled = true;
 
                 try {
                     await updateDoc(doc(db, "users", currentUserDoc.id), {
-                        stamps: stampsMap
+                        stamps: stampsMap,
+                        pointsMap: pointsMap,
+                        points: globalPoints,
+                        tier: newTier
                     });
                     
                     // Log activity
@@ -741,13 +782,25 @@ const initAdminPanel = async () => {
                         userId: currentUserDoc.id,
                         title: `إزالة ختم - ${selectedBrand}`,
                         type: 'stamp',
-                        value: '-1 ختم',
+                        value: '-1 ختم (-30 نقطة)',
                         date: new Date().toLocaleDateString('ar-EG'),
                         createdAt: new Date().toISOString()
                     });
 
+                    // Update Restaurant (-10 points to the restaurant)
+                    const resData = allRestaurants.find(r => r.name === selectedBrand);
+                    if (resData && resData.id && resData.points > 0) {
+                        resData.points = Math.max(0, resData.points - 10);
+                        await updateDoc(doc(db, "restaurants", resData.id), {
+                            points: resData.points
+                        });
+                    }
+
                     // Update local data
                     currentUserData.stamps = stampsMap;
+                    currentUserData.pointsMap = pointsMap;
+                    currentUserData.points = globalPoints;
+                    currentUserData.tier = newTier;
 
                     updateAdminUI();
                     showToast(`تم إزالة الختم بنجاح!`);
