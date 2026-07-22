@@ -299,7 +299,12 @@ const initStampCard = async () => {
 // ═════ ADMIN DASHBOARD LOGIC ═════
 
 const initAdminPanel = async () => {
-    const adminSelect = document.getElementById('admin-restaurant-select');
+    // Custom Dropdown Elements
+    const customSelectBox = document.getElementById('custom-restaurant-select');
+    const customSelectText = document.getElementById('custom-select-text');
+    const customSelectIcon = document.getElementById('custom-select-icon');
+    const customDropdown = document.getElementById('custom-restaurant-dropdown');
+    let allRestaurants = [];
     const searchBtn = document.getElementById('admin-search-btn');
     const searchPhone = document.getElementById('admin-search-phone');
     const searchResult = document.getElementById('admin-search-result');
@@ -307,7 +312,7 @@ const initAdminPanel = async () => {
     const userPhoneEl = document.getElementById('admin-user-phone');
     const stampActionArea = document.getElementById('admin-stamp-action-area');
     
-    if (!adminSelect || !searchBtn) return; // Not on admin page
+    if (!customSelectBox || !searchBtn) return; // Not on admin page
 
     const currentUser = await new Promise((resolve) => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -405,25 +410,103 @@ const initAdminPanel = async () => {
         if (fullScreenLink) fullScreenLink.href = url;
     };
 
-    // Load Restaurants
-    try {
-        const resSnap = await getDocs(collection(db, "restaurants"));
-        let optionsHtml = '';
-        if (resSnap.empty) {
-            optionsHtml = '<option value="">لا يوجد مطاعم</option>';
+    // Render Custom Dropdown
+    const renderRestaurantsDropdown = () => {
+        if (!customDropdown) return;
+        
+        let sortedRes = [...allRestaurants];
+        const stampsMap = (currentUserData && currentUserData.stamps) ? currentUserData.stamps : {};
+        
+        // Sort: first by user's stamps (descending), then by restaurant's global points (descending)
+        sortedRes.sort((a, b) => {
+            const stampsA = stampsMap[a.name] || 0;
+            const stampsB = stampsMap[b.name] || 0;
+            if (stampsA !== stampsB) {
+                return stampsB - stampsA;
+            }
+            return (b.points || 0) - (a.points || 0);
+        });
+
+        let html = '';
+        if (sortedRes.length === 0) {
+            html = '<div style="padding: 1rem; text-align: center; color: var(--dark-300);">لا يوجد مطاعم</div>';
         } else {
-            resSnap.forEach((doc) => {
-                const data = doc.data();
-                optionsHtml += `<option value="${data.name}">${data.name}</option>`;
+            sortedRes.forEach(res => {
+                const userStamps = stampsMap[res.name] || 0;
+                const points = res.points || 0;
+                html += `<div class="custom-dropdown-item" data-name="${res.name}" style="padding: 0.75rem 1rem; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.2s; color: white; display: flex; justify-content: space-between; align-items: center;">
+                            <span class="dropdown-res-name">${res.name}</span>
+                            <div style="display: flex; gap: 0.5rem;">
+                                ${userStamps > 0 ? `<span style="color: var(--brand); font-size: 0.8rem; background: rgba(228,62,61,0.1); padding: 0.2rem 0.5rem; border-radius: 0.25rem;">${userStamps} ختم</span>` : ''}
+                                <span style="color: var(--gold); font-size: 0.8rem; background: rgba(240,192,64,0.1); padding: 0.2rem 0.5rem; border-radius: 0.25rem;">${points.toLocaleString('ar-EG')} نقطة</span>
+                            </div>
+                         </div>`;
             });
         }
-        adminSelect.innerHTML = optionsHtml;
-        adminSelect.disabled = false;
-        selectedBrand = adminSelect.value;
-        updateAdminUI(); // Update iframe immediately with the first restaurant
+        
+        customDropdown.innerHTML = html;
+
+        // Add event listeners
+        document.querySelectorAll('.custom-dropdown-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                const resItem = e.target.closest('.custom-dropdown-item');
+                const resName = resItem.dataset.name;
+                
+                customSelectText.textContent = resName;
+                customSelectText.style.color = "white";
+                customDropdown.classList.add('hidden');
+                if (customSelectIcon) customSelectIcon.style.transform = 'rotate(0deg)';
+                
+                selectedBrand = resName;
+                updateAdminUI();
+            });
+            item.addEventListener('mouseenter', () => item.style.background = 'rgba(255,255,255,0.05)');
+            item.addEventListener('mouseleave', () => item.style.background = 'transparent');
+        });
+    };
+
+    // Toggle dropdown
+    if (customSelectBox) {
+        customSelectBox.addEventListener('click', () => {
+            if (allRestaurants.length === 0) return; // Not loaded yet or none
+            customDropdown.classList.toggle('hidden');
+            if (customDropdown.classList.contains('hidden')) {
+                if (customSelectIcon) customSelectIcon.style.transform = 'rotate(0deg)';
+            } else {
+                if (customSelectIcon) customSelectIcon.style.transform = 'rotate(180deg)';
+                renderRestaurantsDropdown(); // Re-render to ensure latest sort is shown
+            }
+        });
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (customDropdown && !e.target.closest('.custom-select-wrapper')) {
+            customDropdown.classList.add('hidden');
+            if (customSelectIcon) customSelectIcon.style.transform = 'rotate(0deg)';
+        }
+    });
+
+    // Load Restaurants Initial Fetch
+    try {
+        const resSnap = await getDocs(collection(db, "restaurants"));
+        allRestaurants = [];
+        resSnap.forEach((doc) => {
+            const data = doc.data();
+            allRestaurants.push({ name: data.name, points: data.points || 0 });
+        });
+        
+        if (allRestaurants.length > 0 && customSelectText) {
+            customSelectText.textContent = "-- اختر المطعم --";
+            // Do not pre-select automatically so they have to choose
+            // selectedBrand = allRestaurants[0].name;
+            // updateAdminUI();
+        } else if (customSelectText) {
+            customSelectText.textContent = "لا يوجد مطاعم";
+        }
     } catch (e) {
         console.error("Error loading restaurants:", e);
-        adminSelect.innerHTML = '<option value="">خطأ في التحميل</option>';
+        if (customSelectText) customSelectText.textContent = "خطأ في التحميل";
     }
 
 
@@ -519,10 +602,7 @@ const initAdminPanel = async () => {
         }
     });
 
-    adminSelect.addEventListener('change', (e) => {
-        selectedBrand = e.target.value;
-        updateAdminUI();
-    });
+    // Custom dropdown selection is handled in renderRestaurantsDropdown()
 
     // Reset User Handler
     const btnResetUser = document.getElementById('btn-reset-user');
